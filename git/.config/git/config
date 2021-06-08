@@ -1,0 +1,9 @@
+[user]
+	name = Soffiafdz
+	email = soffiafdz@gmail.com
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+[pull]
+	rebase = false
