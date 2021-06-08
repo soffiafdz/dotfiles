@@ -1,0 +1,196 @@
+#!/bin/sh
+# This script sets the statusbar with the xsetroot command at the end.
+
+# Set delimeter
+delim=""
+
+# testweather checks to see if the most recent forecast is up to date.	If it
+# isn't, it downloads a new weather forecast, then signals to update the
+# statusbar. Gets weather report from wttr.in.
+testweather() { \
+	[ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ] &&
+		ping -q -c 1 1.1.1.1 >/dev/null &&
+		curl -s "wttr.in/$location" > "$HOME/.local/share/weatherreport" &&
+		notify-send "🌞 Weather" "New weather forecast for today." &&
+		refbar
+}
+
+# Here is the (big) function that outputs the appearance of the statusbar. It
+# can really be broken down into many submodules which I've commented and
+# explained.	Note that I use printf "%s" to format everything without line
+# breaks. I try to put | as delimiters between modules.
+status() { \
+	# Get current mpd track filename or artist - title if possible.
+	# mpc -f "[[%artist% - [%title%]" 2>/dev/null | grep -v "volume:" | head -n 1 && echo "$delim"
+
+	# If the weather report is current, show daily precipitation chance,
+	# low and high.	Don't even bother to understand this one unless you
+	# have all day. Takes the weather report format from wttr.in and makes
+	# it look like how I want it for the status bar.
+
+	# [ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | awk '{print $1}')" = "$(date '+%Y-%m-%d')" ] &&
+	# sed '16q;d' "$HOME/.local/share/weatherreport" | grep -wo "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/  /g" | tr -d '\n' &&
+	# sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print " ",$1 "°","",$2 "°"}' &&
+	# echo "$delim"
+
+	# printf "  %d°  %d° |" \
+	# "$(sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $1}')" \
+	# "$(sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $2}')"
+
+	### Volume
+	# Get the volume of ALSA's master volume output.	Show an icon if or not muted.
+	# mute=$(amixer get Master | awk '/\[/ {print $6; exit}')
+	# vol=$(amixer get Master | awk '/\[/ {print $5; exit}' | sed "s/\[//g; s/\]//g")
+	# amixer get Master | awk '/\[/ {print $6 $4}' | sed "s/\[//g; s/\]//g" | sed "s/on/ 墳 /;s/off/ ﱝ /"
+	mute=$(pamixer --get-mute)
+	vol=$(pamixer --get-volume-human)
+	case $mute in
+		"true")	echo " 婢 $delim" ;;
+		"false")	 case $vol in
+			0%)									 			 echo " $vol ﱝ $delim"	;;
+			[0-9]%|[1-2][0-9]%)					echo " $vol 奄 $delim" ;;
+			[3-6][0-9]%)								 echo " $vol 奔 $delim" ;;
+			[7-9][0-9]%|1[0-9][0-9]%)		echo " $vol 墳 $delim" ;;
+		esac ;;
+	esac
+
+	### Internet
+	# Wifi quality percentage and  icon if ethernet is connected.
+	# Make if for when there is no network
+	sed "s/down/ $delim/;s/up/ $delim/" /sys/class/net/e*/operstate
+	wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
+	[ -z $wifi ] && echo "睊 $delim" || echo "$wifi 直 $delim"
+
+	# Show unread mail if mutt-wizard is installed.
+	# command -v mw >/dev/null 2>&1 &&
+	#		 echo "$delim" &&
+	#		 du -a ~/.local/share/mail/*/INBOX/new/* 2>/dev/null | wc -l | sed 's/^/:/'
+	#		 echo "$delim"
+
+	### Disk
+	# Disk space available
+	df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}'
+	echo " $delim"
+
+	### Memory
+	# Memory used/total
+	free -h | awk '/^Mem:/ {print $3}'
+	echo " $delim"
+
+	### CPU temp
+	## Tango:
+	# sensors | awk '/^Package id 0/ {print $4}' | sed -e "s/+//; s/C//"
+	## Hyde:
+	sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
+	echo " $delim"
+
+	### Battery
+	# Will show battery with approximate icon for remaining power.
+	#batt=$(cat /sys/class/power_supply/BAT0/capacity)
+	#bstat=$(cat /sys/class/power_supply/BAT0/status)
+	#case $batt in
+		#9[5-9]|1[0-2][0-9])		 bcap=" ";;
+		#8[5-9]|9[0-4])					bcap=" ";;
+		#7[5-9]|8[0-4])					bcap=" ";;
+		#6[5-9]|7[0-4])					bcap=" ";;
+		#5[5-9]|6[0-4])					bcap=" ";;
+		#4[5-9]|5[0-4])					bcap=" ";;
+		#3[5-9]|4[0-4])					bcap=" ";;
+		#2[5-9]|3[0-4])					bcap=" ";;
+		#1[5-9]|2[0-4])					bcap=" ";;
+		#[5-9]|1[0-4])					 bcap=" ";;
+		#[0-5])									bcap=" ";;
+	#esac
+
+	#[ $bstat = "Charging" ] &&
+		#echo $bcap |
+			#awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
+		## echo "${bstat:1:1} $batt% $delim"
+	#[ $bstat = "Discharging" ] ||
+		#[ $bstat = "Full" ] ||
+		#[ $bstat = "Unknown" ] &&
+		#echo $bcap |
+			#awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
+
+	# if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Charging" ]; then
+	#		 echo "🔌"
+	# else
+	#	 echo "🔋"
+	#		 # case $batt in
+	#		 #		 1[0-9][0-9]|9[0-9])		 echo "" ;;
+	#		 #		 8[0-9]|7[0-9])	echo "" ;;
+	#		 #		 6[0-9]|5[0-9])	echo "" ;;
+	#		 #		 4[0-9]|3[0-9])	echo "" ;;
+	#		 #		 *)							echo "" ;;
+	#		 # esac;
+	# fi
+	# echo "$batt% $delim"
+
+	### TIME
+	time=$(date '+%H:%M')
+	hr=$(date '+%I')
+	case $hr in
+			01)	echo "$time 🕐 $delim" ;;
+			02)	echo "$time 🕑 $delim" ;;
+			03)	echo "$time 🕒 $delim" ;;
+			04)	echo "$time 🕓 $delim" ;;
+			05)	echo "$time 🕔 $delim" ;;
+			06)	echo "$time 🕕 $delim" ;;
+			07)	echo "$time 🕖 $delim" ;;
+			08)	echo "$time 🕗 $delim" ;;
+			09)	echo "$time 🕘 $delim" ;;
+			10)	echo "$time 🕙 $delim" ;;
+			11)	echo "$time 🕚 $delim" ;;
+			12)	echo "$time 🕛 $delim" ;;
+	esac;
+
+	# if [ $(date '+%M') -lt 30 ]; then
+	#		 case $hr in
+	#				 01)	echo "🕐" ;;
+	#				 02)	echo "🕑" ;;
+	#				 03)	echo "🕒" ;;
+	#				 04)	echo "🕓" ;;
+	#				 05)	echo "🕔" ;;
+	#				 06)	echo "🕕" ;;
+	#				 07)	echo "🕖" ;;
+	#				 08)	echo "🕗" ;;
+	#				 09)	echo "🕘" ;;
+	#				 10)	echo "🕙" ;;
+	#				 11)	echo "🕚" ;;
+	#				 12)	echo "🕛" ;;
+	#		 esac;
+	# else
+	#		 case $hr in
+	#				 01)	echo "🕜" ;;
+	#				 02)	echo "🕝" ;;
+	#				 03)	echo "🕞" ;;
+	#				 04)	echo "🕟" ;;
+	#				 05)	echo "🕠" ;;
+	#				 06)	echo "🕡" ;;
+	#				 07)	echo "🕢" ;;
+	#				 08)	echo "🕣" ;;
+	#				 09)	echo "🕤" ;;
+	#				 10)	echo "🕥" ;;
+	#				 11)	echo "🕦" ;;
+	#				 12)	echo "🕧" ;;
+	#		 esac;
+	# fi
+
+	### Date
+	echo "$(date '+%y:%m:%d') "
+}
+
+while :; do
+		# So all that big status function was just a command that quicking gets
+		# what we want to be the statusbar. This xsetroot command is what sets
+		# it.
+		xsetroot -name "$(status | tr '\n' ' ')"
+
+		# Check to see if new weather report is needed.
+		# testweather &
+
+		# Sleep for a minute after changing the status bar before updating it
+		# again. Note that the `refbar` "refreshes" the statusbar by killing
+		# this command. Feel free to change the time interval if you want.
+		sleep 60s
+done

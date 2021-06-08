@@ -1,0 +1,3 @@
+#!/bin/sh
+
+bluetoothctl connect 14:3F:A6:3D:71:E3

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+for i in \
+	phebe \
+	ursula \
+	portia \
+	latour \
+	adam \
+	alice \
+	celia \
+	arthur
+do
+	ssh $i "hostname;uptime"
+done
+
+# Removed
+# banquo
+# juliet
+
+# phebe
+# pluto
+# vernon \
+# volsce \
+# gonzalo \
+# menelaus \
+# gobbo \
+# fonseca \
