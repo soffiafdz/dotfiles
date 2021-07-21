@@ -61,6 +61,8 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'instant-markdown/vim-instant-markdown',
+    \ {'for': 'markdown', 'do': 'yarn install'}
 
 call plug#end()
 
@@ -273,6 +275,9 @@ autocmd filetype htmldjango set shiftwidth=2 tabstop=2 expandtab formatoptions-=
 
 " Javascript
 autocmd filetype javascript set shiftwidth=2 tabstop=2 expandtab
+
+" YAML
+autocmd Filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 " Markdown
 augroup pandoc_syntax
