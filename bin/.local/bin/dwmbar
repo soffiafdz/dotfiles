@@ -69,8 +69,15 @@ status() { \
 
 	### Disk
 	# Disk space available
-	df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}'
-	echo " $delim"
+	disk=$(df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}')
+
+	if [ "$HOSTNAME" = "hyde" ]
+	then
+		disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
+		echo "$disk|$disk2  $delim"
+	else
+		echo "$disk  $delim"
+	fi
 
 	### Memory
 	# Memory used/total
