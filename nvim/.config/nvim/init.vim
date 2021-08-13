@@ -283,7 +283,8 @@ autocmd Filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup pandoc_syntax
     autocmd! BufNewFile,BufFilePre,BufRead *.md
         \ set filetype=markdown.pandoc wrapmargin=10
-    autocmd filetype r setlocal shiftwidth=2 tabstop=2 expandtab
+    autocmd! FileType vimwiki set syntax=markdown.pandoc
+    autocmd FileType r setlocal shiftwidth=2 tabstop=2 expandtab
 augroup END
 
 " LaTeX
