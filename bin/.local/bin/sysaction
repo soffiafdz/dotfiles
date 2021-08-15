@@ -9,12 +9,12 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 cmds="\
-📺 display off	xset dpms force off
-🔒 lock	slock
-🚪 leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
+  display off	xset dpms force off
+ lock	slock
+ leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
 ⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
-🔃 reboot	${reb:-sudo -A reboot}
-🖥 shutdown	${shut:-sudo -A shutdown -h now}"
+ﰇ reboot	${reb:-sudo -A reboot}
+ shutdown	${shut:-sudo -A shutdown -h now}"
 
 choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu)" || exit 1
 
