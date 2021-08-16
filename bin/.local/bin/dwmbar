@@ -85,103 +85,63 @@ status() { \
 	echo " $delim"
 
 	### CPU temp
-	## Tango:
-	# sensors | awk '/^Package id 0/ {print $4}' | sed -e "s/+//; s/C//"
-	## Hyde:
-	sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
+	if [ "$HOSTNAME" = "hyde" ]; then
+		sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
+	else
+		sensors | awk '/^CPU:/ {print $2}' | sed -e "s/+//; s/C//"
+	fi
 	echo " $delim"
 
 	### Battery
 	# Will show battery with approximate icon for remaining power.
-	#batt=$(cat /sys/class/power_supply/BAT0/capacity)
-	#bstat=$(cat /sys/class/power_supply/BAT0/status)
-	#case $batt in
-		#9[5-9]|1[0-2][0-9])		 bcap=" ";;
-		#8[5-9]|9[0-4])					bcap=" ";;
-		#7[5-9]|8[0-4])					bcap=" ";;
-		#6[5-9]|7[0-4])					bcap=" ";;
-		#5[5-9]|6[0-4])					bcap=" ";;
-		#4[5-9]|5[0-4])					bcap=" ";;
-		#3[5-9]|4[0-4])					bcap=" ";;
-		#2[5-9]|3[0-4])					bcap=" ";;
-		#1[5-9]|2[0-4])					bcap=" ";;
-		#[5-9]|1[0-4])					 bcap=" ";;
-		#[0-5])									bcap=" ";;
-	#esac
+	batt=$(cat /sys/class/power_supply/BAT0/capacity)
+	bstat=$(cat /sys/class/power_supply/BAT0/status)
+	case $batt in
+		9[5-9]|1[0-2][0-9])		 bcap=" ";;
+		8[5-9]|9[0-4])					bcap=" ";;
+		7[5-9]|8[0-4])					bcap=" ";;
+		6[5-9]|7[0-4])					bcap=" ";;
+		5[5-9]|6[0-4])					bcap=" ";;
+		4[5-9]|5[0-4])					bcap=" ";;
+		3[5-9]|4[0-4])					bcap=" ";;
+		2[5-9]|3[0-4])					bcap=" ";;
+		1[5-9]|2[0-4])					bcap=" ";;
+		[5-9]|1[0-4])					 bcap=" ";;
+		[0-5])									bcap=" ";;
+	esac
 
-	#[ $bstat = "Charging" ] &&
-		#echo $bcap |
-			#awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
-		## echo "${bstat:1:1} $batt% $delim"
-	#[ $bstat = "Discharging" ] ||
-		#[ $bstat = "Full" ] ||
-		#[ $bstat = "Unknown" ] &&
-		#echo $bcap |
-			#awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
-
-	# if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Charging" ]; then
-	#		 echo "🔌"
-	# else
-	#	 echo "🔋"
-	#		 # case $batt in
-	#		 #		 1[0-9][0-9]|9[0-9])		 echo "" ;;
-	#		 #		 8[0-9]|7[0-9])	echo "" ;;
-	#		 #		 6[0-9]|5[0-9])	echo "" ;;
-	#		 #		 4[0-9]|3[0-9])	echo "" ;;
-	#		 #		 *)							echo "" ;;
-	#		 # esac;
-	# fi
-	# echo "$batt% $delim"
+	[ $bstat = "Charging" ] &&
+		echo $bcap |
+			awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
+		# echo "${bstat:1:1} $batt% $delim"
+	[ $bstat = "Discharging" ] ||
+		[ $bstat = "Full" ] ||
+		[ $bstat = "Unknown" ] &&
+		echo $bcap |
+			awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
 
 	### TIME
 	time=$(date '+%H:%M')
 	hr=$(date '+%I')
-	case $hr in
-			01)	echo "$time 🕐 $delim" ;;
-			02)	echo "$time 🕑 $delim" ;;
-			03)	echo "$time 🕒 $delim" ;;
-			04)	echo "$time 🕓 $delim" ;;
-			05)	echo "$time 🕔 $delim" ;;
-			06)	echo "$time 🕕 $delim" ;;
-			07)	echo "$time 🕖 $delim" ;;
-			08)	echo "$time 🕗 $delim" ;;
-			09)	echo "$time 🕘 $delim" ;;
-			10)	echo "$time 🕙 $delim" ;;
-			11)	echo "$time 🕚 $delim" ;;
-			12)	echo "$time 🕛 $delim" ;;
-	esac;
+	if [ "$HOSTNAME" = "tango" ]; then
+		echo "$time  $delim"
+	else
+		case $hr in
+				01)	echo "$time 🕐 $delim" ;;
+				02)	echo "$time 🕑 $delim" ;;
+				03)	echo "$time 🕒 $delim" ;;
+				04)	echo "$time 🕓 $delim" ;;
+				05)	echo "$time 🕔 $delim" ;;
+				06)	echo "$time 🕕 $delim" ;;
+				07)	echo "$time 🕖 $delim" ;;
+				08)	echo "$time 🕗 $delim" ;;
+				09)	echo "$time 🕘 $delim" ;;
+				10)	echo "$time 🕙 $delim" ;;
+				11)	echo "$time 🕚 $delim" ;;
+				12)	echo "$time 🕛 $delim" ;;
+		esac;
+	fi
 
-	# if [ $(date '+%M') -lt 30 ]; then
-	#		 case $hr in
-	#				 01)	echo "🕐" ;;
-	#				 02)	echo "🕑" ;;
-	#				 03)	echo "🕒" ;;
-	#				 04)	echo "🕓" ;;
-	#				 05)	echo "🕔" ;;
-	#				 06)	echo "🕕" ;;
-	#				 07)	echo "🕖" ;;
-	#				 08)	echo "🕗" ;;
-	#				 09)	echo "🕘" ;;
-	#				 10)	echo "🕙" ;;
-	#				 11)	echo "🕚" ;;
-	#				 12)	echo "🕛" ;;
-	#		 esac;
-	# else
-	#		 case $hr in
-	#				 01)	echo "🕜" ;;
-	#				 02)	echo "🕝" ;;
-	#				 03)	echo "🕞" ;;
-	#				 04)	echo "🕟" ;;
-	#				 05)	echo "🕠" ;;
-	#				 06)	echo "🕡" ;;
-	#				 07)	echo "🕢" ;;
-	#				 08)	echo "🕣" ;;
-	#				 09)	echo "🕤" ;;
-	#				 10)	echo "🕥" ;;
-	#				 11)	echo "🕦" ;;
-	#				 12)	echo "🕧" ;;
-	#		 esac;
-	# fi
 
 	### Date
 	echo "$(date '+%y:%m:%d') "
