@@ -30,6 +30,10 @@ alias \
 alias \
 	ka="killall" \
 	g="git" \
+	gs="git status" \
+	gd="git diff" \
+	ga="git add" \
+	gc="git commit" \
 	trem="transmission-remote" \
 	sdn="sudo shutdown -h now" \
 	e="$EDITOR" \
