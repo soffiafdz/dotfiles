@@ -27,9 +27,6 @@ Plug 'ncm2/ncm2-tmux'
 Plug 'ncm2/ncm2-jedi'
 Plug 'jiangmiao/auto-pairs'
 
-" NERDTree
-" Plug 'scrooloose/nerdtree'
-
 " Comments
 Plug 'scrooloose/nerdcommenter'
 
@@ -53,6 +50,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'vimwiki/vimwiki'
 Plug 'Yggdroot/indentLine'
+Plug 'michal-h21/vimwiki-sync'
 
 " CSS colorizer
 Plug 'norcalli/nvim-colorizer.lua'
@@ -82,10 +80,8 @@ let g:vimwiki_list = [
             \{"path": "~/vimwiki/mcgill/neur631", "name": "N631"},
             \{"path": "~/vimwiki/mcgill/neur602_015", "name": "N602"},
             \{"path": "~/vimwiki/mcgill/bmde520", "name": "B520"},
-            \{"path": "~/vimwiki/tech/python", "name": "Python"},
-            \{"path": "~/vimwiki/tech/r", "name": "R"},
-            \{"path": "~/vimwiki/tech/shell", "name": "Shell"},
-            \{"path": "~/vimwiki/tech/linux", "name": "Linux"},
+            \{"path": "~/vimwiki/tech", "name": "Tech"},
+            \{"path": "~/vimwiki/writing", "name": "Writing"},
             \{"path": "~/vimwiki/recipes", "name": "Recipes"}]
 
 " Neomake config
@@ -283,7 +279,7 @@ autocmd Filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 augroup pandoc_syntax
     autocmd! BufNewFile,BufFilePre,BufRead *.md
         \ set filetype=markdown.pandoc wrapmargin=10
-    autocmd! FileType vimwiki set syntax=markdown.pandoc
+    "autocmd! FileType vimwiki set syntax=markdown.pandoc
     autocmd FileType r setlocal shiftwidth=2 tabstop=2 expandtab
 augroup END
 
