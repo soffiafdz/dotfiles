@@ -1,3 +1,5 @@
+set ratios 1:2:3
+set cleaner ~/.config/lf/cleaner
 # Luke's lf settings
 
 # Basic vars
@@ -5,12 +7,13 @@ set shell bash
 set shellopts '-eu'
 set ifs "\n"
 set scrolloff 10
-set icons
+#set icons
 set period 1
 set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
 
 # Vars that depend on environmental variables
-$lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
+#$lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
+set previewer ~/.config/lf/preview
 
 # cmds/functions
 cmd open ${{
