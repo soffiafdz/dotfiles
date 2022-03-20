@@ -7,7 +7,7 @@
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
 # Implicit sudo in most used commands
-for bin in mount umount sv pacman su; do
+for bin in mount umount sv pacman su light; do
 	alias $bin="sudo $bin"
 done
 
