@@ -88,7 +88,7 @@ status() { \
 	if [ "$HOSTNAME" = "hyde" ]; then
 		sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
 	else
-		sensors | awk '/^CPU:/ {print $2}' | sed -e "s/+//; s/C//"
+		sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//"
 	fi
 	echo " $delim"
 
