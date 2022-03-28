@@ -1,0 +1,15 @@
+#!/bin/env sh
+
+if [ "$#" -eq 0 ]; then
+    NO_SESS=$(tmux ls 2>/dev/null | grep --count LOCAL);
+    [ "$NO_SESS" -eq 0 ] && NAME=LOCAL || NAME=LOCAL$(( NO_SESS + 1 ));
+elif [ "$#" -eq 1 ]; then
+    NAME="$1";
+    [ $(tmux ls | grep --count --word-regexp $NAME) -eq 1 ] \
+        && tmux attach -t $NAME && exit 0;
+else
+    echo "Too many arguments"
+    exit 1
+fi
+
+tmux new -s $NAME
