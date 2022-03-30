@@ -296,6 +296,9 @@ let g:vimtex_compiler_latexmk = {
     \}
 let g:Tex_CompileRule_pdf='xelatex --interaction=nonstopmode $*'
 let g:tex_flavor = "latex"
+let g:livepreview_previewer = 'zathura'
+let g:vimtex_view_method = 'zathura'
+
 augroup LaTeX
     au! BufNewFile,BufFilePre,BufRead *.tex  set filetype=tex
     au filetype tex setlocal shiftwidth=2 tabstop=2 expandtab
