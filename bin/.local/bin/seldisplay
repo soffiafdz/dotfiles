@@ -6,8 +6,8 @@ MODE="$(printf "Laptop\\nDual\\nExternal" |
 
 
 case $MODE in
-	Laptop) autorandr laptop; sleep 1; setbg;;
-	Dual) autorandr dual_$DP; sleep 1; setbg;;
-	External) autorandr ext2k_$DP; sleep 1; setbg;;
+	Laptop) autorandr laptop; sleep 1;;
+	Dual) autorandr dual_$DP; sleep 1;;
+	External) autorandr ext2k_$DP; sleep 1;;
 	*) exit 2;;
 esac
