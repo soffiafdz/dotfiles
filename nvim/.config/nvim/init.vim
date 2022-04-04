@@ -51,6 +51,8 @@ Plug 'tpope/vim-surround'
 Plug 'vimwiki/vimwiki'
 Plug 'Yggdroot/indentLine'
 Plug 'michal-h21/vimwiki-sync'
+Plug 'vim-voom/VOoM'
+Plug 'mikewest/vimroom'
 
 " CSS colorizer
 Plug 'norcalli/nvim-colorizer.lua'
@@ -282,6 +284,9 @@ augroup pandoc_syntax
     "autocmd! FileType vimwiki set syntax=markdown.pandoc
     autocmd FileType r setlocal shiftwidth=2 tabstop=2 expandtab
 augroup END
+
+" Fountain
+autocmd BufRead, BufNewFile *.fountain set filetype=fountain
 
 " LaTeX
 let g:vimtex_compiler_latexmk = {
