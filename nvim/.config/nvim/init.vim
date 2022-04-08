@@ -257,6 +257,9 @@ nnoremap <C-l> <C-w>l
 " Delete trailing whitespace
 autocmd BufWritePre * %s/\s\+$//e
 
+" CSV
+autocmd Filetype csv set tabstop=4 shiftwidth=4 noexpandtab formatoptions-=t
+
 " Shell
 autocmd filetype sh set tabstop=4 shiftwidth=4 noexpandtab
 
