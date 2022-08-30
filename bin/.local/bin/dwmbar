@@ -69,7 +69,7 @@ status() { \
 
 	### Disk
 	# Disk space available
-	disk=$(df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}')
+	disk=$(df -h | awk '/^\/dev\/nvme0n1p5/ {print $5}')
 
 	if [ "$HOSTNAME" = "hyde" ]
 	then
