@@ -100,3 +100,22 @@ export GPG_TTY
 # [ -e $REPOS_DIR/conda-zsh-completion ] &&
 # 	fpath+=$REPOS/conda-zsh-completion **
 # 	compinit conda
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+#__conda_setup="$('/home/soffiafdz/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+#if [ $? -eq 0 ]; then
+    #eval "$__conda_setup"
+#else
+    #if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh" ]; then
+        #. "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh"
+    #else
+        #export PATH="/home/soffiafdz/mambaforge/bin:$PATH"
+    #fi
+#fi
+#unset __conda_setup
+
+#if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh" ]; then
+    #. "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh"
+#fi
+# <<< conda initialize <<<
