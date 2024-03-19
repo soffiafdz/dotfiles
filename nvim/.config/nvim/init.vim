@@ -58,33 +58,17 @@ Plug 'mikewest/vimroom'
 Plug 'norcalli/nvim-colorizer.lua'
 
 " Markdown
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
+"Plug 'vim-pandoc/vim-pandoc'
+"Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-rmarkdown'
-Plug 'instant-markdown/vim-instant-markdown',
-    \ {'for': 'markdown', 'do': 'yarn install'}
+Plug 'iamcco/markdown-preview.nvim',
+    \ {'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+"Plug 'instant-markdown/vim-instant-markdown',
+    "\ {'for': 'markdown', 'do': 'yarn install'}
 
 call plug#end()
-
-" VimWiki
-augroup vimwikiGroup
-    autocmd! BufNewFile,BufFilePre,BufRead *.wiki
-        \ set filetype=vimwiki wrapmargin=7 tabstop=2 shiftwidth=2 expandtab
-    autocmd filetype vimwiki inoremap <silent><buffer> <CR>
-              \ <C-]><Esc>:VimwikiReturn 3 5<CR>
-    autocmd filetype vimwiki inoremap <silent><buffer> <A-CR>
-              \ <Esc>:VimwikiReturn 2 2<CR>
-augroup END
-
-let g:vimwiki_list = [
-            \{},
-            \{"path": "~/vimwiki/mcgill/neur630", "name": "N630"},
-            \{"path": "~/vimwiki/mcgill/neur631", "name": "N631"},
-            \{"path": "~/vimwiki/mcgill/neur602_015", "name": "N602"},
-            \{"path": "~/vimwiki/mcgill/bmde520", "name": "B520"},
-            \{"path": "~/vimwiki/tech", "name": "Tech"},
-            \{"path": "~/vimwiki/writing", "name": "Writing"},
-            \{"path": "~/vimwiki/recipes", "name": "Recipes"}]
 
 " Neomake config
 function! OnBatt()
@@ -278,18 +262,39 @@ autocmd filetype htmldjango set shiftwidth=2 tabstop=2 expandtab formatoptions-=
 autocmd filetype javascript set shiftwidth=2 tabstop=2 expandtab
 
 " YAML
-autocmd Filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+autocmd filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 
 " Markdown
 augroup pandoc_syntax
+    autocmd fileType r setlocal shiftwidth=2 tabstop=2 expandtab
     autocmd! BufNewFile,BufFilePre,BufRead *.md
-        \ set filetype=markdown.pandoc wrapmargin=10
-    "autocmd! FileType vimwiki set syntax=markdown.pandoc
-    autocmd FileType r setlocal shiftwidth=2 tabstop=2 expandtab
+        \ set filetype=markdown wrapmargin=7
 augroup END
 
 " Fountain
 autocmd BufRead, BufNewFile *.fountain set filetype=fountain
+
+" VimWiki
+augroup vimwikiGroup
+    autocmd! BufNewFile,BufFilePre,BufRead *.wiki
+        \ set filetype=vimwiki wrapmargin=7 tabstop=2 shiftwidth=2 expandtab
+    autocmd! fileType vimwiki set syntax=markdown
+    autocmd filetype vimwiki inoremap <silent><buffer> <CR>
+              \ <C-]><Esc>:VimwikiReturn 3 5<CR>
+    autocmd filetype vimwiki inoremap <silent><buffer> <A-CR>
+              \ <Esc>:VimwikiReturn 2 2<CR>
+augroup END
+
+let g:vimwiki_global_ext = 0
+let g:vimwiki_list = [
+            \{},
+            \{"path": "~/Vimwiki/mcgill/neur630", "name": "N630"},
+            \{"path": "~/Vimwiki/mcgill/neur631", "name": "N631"},
+            \{"path": "~/Vimwiki/mcgill/neur602_015", "name": "N602"},
+            \{"path": "~/Vimwiki/mcgill/bmde520", "name": "B520"},
+            \{"path": "~/Vimwiki/tech", "name": "Tech"},
+            \{"path": "~/Vimwiki/writing", "name": "Writing"},
+            \{"path": "~/Vimwiki/recipes", "name": "Recipes"}]
 
 " LaTeX
 let g:vimtex_compiler_latexmk = {
