@@ -216,7 +216,7 @@ set hlsearch
 nnoremap <leader><tab> :noh<cr>
 nnoremap j gj
 nnoremap k gk
-nnoremap ; :
+"nnoremap ; :
 " nnoremap i zzi
 " nnoremap I zzI
 " nnoremap a zza

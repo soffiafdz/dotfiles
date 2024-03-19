@@ -40,3 +40,6 @@ alias \
 	v="$EDITOR" \
 	p="sudo pacman" \
 	z="zathura"
+
+# Radian
+alias r="radian"
