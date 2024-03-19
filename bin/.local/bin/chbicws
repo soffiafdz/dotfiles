@@ -4,9 +4,7 @@ for i in \
 	phebe \
 	ursula \
 	portia \
-	latour \
 	adam \
-	alice \
 	celia \
 	arthur
 do
@@ -17,6 +15,8 @@ done
 # banquo
 # juliet
 
+	#alice \
+	#latour \
 # phebe
 # pluto
 # vernon \
