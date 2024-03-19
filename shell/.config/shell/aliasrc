@@ -43,3 +43,6 @@ alias \
 
 # Radian
 alias r="radian"
+
+# Mamba
+alias _mamba=". /home/soffiafdz/.miniforge3/etc/profile.d/conda.sh"
