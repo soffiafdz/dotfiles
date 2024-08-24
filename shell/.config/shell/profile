@@ -50,4 +50,7 @@ export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export AWT_TOOLKIT="MToolkit wmname LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
+[ "$HOSTNAME" = "hyde" ] \
+	&& [ "$(tty)" = "/dev/tty1" ] \
+	&& ! pidof -s Xorg >/dev/null 2>&1 \
+	&& exec startx "$XINITRC"
