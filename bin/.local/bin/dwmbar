@@ -72,7 +72,7 @@ status() { \
 
 	if [ "$HOSTNAME" = "hyde" ]
 	then
-		disk=$(df -h | awk '/^\/dev\/nvme0n1p5/ {print $5}')
+		disk=$(df -h | awk '/^\/dev\/nvme0n1p6/ {print $5}')
 		disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
 	elif [ "$HOSTNAME" = "tango" ]
 	then
