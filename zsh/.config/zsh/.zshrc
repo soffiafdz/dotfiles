@@ -1,6 +1,12 @@
-#Powerlevel10k
-#source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+# Powerlevel10k
+p10k_sources=( \
+    /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
+    ~/powerlevel10k/powerlevel10k.zsh-theme )
+
+for p10k_source in ${p10k_sources[@]}
+do
+    [ -f $p10k_source ] && source $p10k_source
+done
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
