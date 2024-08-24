@@ -19,6 +19,7 @@ alias \
 	mkd="mkdir -pv"
 
 # Prettify
+
 alias \
 	ls="exa --group-directories-first" \
 	la="exa --group-directories-first -a" \
