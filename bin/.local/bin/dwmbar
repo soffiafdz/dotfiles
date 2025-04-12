@@ -47,7 +47,7 @@ status() { \
 	case $mute in
 		"true")	echo " 婢 $delim" ;;
 		"false")	 case $vol in
-			0%)									 			 echo " $vol ﱝ $delim"	;;
+			0%)									 			 echo " $vol 婢 $delim" ;;
 			[0-9]%|[1-2][0-9]%)					echo " $vol 奄 $delim" ;;
 			[3-6][0-9]%)								 echo " $vol 奔 $delim" ;;
 			[7-9][0-9]%|1[0-9][0-9]%)		echo " $vol 墳 $delim" ;;
@@ -74,6 +74,10 @@ status() { \
 	then
 		disk=$(df -h | awk '/^\/dev\/nvme0n1p6/ {print $5}')
 		disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
+	elif [ "$HOSTNAME" = "lettera" ]
+	then
+		disk=$(df -h | awk '/^\/dev\/sda1/ {print $5}')
+		disk2=$(df -h | awk '/^\/dev\/sda3/ {print $5}')
 	elif [ "$HOSTNAME" = "tango" ]
 	then
 		disk=$(df -h | awk '/^\/dev\/nvme0n1p2/ {print $5}')
@@ -87,8 +91,12 @@ status() { \
 	echo " $delim"
 
 	### CPU temp
-	if [ "$HOSTNAME" = "hyde" ]; then
+	if [ "$HOSTNAME" = "hyde" ]
+	then
 		sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
+	elif [ "$HOSTNAME" = "lettera" ]
+	then
+		sensors | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//"
 	else
 		sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//"
 	fi
