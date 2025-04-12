@@ -2,9 +2,10 @@
 st.alpha: 0.9
 
 !! Font
-!*.font: FiraCode Nerd Font:style=Retina,Regular:size=12:antialias=true
-*.font: CaskaydiaCove Nerd Font:style=Book:size=14:antialias=true
 ! *.font: Monospace:size=13:antialias=true:autohint=true
+!*.font: FiraCode Nerd Font:style=Retina,Regular:size=12:antialias=true
+*.font: CaskaydiaCove Nerd Font:style=Book:size=12:antialias=true
+!*.font: MesloLGL Nerd Font Mono:style=Regular:size=12
 
 !! gruvbox:
 *.color0: #1d2021
@@ -26,7 +27,7 @@ st.alpha: 0.9
 
 !!! Dmenu
 !! Font
-/* dmenu.font: Iosevka,Iosevka Nerd Font:style=Light,Regular:size=12:antialias=true:autostart=true */
+/* dmenu.font: Iosevka Nerd Font:style=Regular:size=11:antialias=true:autostart=true */
 
 !! Colors
 /*dmenu.background: #222222*/
