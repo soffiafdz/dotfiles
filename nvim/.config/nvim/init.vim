@@ -98,6 +98,17 @@ inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" For large files, disable most features
+function! DisableHeavyFeatures()
+  if getfsize(expand('%')) > 1000000 " size in bytes, adjust as needed
+    syntax off
+    set noloadplugins
+    set nofoldenable
+  endif
+endfunction
+
+autocmd BufReadPre * call DisableHeavyFeatures()
+
 " Netrw
 let g:netrw_banner = 0
 
