@@ -144,6 +144,10 @@ let g:airline_right_alt_sep     = '|'
 nmap , <Plug>RDSendLine
 vmap , <Plug>RDSendSelection
 vmap ,e <Plug>RESendSelection
+let R_app = "radian"
+let R_cmd = "R"
+let R_hl_term = 0
+let R_bracketed_paste = 1"
 
 " Appearance
 set t_Co=256
