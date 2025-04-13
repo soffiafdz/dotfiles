@@ -7,7 +7,7 @@ stat=$(xinput list-props "${id#id=}" \
 	| grep "Device Enabled" \
 	| awk '{gsub(/^[ \t]+|[ \t]+$/, "", $NF); if ($NF ~ /^[01]$/) print $NF}')
 
-if [ $stat = 2 ]; then
+if [ $stat = 1 ]; then
     xinput disable "${id#id=}" && notify-send "🖱 Trackpad is DISABLED"
 else
     xinput enable "${id#id=}" && notify-send "🖱 Trackpad is ENABLED"
