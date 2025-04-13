@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Need to let snd load
+#sleep 5
+
+# Load services
+/usr/bin/pipewire &
+/usr/bin/pipewire-pulse &
+/usr/bin/wireplumber &
