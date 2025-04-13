@@ -1,7 +1,11 @@
 #!/bin/sh
 
-id=$(xinput list | grep "Synaptics" | awk '{print $5}')
-stat=$(xinput list-props "${id#id=}" | grep "Device Enabled" | awk '{print $4}')
+id=$(xinput list \
+	| grep "Synaptics" \
+	| awk '{for (i = 1; i < NF; i++) if ($i ~ /id=/) print $i}')
+stat=$(xinput list-props "${id#id=}" \
+	| grep "Device Enabled" \
+	| awk '{gsub(/^[ \t]+|[ \t]+$/, "", $NF); if ($NF ~ /^[01]$/) print $NF}')
 
 if [ $stat = 2 ]; then
     xinput disable "${id#id=}" && notify-send "🖱 Trackpad is DISABLED"

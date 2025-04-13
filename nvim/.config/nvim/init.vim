@@ -98,6 +98,17 @@ inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+" For large files, disable most features
+function! DisableHeavyFeatures()
+  if getfsize(expand('%')) > 1000000 " size in bytes, adjust as needed
+    syntax off
+    set noloadplugins
+    set nofoldenable
+  endif
+endfunction
+
+autocmd BufReadPre * call DisableHeavyFeatures()
+
 " Netrw
 let g:netrw_banner = 0
 
@@ -133,6 +144,10 @@ let g:airline_right_alt_sep     = '|'
 nmap , <Plug>RDSendLine
 vmap , <Plug>RDSendSelection
 vmap ,e <Plug>RESendSelection
+let R_app = "radian"
+let R_cmd = "R"
+let R_hl_term = 0
+let R_bracketed_paste = 1"
 
 " Appearance
 set t_Co=256
