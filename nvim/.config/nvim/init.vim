@@ -1,372 +1,443 @@
-" Configuration for Neovim
-" Maintained by Soffiafdz <so1.618e@gmail.com>
+" init.vim - Neovim configuration by Soffiafdz
 
-call plug#begin()
+" ===============================
+" Plugin management (vim-plug)
+" ===============================
+
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Color schemes
 Plug 'rafi/awesome-vim-colorschemes'
 
-" Linting
+" Linting & formatting
 Plug 'dense-analysis/ale'
-Plug 'neomake/neomake'
 
-" Python
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'numirias/semshi'
-
-" R
+" Python & R support
 Plug 'jalvesaq/Nvim-R'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
-" Completion
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'gaalcaras/ncm-R'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-tmux'
-Plug 'ncm2/ncm2-jedi'
-Plug 'jiangmiao/auto-pairs'
-
-" Comments
+" Comments, Git, CSV
 Plug 'scrooloose/nerdcommenter'
-
-" Git
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-
-" [tc]sv
 Plug 'mechatroner/rainbow_csv'
 
-" Airline
+" Statusline/tabline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Distraction-free writing
+Plug 'junegunn/goyo.vim'
+
+" Fzf
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"lug 'junegunn/fzf.vim'
+
+" Telescope
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'ElPiloto/telescope-vimwiki.nvim'
+
+" Vimwiki
+Plug 'vimwiki/vimwiki'
+Plug 'michal-h21/vimwiki-sync'
+
+" Markdown support
+Plug 'preservim/vim-markdown', { 'for': ['markdown'] }
+Plug 'iamcco/markdown-preview.nvim', {
+  \ 'do': 'mkdp#util#install()',
+  \ 'for': ['markdown']
+  \ }
+
 " LaTeX
-Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
-" Misc
+" Helpers & enhancements
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'vimwiki/vimwiki'
+Plug 'jiangmiao/auto-pairs'
 Plug 'Yggdroot/indentLine'
-Plug 'michal-h21/vimwiki-sync'
-Plug 'vim-voom/VOoM'
-Plug 'mikewest/vimroom'
-
-" CSS colorizer
 Plug 'norcalli/nvim-colorizer.lua'
-
-" Markdown
-Plug 'godlygeek/tabular'
-Plug 'preservim/vim-markdown'
-"Plug 'vim-pandoc/vim-pandoc'
-"Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'vim-pandoc/vim-rmarkdown'
-Plug 'iamcco/markdown-preview.nvim',
-    \ {'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-"Plug 'instant-markdown/vim-instant-markdown',
-    "\ {'for': 'markdown', 'do': 'yarn install'}
 
 call plug#end()
 
-" Neomake config
-function! OnBatt()
-    if has('macunix')
-        return match(system('pmset -g batt'), "Now drawing from 'Battery Power'") != -1
-    elseif has('unix')
-        let file = 'sys/class/power_supply/AC/online'
-        if filereadable(file)
-            return readfile('/sys/class/power_supply/AC/online') == ['0']
-        endif
-    endif
-    return 0
-endfunction
+" ===============================
+" Core settings
+" ===============================
 
-if OnBatt()
-    call neomake#configure#automake('w')
-else
-    call neomake#configure#automake('nw', 750)
-endif
+syntax on                             " Enable syntax highlighting
+filetype plugin indent on             " Enable filetype detection and indent
+let mapleader = " "
 
-" ncm2 config
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=noinsert,menuone,noselect
-set shortmess+=c
-inoremap <c-c> <ESC>
-" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>\")
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" For large files, disable most features
-function! DisableHeavyFeatures()
-  if getfsize(expand('%')) > 1000000 " size in bytes, adjust as needed
-    syntax off
-    set noloadplugins
-    set nofoldenable
-  endif
-endfunction
-
-autocmd BufReadPre * call DisableHeavyFeatures()
-
-" Netrw
-let g:netrw_banner = 0
-
-" NerdTree config
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd vimenter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" nnoremap <space>n :NERDTreeToggle<CR>
-" nnoremap <space>m :NERDTreeFind<CR>
-" let NERDTreeShowFiles=1
-" let NERDTreeShowHidden=1
-" let NERDTreeQuitOnOpen=1
-" let NERDTreeHighlightCursorline=1
-" let NERDTreeMinimalUI=1
-" let NERDTreeDirArrows=1
-" let g:NERDSpaceDelims=1
-" let g:NERDCompactSexyComs=1
-" let g:NERDDefaultAlign='left'
-" let g:NERDCommentEmptyLines=1
-" let g:NERDTrimTrailingWhitespace=1
-
-" Airline config
-let g:airline_powerline_fonts=1
-let g:airline_theme='distinguished'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline_left_sep          = ''
-let g:airline_left_alt_sep      = '|'
-let g:airline_right_sep         = ''
-let g:airline_right_alt_sep     = '|'
-
-" nvm-R
-nmap , <Plug>RDSendLine
-vmap , <Plug>RDSendSelection
-vmap ,e <Plug>RESendSelection
-let R_app = "radian"
-let R_cmd = "R"
-let R_hl_term = 0
-let R_bracketed_paste = 1"
+" General
+set lazyredraw                        " Redraw only when needed
+set synmaxcol=200                     " Limit syntax scan length
+set textwidth=80                      " Text width is 80 characters
+set nowrap                            " No wrap by default
+set number relativenumber             " Combined line number settings
+set noshowmode                        " Airline displays mode
+set showcmd                           " Show incomplete commands
+set ruler                             " Show cursor position
+set laststatus=2                      " Always display statusline
+set wildmode=list:longest             " Command-line completion
+set hidden                            " Allow background buffers
+set scrolloff=5 sidescrolloff=5       " Keep context around cursor
+set signcolumn=yes                    " Always show signcolumn
 
 " Appearance
-set t_Co=256
 set termguicolors
-" colorscheme happy_hacking
-" colorscheme sierra
+set background=dark
 colorscheme gruvbox
-set background=dark termguicolors cursorline
-hi! Normal ctermbg=NONE guibg=NONE
-hi! LineNr ctermbg=NONE guibg=NONE
+"
+" Transparent backgrounds
+hi! Normal       ctermbg=NONE guibg=NONE
+hi! LineNr       ctermbg=NONE guibg=NONE
 hi! CursorLineNr ctermbg=NONE guibg=NONE
-hi! NonText ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
-lua require'colorizer'.setup()
+hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
 
-" " Cursor in TMUX
-" if exists('$TMUX')
-"         let &t_SI = "\<Esc>Ptmux;\<Esc>\e[6 q\<Esc>\\"
-"         let &t_SR = "\<Esc>Ptmux;\<Esc>\e[4 q\<Esc>\\"
-"         let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
-" else
-    let &t_SI = "\e[6 q"
-    let &t_SR = "\e[4 q"
-    let &t_EI = "\e[2 q"
-" endif
-
-" Leader Key
-let mapleader="\<space>"
-
-" IndentLines
-let g:indentLine_setColors = 0
-
-" Tab settings
-set cindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-" Security
-set nomodeline
-
-" Format
-set encoding=utf-8
-set copyindent
-set showmode
-set showcmd
-set hidden
-set wildmode=list:longest
-set nocursorline
-set noerrorbells
-set title
-set ruler
-set laststatus=2
-set nu rnu
-set relativenumber
-
-" Search and moving
-nnoremap / /\v
-vnoremap / /\v
-set ignorecase
-set smartcase
-set gdefault
-set incsearch
-set showmatch
-set hlsearch
-nnoremap <leader><tab> :noh<cr>
-nnoremap j gj
-nnoremap k gk
-"nnoremap ; :
-" nnoremap i zzi
-" nnoremap I zzI
-" nnoremap a zza
-" nnoremap A zzA
-" nnoremap o zzo
-" nnoremap O zzO
-
-
-" Wrapping and line lenght
-set wrap
-set textwidth=79
-set formatoptions=tcqrn1
-set scrolloff=3
-set colorcolumn=80
-
-" Invisible characters
+" Invisible chars
 set list
-set listchars=eol:¬
+set listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
 
-" Split open bottom/right
+" Splits: below/right
 set splitbelow splitright
 
-
-" Saving
-au FocusLost * :wa
-set undolevels=10000
-set nobackup
-set nowritebackup
-set noswapfile
-
-" Windows settings
+" Window nav
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Delete trailing whitespace
+" Mouse & undo
+set mouse=a
+set undofile
+
+" Search
+set ignorecase smartcase incsearch hlsearch
+nnoremap / /\v
+vnoremap / /\v
+nnoremap <leader><tab> :noh<CR>
+
+" Netrw
+let g:netrw_banner = 0
+
+" Trim trailing whitespace
 autocmd BufWritePre * %s/\s\+$//e
 
-" CSV
-autocmd Filetype csv set tabstop=4 shiftwidth=4 noexpandtab formatoptions-=t
+" Auto-save on focus lost
+autocmd FocusLost * :wa
 
-" Shell
-autocmd filetype sh set tabstop=4 shiftwidth=4 noexpandtab
+" Backup & swap in central dirs
+set backupdir=~/.local/state/nvim/backup//
+set directory=~/.local/state/nvim/swap//
+set nobackup
+set nowritebackup
 
-" R
-autocmd filetype r set shiftwidth=2 tabstop=2 expandtab
-autocmd filetype rmd set shiftwidth=2 tabstop=2 expandtab
+" Security
+set nomodeline
 
-" Python
-autocmd filetype python set shiftwidth=4 tabstop=4 expandtab
+" Completion settings (ncm2)
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
 
-" HTML
-autocmd filetype html set shiftwidth=2 tabstop=2 expandtab formatoptions-=t
-autocmd filetype htmldjango set shiftwidth=2 tabstop=2 expandtab formatoptions-=t
+" ===============================
+" Filetype-specific overrides
+" ===============================
 
-" Javascript
-autocmd filetype javascript set shiftwidth=2 tabstop=2 expandtab
-
-" YAML
-autocmd filetype yaml setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
-
-" Markdown
-augroup pandoc_syntax
-    autocmd fileType r setlocal shiftwidth=2 tabstop=2 expandtab
-    autocmd! BufNewFile,BufFilePre,BufRead *.md
-        \ set filetype=markdown wrapmargin=7
+augroup FiletypeSettings
+  autocmd!
+  " Bash/sh: 2-space soft tabs, converted to spaces
+  autocmd FileType sh,bash    setl ts=2 sw=2 sts=2 et
+  " Python: PEP8 indent
+  autocmd FileType python     setl ts=4 sw=4 sts=4 et ci cc=+1,+2,+3
+  " C/C++: indent
+  autocmd FileType c,cpp      setl ts=4 sw=4 sts=4 et ci cc=+1,+2,+3
+  " R, RMarkdown: 2-space
+  autocmd FileType r          setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  autocmd FileType rmd        setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  " Text:
+  autocmd FileType markdown   setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
+  autocmd FileType tex        setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
+  autocmd FileType text,txt   setl noai nosi nowrap fo=tcqrn1
+  " Makefiles
+  autocmd FileType make       setl ts=4 sw=4 sts=4 noet cc=+1,+2,+3
+  " Web: HTML, JS, YAML
+  autocmd FileType html       setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  autocmd FileType yaml       setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  autocmd FileType javascript setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  " Vim
+  autocmd FileType vim        setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  " Colorizer
+  autocmd FileType css,html,markdown lua require('colorizer').setup()
 augroup END
 
-" Fountain
-autocmd BufRead, BufNewFile *.fountain set filetype=fountain
+" ===============================
+" Plugin-specific settings
+" ===============================
 
-" VimWiki
-augroup vimwikiGroup
-    autocmd! BufNewFile,BufFilePre,BufRead *.wiki
-        \ set filetype=vimwiki wrapmargin=7 tabstop=2 shiftwidth=2 expandtab
-    autocmd! fileType vimwiki set syntax=markdown
-    autocmd filetype vimwiki inoremap <silent><buffer> <CR>
-              \ <C-]><Esc>:VimwikiReturn 3 5<CR>
-    autocmd filetype vimwiki inoremap <silent><buffer> <A-CR>
-              \ <Esc>:VimwikiReturn 2 2<CR>
-augroup END
+" Airline configuration
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'distinguished'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_left_sep          = ''
+let g:airline_left_alt_sep      = '|'
+let g:airline_right_sep         = ''
+let g:airline_right_alt_sep     = '|'
 
-let g:vimwiki_global_ext = 0
-let g:vimwiki_list = [
-            \{},
-            \{"path": "~/Vimwiki/mcgill/neur630", "name": "N630"},
-            \{"path": "~/Vimwiki/mcgill/neur631", "name": "N631"},
-            \{"path": "~/Vimwiki/mcgill/neur602_015", "name": "N602"},
-            \{"path": "~/Vimwiki/mcgill/bmde520", "name": "B520"},
-            \{"path": "~/Vimwiki/tech", "name": "Tech"},
-            \{"path": "~/Vimwiki/writing", "name": "Writing"},
-            \{"path": "~/Vimwiki/recipes", "name": "Recipes"}]
+" nvm-R
+let R_app = "radian"
+let R_cmd = "R"
+let R_hl_term = 0
+let R_bracketed_paste = 1"
 
-" LaTeX
-let g:vimtex_compiler_latexmk = {
-    \ 'options' : [
-    \   '-pdf',
-    \   '-shell-escape',
-    \   '-verbose',
-    \   '-file-line-error',
-    \   '-synctex=1',
-    \   '-interaction=nonstopmode',
-    \ ]
-    \}
-let g:Tex_CompileRule_pdf='xelatex --interaction=nonstopmode $*'
-let g:tex_flavor = "latex"
-let g:livepreview_previewer = 'zathura'
+" Markdown-preview settings
+let g:mkdp_auto_start = 0
+let g:mkdp_open_to_the_world = 0
+
+" VimTeX settings
 let g:vimtex_view_method = 'zathura'
-let g:Tex_IgnoredWarnings =
-    \'Underfull'."\n".
-    \'Overfull'."\n".
-    \'specifier changed to'."\n".
-    \'You have requested'."\n".
-    \'Missing number, treated as zero.'."\n".
-    \'There were undefined references'."\n".
-    \'Citation %.%# undefined'."\n".
-    \'Double space found.'."\n"
-let g:Tex_IgnoreLevel = 8
+let g:vimtex_compiler_method = 'latexmk'
 
-augroup LaTeX
-    au! BufNewFile,BufFilePre,BufRead *.tex  set filetype=tex
-    au filetype tex setlocal shiftwidth=2 tabstop=2 expandtab
-    au VimLeave *.tex !texclear %
-    au filetype tex map <leader>b :vsp<space>$BIB<CR>
-    " au filetype tex map <leader>W :w !detex \| wc -w<CR>
+" ===============================
+" Telescope
+" ===============================
+
+lua << EOF
+local telescope = require('telescope')
+telescope.setup{
+  defaults = {
+    prompt_prefix = '❯ ',
+    selection_caret = '▶ ',
+    file_ignore_patterns = { '%.git/' },
+  },
+}
+telescope.load_extension('fzf')
+telescope.load_extension('vimwiki')
+EOF
+
+" Mappings
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" ===============================
+" Vimwiki configuration
+" ===============================
+
+" Get hostname
+if !empty($HOSTNAME)
+  let s:host = $HOSTNAME
+elseif executable('hostname')
+  let s:host = trim(system('hostname'))
+elseif executable('uname')
+  let s:host = trim(system('uname -n'))
+elseif filereadable('/proc/sys/kernel/hostname')
+  let s:host = trim(join(readfile('/proc/sys/kernel/hostname')))
+else
+  let s:host = 'JohnDoe'
+endif
+
+" Use appropriate Path
+if s:host ==# 'lettera'
+  let g:proj_repo = '/home/soffiafdz/documents/journal'
+elseif s:host ==# 'workstation'
+  let g:proj_repo = '/mnt/data/manuscript_project'
+else
+  let g:proj_repo = $HOME . '/Projects/proj_project'
+endif
+
+" Vimwiki configuration (use Markdown syntax)
+let g:vimwiki_global_ext = 0
+let g:vimwiki_list = [{
+      \ 'path': expand(g:proj_repo . '/wiki'),
+      \ 'syntax': 'markdown',
+      \ 'ext': '.md',
+      \ 'name': 'Manuscript'
+      \ }]
+
+" Telescope
+lua << EOF
+local builtin  = require('telescope.builtin')
+local vimwiki  = require('telescope').extensions.vimwiki
+
+local function wiki_root()
+  return vim.fn.expand(vim.g.proj_repo .. '/wiki')
+end
+
+local function vignette_root()
+  return vim.fn.expand(vim.g.proj_repo .. '/vignettes')
+end
+
+-- Find any file in wiki
+function WikiFiles()
+  builtin.find_files({
+    prompt_title = 'Wiki files',
+    cwd          = wiki_root(),
+    find_command = { 'fd', '--type', 'f', '--extension', 'md' },
+  })
+end
+
+-- Live grep inside wiki
+function WikiGrep()
+  builtin.live_grep({
+    prompt_title = 'Search in wiki',
+    cwd          = wiki_root(),
+    search_dirs  = { wiki_root() },
+  })
+end
+
+-- Find in vignettes only
+function VignetteFiles()
+  builtin.find_files({
+    prompt_title = 'Vignettes',
+    cwd          = vignette_root(),
+    find_command = { 'fd', '--type', 'f', '--extension', 'md' },
+  })
+end
+EOF
+
+" Keymaps
+augroup vimwiki_telescope
+  autocmd!
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>f :lua WikiFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>g :lua WikiGrep()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>v :lua VignetteFiles()<CR>
+  autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:proj_repo<CR> status<CR>
 augroup END
 
-"""HTML
-augroup HTML
-    au filetype html inoremap &<space> &amp;<space>
-    au filetype html inoremap á &aacute;
-    au filetype html inoremap é &eacute;
-    au filetype html inoremap í &iacute;
-    au filetype html inoremap ó &oacute;
-    au filetype html inoremap ú &uacute;
-    au filetype html inoremap ä &auml;
-    au filetype html inoremap ë &euml;
-    au filetype html inoremap ï &iuml;
-    au filetype html inoremap ö &ouml;
-    au filetype html inoremap ü &uuml;
-    au filetype html inoremap ã &atilde;
-    au filetype html inoremap ẽ &etilde;
-    au filetype html inoremap ĩ &itilde;
-    au filetype html inoremap õ &otilde;
-    au filetype html inoremap ũ &utilde;
-    au filetype html inoremap ñ &ntilde;
-    au filetype html inoremap à &agrave;
-    au filetype html inoremap è &egrave;
-    au filetype html inoremap ì &igrave;
-    au filetype html inoremap ò &ograve;
-    au filetype html inoremap ù &ugrave;
+" ===============================
+" Linting & formatting
+" ===============================
+
+let g:ale_linters_explicit = 1        " Only use linters we configure
+let g:ale_fix_on_save = 1             " Auto-fix on save
+
+let g:ale_linters = {
+  \  'python'    : ['flake8', 'mypy', 'pylint'],
+  \  'javascript': ['eslint'],
+  \  'typescript': ['eslint'],
+  \  'html'      : ['tidy', 'htmlhint'],
+  \  'css'       : ['stylelint'],
+  \  'sh'        : ['shellcheck'],
+  \  'markdown'  : ['markdownlint', 'mdl'],
+  \  'r'         : ['lintr'],
+  \  'yaml'      : ['yamllint'],
+  \}
+
+let g:ale_fixers = {
+  \  '*'           : ['remove_trailing_lines', 'trim_whitespace'],
+  \  'python'      : ['black', 'isort'],
+  \  'javascript'  : ['prettier'],
+  \  'typescript'  : ['prettier'],
+  \  'css'         : ['prettier'],
+  \  'html'        : ['prettier'],
+  \  'sh'          : ['shfmt'],
+  \  'rust'        : ['rustfmt'],
+  \  'go'          : ['gofmt'],
+  \  'r'           : ['styler'],
+  \  'markdown'    : ['prettier'],
+  \}
+
+" ===============================
+" Goyo implementation
+" ===============================
+
+nnoremap <Leader>zz :Goyo<CR>
+let g:goyo_width  = 80
+let g:goyo_height = '85%'
+let g:goyo_linenr = 0
+
+augroup GoyoIntegration
+  autocmd!
+  autocmd User GoyoEnter nested call s:GoyoEnterSetup()
+  autocmd User GoyoLeave nested call s:GoyoLeaveSetup()
 augroup END
+
+function! s:GoyoEnterSetup()
+  " 1) Hide TMUX, Airline status AND tabline
+  if executable('tmux') && strlen($TMUX)
+    silent !tmux set status off
+    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  endif
+  silent! AirlineDisable
+  let g:airline#extensions#tabline#enabled = 0
+  set showtabline=0
+
+  " 2) Disable linting, indent guides, and colorizer
+  let b:ale_enabled        = 0
+  let b:indentLine_enabled = 0
+  silent! IndentLinesDisable
+  exec 'ColorizerDetachFromBuffer'
+
+  " 3) Hide all columns and signs
+  setlocal signcolumn=no
+  setlocal colorcolumn=
+
+  " 4) Re-apply transparency in all Goyo panes
+  hi! Normal       ctermbg=NONE guibg=NONE
+  hi! LineNr       ctermbg=NONE guibg=NONE
+  hi! CursorLineNr ctermbg=NONE guibg=NONE
+  hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE
+
+  " 5) Simplify buffer options
+  setlocal nowrap textwidth=0 nolist nospell listchars=
+  setlocal nocursorline
+  setlocal conceallevel=0 concealcursor=
+  setlocal foldmethod=manual nofoldenable
+endfunction
+
+function! s:GoyoLeaveSetup()
+  " 1) Restore TMUX, Airline and tabline
+  if executable('tmux') && strlen($TMUX)
+    silent !tmux set status on
+    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+  endif
+  silent! AirlineEnable
+  let g:airline#extensions#tabline#enabled = 1
+  set showtabline=2
+
+  " 2) Re-enable linting, indent guides, and colorizer
+  let b:ale_enabled        = 1
+  silent! IndentLinesEnable
+  let b:indentLine_enabled = 1
+  exec 'ColorizerAttachToBuffer'
+
+  " 3) Restore signs and guide
+  setlocal signcolumn=yes
+  setlocal colorcolumn=80
+
+  " 4) Keep transparency
+  hi! Normal       ctermbg=NONE guibg=NONE
+  hi! LineNr       ctermbg=NONE guibg=NONE
+  hi! CursorLineNr ctermbg=NONE guibg=NONE
+  hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE
+
+  " 5) Restore prose editing UI
+  setlocal wrap textwidth=79 formatoptions=tcqrn1
+  setlocal list listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
+  setlocal spell cursorline
+  setlocal foldmethod=indent foldenable
+endfunction
+
+
+" ===============================
+" Performance guard (large MD)
+" ===============================
+
+function! s:MarkdownPerformance()
+  if line('$') > 10000
+    let b:ale_enabled = 0                       " Disable ALE linting
+    let b:indentLine_enabled = 0                " Disable indent guides
+    setlocal laststatus=0                       " Hide statusline/Airline
+    setlocal nocursorline                       " Disable cursorline
+    setlocal nospell                            " Turn off spell-check
+    setlocal conceallevel=0 concealcursor=      " Disable conceal
+    setlocal foldmethod=manual nofoldenable     " Disable folding
+    setlocal synmaxcol=200                      " Restrict syntax scanning
+  endif
+endfunction
+autocmd BufReadPost *.md call s:MarkdownPerformance()
