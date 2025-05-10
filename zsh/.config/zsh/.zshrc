@@ -119,7 +119,7 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 if [ "$HOSTNAME" = "lettera" ]
 then
 	export MAMBA_EXE='/home/soffiafdz/Repos/dotfiles/bin/.local/bin/micromamba';
-	export MAMBA_ROOT_PREFIX='/home/soffiafdz/micromamba';
+	export MAMBA_ROOT_PREFIX='/home/soffiafdz/Micromamba';
 	__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 	if [ $? -eq 0 ]; then
 		eval "$__mamba_setup"
