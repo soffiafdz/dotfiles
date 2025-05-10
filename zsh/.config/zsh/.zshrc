@@ -100,6 +100,11 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 GPG_TTY=$(tty)
 export GPG_TTY
 
+# Go
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
 # Source Miniconda3
 # [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh" ] &&
 # 	source "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh"
