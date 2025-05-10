@@ -298,6 +298,14 @@ function VignetteFiles()
     find_command = { 'fd', '--type', 'f', '--extension', 'md' },
   })
 end
+
+function JournalRaw()
+  require('telescope.builtin').find_files({
+    prompt_title = 'Raw journal txt',
+    cwd          = vim.fn.expand(vim.g.manu_repo .. '/journal/raw-txt'),
+    find_command = { 'fd', '--type', 'f', '--extension', 'txt' },
+  })
+end
 EOF
 
 " Keymaps
@@ -306,6 +314,7 @@ augroup vimwiki_telescope
   autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>f :lua WikiFiles()<CR>
   autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>g :lua WikiGrep()<CR>
   autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>v :lua VignetteFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>j :lua JournalRaw()<CR>
   autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:proj_repo<CR> status<CR>
 augroup END
 
