@@ -102,7 +102,7 @@ export GPG_TTY
 
 # Go
 export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
+export GOPATH=$HOME/Go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
 # Source Miniconda3
