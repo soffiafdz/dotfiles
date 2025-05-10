@@ -228,36 +228,53 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " Vimwiki configuration
 " ===============================
 
-" Get hostname
-if !empty($HOSTNAME)
-  let s:host = $HOSTNAME
-elseif executable('hostname')
-  let s:host = trim(system('hostname'))
-elseif executable('uname')
-  let s:host = trim(system('uname -n'))
-elseif filereadable('/proc/sys/kernel/hostname')
-  let s:host = trim(join(readfile('/proc/sys/kernel/hostname')))
-else
-  let s:host = 'JohnDoe'
-endif
-
-" Use appropriate Path
-if s:host ==# 'lettera'
-  let g:proj_repo = '/home/soffiafdz/documents/journal'
-elseif s:host ==# 'workstation'
-  let g:proj_repo = '/mnt/data/manuscript_project'
-else
-  let g:proj_repo = $HOME . '/Projects/proj_project'
-endif
-
 " Vimwiki configuration (use Markdown syntax)
-let g:vimwiki_global_ext = 0
+let g:palimpsest_path = '/home/soffiafdz/Documents/palimpsest'
 let g:vimwiki_list = [{
-      \ 'path': expand(g:proj_repo . '/wiki'),
-      \ 'syntax': 'markdown',
-      \ 'ext': '.md',
-      \ 'name': 'Manuscript'
-      \ }]
+  \ 'path': expand(g:palimpsest_path . '/wiki'),
+  \ 'syntax': 'markdown',
+  \ 'ext': '.md',
+  \ 'name': 'Palimpsest',
+  \ 'diary_rel_path': 'log',
+  \ 'diary_index': 'index'
+  \ }]
+let g:vimwiki_global_ext = 0
+let g:vimwiki_diary_index_header = '# Session Log\n\n'
+
+" VimwikiDiary (log: Palimpsest)
+augroup vimwiki_diary
+  autocmd!
+  " <leader>wd → create/open today’s note
+  autocmd FileType vimwiki nnoremap <buffer> <Leader>wd :VimwikiMakeDiaryNote<CR>
+  " <leader>wi → open the diary index
+  autocmd FileType vimwiki nnoremap <buffer> <Leader>wi :VimwikiDiaryIndex<CR>
+  " <leader>ws → rebuild links in the index
+  autocmd FileType vimwiki nnoremap <buffer> <Leader>ws :VimwikiDiaryGenerateLinks<CR>
+augroup END
+
+" Boilerplate (log: Palimpsest)
+augroup vimwiki_diary_template
+  autocmd!
+  " When a brand-new file is created in the diary folder, insert our skeleton
+  autocmd BufNewFile */wiki/log/*.md call s:InsertDiaryTemplate()
+augroup END
+
+function! s:InsertDiaryTemplate()
+  " First line: full weekday, month day, year
+  call append(0, '# ' . strftime("%A, %B %d, %Y"))
+  " Blank line
+  call append(1, '')
+  " Sections
+  call append(2, '**Mood**: ')
+  call append(3, '**Focus**: ')
+  call append(4, '**Notes**: ')
+  " Separator
+  call append(5, '---')
+  call append(6, '')
+  " Jump cursor to line 3 (after the header)
+  exec "normal! 3G"
+endfunction
+
 
 " Telescope
 lua << EOF
@@ -265,11 +282,15 @@ local builtin  = require('telescope.builtin')
 local vimwiki  = require('telescope').extensions.vimwiki
 
 local function wiki_root()
-  return vim.fn.expand(vim.g.proj_repo .. '/wiki')
+  return vim.fn.expand(vim.g.palimpsest_path .. '/wiki')
 end
 
 local function vignette_root()
-  return vim.fn.expand(vim.g.proj_repo .. '/vignettes')
+  return vim.fn.expand(vim.g.palimpsest_path .. '/vignettes')
+end
+
+local function source_root()
+  return vim.fn.expand(vim.g.palimpsest_path .. '/journal/raw-txt')
 end
 
 -- Find any file in wiki
@@ -300,9 +321,9 @@ function VignetteFiles()
 end
 
 function JournalRaw()
-  require('telescope.builtin').find_files({
+  builtin.find_files({
     prompt_title = 'Raw journal txt',
-    cwd          = vim.fn.expand(vim.g.manu_repo .. '/journal/raw-txt'),
+    cwd          = source_root(),
     find_command = { 'fd', '--type', 'f', '--extension', 'txt' },
   })
 end
@@ -311,11 +332,11 @@ EOF
 " Keymaps
 augroup vimwiki_telescope
   autocmd!
-  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>f :lua WikiFiles()<CR>
-  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>g :lua WikiGrep()<CR>
-  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>v :lua VignetteFiles()<CR>
-  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>j :lua JournalRaw()<CR>
-  autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:proj_repo<CR> status<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>ff :lua WikiFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fg :lua WikiGrep()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fv :lua VignetteFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fj :lua JournalRaw()<CR>
+  autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:palimpsest_path<CR> status<CR>
 augroup END
 
 " ===============================
@@ -426,12 +447,11 @@ function! s:GoyoLeaveSetup()
   hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE
 
   " 5) Restore prose editing UI
-  setlocal wrap textwidth=79 formatoptions=tcqrn1
+  setlocal wrap textwidth=80 formatoptions=tcqrn1
   setlocal list listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
   setlocal spell cursorline
   setlocal foldmethod=indent foldenable
 endfunction
-
 
 " ===============================
 " Performance guard (large MD)
