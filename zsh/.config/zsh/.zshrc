@@ -1,3 +1,17 @@
+# HOST vs HOSTNAME
+if [ -z $HOSTNAME ]
+then
+	if [ -n $HOST ]
+	then
+		export HOSTNAME=$HOST
+	elif [ -n $(hostname) ]
+	then
+		export HOSTNAME=$(hostname)
+	else
+		export HOSTNAME=JohnDoe
+	fi
+fi
+
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
@@ -119,6 +133,17 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 if [ "$HOSTNAME" = "lettera" ]
 then
 	export MAMBA_EXE='/home/soffiafdz/Repos/dotfiles/bin/.local/bin/micromamba';
+	export MAMBA_ROOT_PREFIX='/home/soffiafdz/Micromamba';
+	__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__mamba_setup"
+	else
+		alias micromamba="$MAMBA_EXE"  # Fallback on help from micromamba activate
+	fi
+	unset __mamba_setup
+elif [ "$HOSTNAME" = "Lazarus" ]
+then
+	export MAMBA_EXE='/home/soffiafdz/.local/bin/micromamba';
 	export MAMBA_ROOT_PREFIX='/home/soffiafdz/Micromamba';
 	__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 	if [ $? -eq 0 ]; then
