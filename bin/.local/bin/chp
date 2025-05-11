@@ -1,6 +1,0 @@
-#!/bin/sh
-
-
-powered=$(bluetoothctl show | awk '/Powered:/ {print $2}')
-[ $powered = yes ] || bluetoothctl power on
-bluetoothctl connect 14:3F:A6:3D:71:E3
