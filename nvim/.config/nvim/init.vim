@@ -260,19 +260,27 @@ augroup vimwiki_diary_template
 augroup END
 
 function! s:InsertDiaryTemplate()
-  " First line: full weekday, month day, year
-  call append(0, '# ' . strftime("%A, %B %d, %Y"))
-  " Blank line
+  " 1) Date heading
+  call append(0, '# ' .. strftime('%Y-%m-%d'))
+  " 2) Blank line + timestamp fields
   call append(1, '')
-  " Sections
-  call append(2, '**Mood**: ')
-  call append(3, '**Focus**: ')
-  call append(4, '**Notes**: ')
-  " Separator
+  call append(2, 'Started: ' . strftime('%H:%M'))
+  call append(3, 'Finished: ')
+  call append(4, '')
   call append(5, '---')
   call append(6, '')
-  " Jump cursor to line 3 (after the header)
-  exec "normal! 3G"
+  " 3) Tasks section
+  call append(7, 'Tasks:')
+  call append(8, '- [ ]')
+  call append(9, '')
+  call append(10, '---')
+  call append(11, '')
+  " 4) Worked on section
+  call append(12, 'Worked on:')
+  call append(13, '- ')
+  call append(14, '')
+  " 5) Position cursor on the first task bullet
+  exec "normal! 8G"
 endfunction
 
 
