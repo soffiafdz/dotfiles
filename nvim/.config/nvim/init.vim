@@ -328,11 +328,12 @@ function VignetteFiles()
   })
 end
 
+-- Live grep inside raw-txt
 function JournalRaw()
-  builtin.find_files({
-    prompt_title = 'Raw journal txt',
+  builtin.live_grep({
+    prompt_title = 'Search in Raw txts',
     cwd          = source_root(),
-    find_command = { 'fd', '--type', 'f', '--extension', 'txt' },
+    search_dirs  = { source_root() },
   })
 end
 EOF
