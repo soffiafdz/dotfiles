@@ -11,11 +11,12 @@ Plug 'rafi/awesome-vim-colorschemes'
 
 " Linting & formatting
 Plug 'dense-analysis/ale'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Python & R support
 Plug 'jalvesaq/Nvim-R'
 Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+"Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 " Comments, Git, CSV
 Plug 'scrooloose/nerdcommenter'
@@ -352,6 +353,7 @@ augroup END
 " Linting & formatting
 " ===============================
 
+" Ale
 let g:ale_linters_explicit = 1        " Only use linters we configure
 let g:ale_fix_on_save = 1             " Auto-fix on save
 
@@ -380,6 +382,39 @@ let g:ale_fixers = {
   \  'r'           : ['styler'],
   \  'markdown'    : ['prettier'],
   \}
+
+" Treesitter
+lua << EOF
+require('nvim-treesitter.configs').setup {
+  -- pick the parsers you actually use:
+  ensure_installed = {
+    "bash", "c", "comment", "cpp", "css", "csv", "diff", "dockerfile",
+    "gitcommit", "gitignore", "gpg", "html", "javascript", "json", "julia",
+    "latex", "lua", "make", "python", "r", "typst", "vim", "yaml"
+  },
+  highlight      = { enable = true  },  -- syntax via Treesitter
+  indent         = { enable = true  },  -- indentation via Treesitter
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      node_decremental = "grm",
+    },
+  },
+  textobjects = {
+    select = {
+      enable = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
+  },
+}
+EOF
 
 " ===============================
 " Goyo implementation
