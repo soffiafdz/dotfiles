@@ -45,6 +45,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'michal-h21/vimwiki-sync'
 
 " Markdown support
+Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown', { 'for': ['markdown'] }
 Plug 'iamcco/markdown-preview.nvim', {
   \ 'do': 'mkdp#util#install()',
@@ -150,7 +151,7 @@ set shortmess+=c
 augroup FiletypeSettings
   autocmd!
   " Bash/sh: 2-space soft tabs, converted to spaces
-  autocmd FileType sh,bash    setl ts=2 sw=2 sts=2 et
+  autocmd FileType sh,bash    setl ts=2 sw=2 sts=2 et ci cc=+1,+2,+3
   " Python: PEP8 indent
   autocmd FileType python     setl ts=4 sw=4 sts=4 et ci cc=+1,+2,+3
   " C/C++: indent
@@ -192,6 +193,10 @@ let R_app = "radian"
 let R_cmd = "R"
 let R_hl_term = 0
 let R_bracketed_paste = 1"
+
+" Markdown general settings
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_frontmatter = 1
 
 " Markdown-preview settings
 let g:mkdp_auto_start = 0
@@ -279,6 +284,12 @@ function! s:InsertDiaryTemplate()
   call append(12, 'Worked on:')
   call append(13, '- ')
   call append(14, '')
+  call append(15, '---')
+  call append(16, '')
+  " 5) Notes
+  call append(17, 'Notes:')
+  call append(18, '- ')
+  call append(19, '')
   " 5) Position cursor on the first task bullet
   exec "normal! 8G"
 endfunction
