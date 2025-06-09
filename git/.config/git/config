@@ -3,7 +3,15 @@
 	email = sofia.fernandezlozano@mail.mcgill.ca
 [core]
 	editor = nvim
+	pager = delta
 [init]
 	defaultBranch = main
 [pull]
 	rebase = false
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+[merge]
+    conflictstyle = zdiff3
