@@ -117,7 +117,7 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
 export MAMBA_EXE='/home/soffiafdz/.local/bin/micromamba';
-export MAMBA_ROOT_PREFIX='/home/soffiafdz/Micromamba';
+export MAMBA_ROOT_PREFIX='/home/soffiafdz/.local/share/micromamba';
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
 	eval "$__mamba_setup"
