@@ -33,6 +33,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/goyo.vim'
 
 " Markdown support
+Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown', { 'for': ['markdown'] }
 Plug 'iamcco/markdown-preview.nvim', {
   \ 'do': 'mkdp#util#install()',
@@ -144,11 +145,11 @@ augroup FiletypeSettings
   " Text:
   autocmd FileType markdown   setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
   autocmd FileType tex        setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
-  autocmd FileType text,txt   setl noai nosi nowrap fo=tcqrn1
+  autocmd FileType text,txt   setl noai nosi fo=tcqrn1
   " Makefiles
   autocmd FileType make       setl ts=4 sw=4 sts=4 noet cc=+1,+2,+3
   " Web: HTML, JS, YAML
-  autocmd FileType html       setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  autocmd FileType html       setl ts=2 sw=2 sts=2 et tw=0 fo-=t
   autocmd FileType yaml       setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
   autocmd FileType javascript setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
   " Vim
@@ -304,4 +305,3 @@ function! s:GoyoLeaveSetup()
   setlocal spell cursorline
   setlocal foldmethod=indent foldenable
 endfunction
-
