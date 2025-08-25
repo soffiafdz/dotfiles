@@ -24,6 +24,7 @@ alias \
 	ls="exa --group-directories-first" \
 	la="exa --group-directories-first -a" \
 	ll="exa --group-directories-first -la" \
+  bat="batcat" \
 	grep="grep --color=auto" \
 	diff="diff --color=auto"
 
@@ -44,6 +45,3 @@ alias \
 
 # Radian
 alias r="radian"
-
-# Mamba
-alias _mamba=". /home/soffiafdz/.miniforge3/etc/profile.d/conda.sh"
