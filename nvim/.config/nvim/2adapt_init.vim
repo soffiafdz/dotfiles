@@ -69,24 +69,24 @@ call plug#end()
 " Core settings
 " ===============================
 
-syntax on                             " Enable syntax highlighting
-filetype plugin indent on             " Enable filetype detection and indent
-let mapleader = " "
+"syntax on                             " Enable syntax highlighting
+"filetype plugin indent on             " Enable filetype detection and indent
+"let mapleader = " "
 
 " General
-set lazyredraw                        " Redraw only when needed
-set synmaxcol=200                     " Limit syntax scan length
-set textwidth=80                      " Text width is 80 characters
-set nowrap                            " No wrap by default
-set number relativenumber             " Combined line number settings
-set noshowmode                        " Airline displays mode
-set showcmd                           " Show incomplete commands
-set ruler                             " Show cursor position
-set laststatus=2                      " Always display statusline
-set wildmode=list:longest             " Command-line completion
-set hidden                            " Allow background buffers
-set scrolloff=5 sidescrolloff=5       " Keep context around cursor
-set signcolumn=yes                    " Always show signcolumn
+"set lazyredraw                        " Redraw only when needed
+"set synmaxcol=200                     " Limit syntax scan length
+"set textwidth=80                      " Text width is 80 characters
+"set nowrap                            " No wrap by default
+"set number relativenumber             " Combined line number settings
+"set noshowmode                        " Airline displays mode
+"set showcmd                           " Show incomplete commands
+"set ruler                             " Show cursor position
+"set laststatus=2                      " Always display statusline
+"set wildmode=list:longest             " Command-line completion
+"set hidden                            " Allow background buffers
+"set scrolloff=5 sidescrolloff=5       " Keep context around cursor
+"set signcolumn=yes                    " Always show signcolumn
 
 " Appearance
 "set termguicolors
@@ -100,11 +100,11 @@ hi! CursorLineNr ctermbg=NONE guibg=NONE
 hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
 
 " Invisible chars
-set list
-set listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
+"set list
+"set listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
 
 " Splits: below/right
-set splitbelow splitright
+"set splitbelow splitright
 
 " Window nav
 nnoremap <leader>w <C-w>v<C-w>l
@@ -114,17 +114,17 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Mouse & undo
-set mouse=a
-set undofile
+"set mouse=a
+"set undofile
 
 " Search
-set ignorecase smartcase incsearch hlsearch
+"set ignorecase smartcase incsearch hlsearch
 nnoremap / /\v
 vnoremap / /\v
 nnoremap <leader><tab> :noh<CR>
 
 " Netrw
-let g:netrw_banner = 0
+"let g:netrw_banner = 0
 
 " Trim trailing whitespace
 autocmd BufWritePre * %s/\s\+$//e
@@ -139,11 +139,11 @@ set nobackup
 set nowritebackup
 
 " Security
-set nomodeline
+"set nomodeline
 
 " Completion settings (ncm2)
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
+"set completeopt=menuone,noinsert,noselect
+"set shortmess+=c
 
 " ===============================
 " Filetype-specific overrides
