@@ -9,6 +9,10 @@ call plug#begin('~/.local/share/nvim/plugged')
 " Color schemes
 Plug 'rafi/awesome-vim-colorschemes'
 
+Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
+" Plug 'ryanoasis/vim-devicons' Icons without colours
+Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
+
 " Linting & formatting
 Plug 'dense-analysis/ale'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -89,7 +93,7 @@ set scrolloff=5 sidescrolloff=5       " Keep context around cursor
 set signcolumn=yes                    " Always show signcolumn
 
 " Appearance
-"set termguicolors
+set termguicolors
 "set background=dark
 colorscheme gruvbox
 "
@@ -180,7 +184,12 @@ augroup END
 " Plugin-specific settings
 " ===============================
 
+lua << EOF
+require("bufferline").setup{}
+EOF
+
 " Airline configuration
+let g:airline#extensions#tabline#enabled = 0
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'distinguished'
 let g:airline#extensions#tabline#enabled = 1
