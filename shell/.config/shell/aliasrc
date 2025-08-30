@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# If Lazarus, use binary in .local/share/nvim
+[ "$(uname -n)" = "Lazarus" ] &&
+  alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
+
 # Use neovim (if installed)
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
 
@@ -8,40 +12,40 @@
 
 # Implicit sudo in most used commands
 for bin in mount umount sv pacman su light; do
-	alias $bin="sudo $bin"
+  alias $bin="sudo $bin"
 done
 
 # Verbosiyt/interactivity
 alias \
-	cp="cp -iv" \
-	mv="mv -iv" \
-	rm="rm -vI" \
-	mkd="mkdir -pv"
+  cp="cp -iv" \
+  mv="mv -iv" \
+  rm="rm -vI" \
+  mkd="mkdir -pv"
 
 # Prettify
 
 alias \
-	ls="exa --group-directories-first" \
-	la="exa --group-directories-first -a" \
-	ll="exa --group-directories-first -la" \
+  ls="exa --group-directories-first" \
+  la="exa --group-directories-first -a" \
+  ll="exa --group-directories-first -la" \
   bat="batcat" \
-	grep="grep --color=auto" \
-	diff="diff --color=auto"
+  grep="grep --color=auto" \
+  diff="diff --color=auto"
 
 # Abbreviations
 alias \
-	ka="killall" \
-	g="git" \
-	gs="git status" \
-	gd="git diff" \
-	ga="git add" \
-	gc="git commit" \
-	trem="transmission-remote" \
-	sdn="sudo shutdown -h now" \
-	e="$EDITOR" \
-	v="$EDITOR" \
-	p="sudo pacman" \
-	z="zathura"
+  ka="killall" \
+  g="git" \
+  gs="git status" \
+  gd="git diff" \
+  ga="git add" \
+  gc="git commit" \
+  trem="transmission-remote" \
+  sdn="sudo shutdown -h now" \
+  e="$EDITOR" \
+  v="$EDITOR" \
+  p="sudo pacman" \
+  z="zathura"
 
 # Radian
 alias r="radian"
