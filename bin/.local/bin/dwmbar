@@ -1,19 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 # This script sets the statusbar with the xsetroot command at the end.
 
 # Set delimeter
 delim=""
-
-# testweather checks to see if the most recent forecast is up to date.	If it
-# isn't, it downloads a new weather forecast, then signals to update the
-# statusbar. Gets weather report from wttr.in.
-testweather() {
-  [ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ] &&
-    ping -q -c 1 1.1.1.1 >/dev/null &&
-    curl -s "wttr.in/$location" >"$HOME/.local/share/weatherreport" &&
-    notify-send "🌞 Weather" "New weather forecast for today." &&
-    refbar
-}
 
 # Here is the (big) function that outputs the appearance of the statusbar. It
 # can really be broken down into many submodules which I've commented and
@@ -59,7 +48,7 @@ status() {
   # Make if for when there is no network
   sed "s/down/󰈂 $delim/;s/up/ $delim/" /sys/class/net/e*/operstate
   wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
-  [ -z $wifi ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
+  [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
 
   # Show unread mail if mutt-wizard is installed.
   # command -v mw >/dev/null 2>&1 &&
@@ -103,26 +92,26 @@ status() {
   bstat=$(cat /sys/class/power_supply/BAT0/status)
   case $batt in
   9[5-9] | 1[0-2][0-9]) bcap=" " ;;
-  8[5-9] | 9[0-4]) bcap=" " ;;
-  7[5-9] | 8[0-4]) bcap=" " ;;
-  6[5-9] | 7[0-4]) bcap=" " ;;
-  5[5-9] | 6[0-4]) bcap=" " ;;
-  4[5-9] | 5[0-4]) bcap=" " ;;
-  3[5-9] | 4[0-4]) bcap=" " ;;
-  2[5-9] | 3[0-4]) bcap=" " ;;
-  1[5-9] | 2[0-4]) bcap=" " ;;
-  [5-9] | 1[0-4]) bcap=" " ;;
+  8[5-9] | 9[0-4]) bcap=" " ;;
+  7[5-9] | 8[0-4]) bcap=" " ;;
+  6[5-9] | 7[0-4]) bcap=" " ;;
+  5[5-9] | 6[0-4]) bcap=" " ;;
+  4[5-9] | 5[0-4]) bcap=" " ;;
+  3[5-9] | 4[0-4]) bcap=" " ;;
+  2[5-9] | 3[0-4]) bcap=" " ;;
+  1[5-9] | 2[0-4]) bcap=" " ;;
+  [5-9] | 1[0-4]) bcap=" " ;;
   [0-5]) bcap=" " ;;
   esac
 
-  [ $bstat = "Charging" ] &&
-    echo $bcap |
+  [ "$bstat" = "Charging" ] &&
+    echo "$bcap" |
     awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
   # echo "${bstat:1:1} $batt% $delim"
-  [ $bstat = "Discharging" ] ||
-    [ $bstat = "Full" ] ||
-    [ $bstat = "Unknown" ] &&
-    echo $bcap |
+  [ "$bstat" = "Discharging" ] ||
+    [ "$bstat" = "Full" ] ||
+    [ "$bstat" = "Unknown" ] &&
+    echo "$bcap" |
     awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
 
   ### TIME
