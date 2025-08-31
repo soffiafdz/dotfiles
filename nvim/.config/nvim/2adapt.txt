@@ -1,36 +1,3 @@
-# Markdown
-## Vim-Markdown
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_frontmatter = 1
-
-## Markdown-preview
-let g:mkdp_auto_start = 0
-let g:mkdp_open_to_the_world = 0
-
-# LaTeX
-## VimTeX
-let g:vimtex_view_method = 'zathura'
-let g:vimtex_compiler_method = 'latexmk'
-
-# Telescope
-## General setup
-local telescope = require('telescope')
-telescope.setup{
-  defaults = {
-    prompt_prefix = '❯ ',
-    selection_caret = '▶ ',
-    file_ignore_patterns = { '%.git/' },
-  },
-}
-telescope.load_extension('fzf')
-telescope.load_extension('vimwiki')
-
-## Mappings
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
 # Vimwiki
 ## Configuration
 let g:palimpsest_path = '/home/soffiafdz/Documents/palimpsest'
@@ -156,36 +123,3 @@ augroup vimwiki_telescope
   autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fj :lua JournalRaw()<CR>
   autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:palimpsest_path<CR> status<CR>
 augroup END
-
-
-# Treesitter
-## Setup
-require('nvim-treesitter.configs').setup {
-  -- pick the parsers you actually use:
-  ensure_installed = {
-    "bash", "c", "comment", "cpp", "css", "csv", "diff", "dockerfile",
-    "gitcommit", "gitignore", "gpg", "html", "javascript", "json", "julia",
-    "latex", "lua", "make", "python", "r", "typst", "vim", "yaml"
-  },
-  highlight      = { enable = true  },  -- syntax via Treesitter
-  indent         = { enable = true  },  -- indentation via Treesitter
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      node_decremental = "grm",
-    },
-  },
-  textobjects = {
-    select = {
-      enable = true,
-      keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        ["ic"] = "@class.inner",
-      },
-    },
-  },
-}
