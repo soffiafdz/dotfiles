@@ -5,14 +5,30 @@ return {
     event = "BufReadPre",
     -- TODO: Make sure that local keymaps work correctly.
     keys = {
+      { "<leader>v", group = "Vimwiki" },
+      -- Global mapping (any filetype)
+      { "<leader>vw", "<Plug>VimwikiIndex", desc = "Index", mode = "n" },
+      -- Filetype-restricted mappings
       {
-        "<leader>v",
-        name = "Vimwiki", -- Which-Key group name
+        "<leader>vt",
+        "<Plug>VimwikiTabIndex",
+        desc = "Tab Index",
         mode = "n",
-        { "i", "<Plug>VimwikiIndex", desc = "Index" },
-        { "t", "<Plug>VimwikiTabIndex", desc = "Tab Index" },
-        { "d", "<Plug>VimwikiMakeDiaryNote", desc = "Diary Today" },
-        { "s", "<Plug>VimwikiDiaryGenerateLinks", desc = "Rebuild Links" },
+        ft = { "vimwiki" },
+      },
+      {
+        "<leader>vd",
+        "<Plug>VimwikiMakeDiaryNote",
+        desc = "Diary Today",
+        mode = "n",
+        ft = { "vimwiki" },
+      },
+      {
+        "<leader>vs",
+        "<Plug>VimwikiDiaryGenerateLinks",
+        desc = "Rebuild Links",
+        mode = "n",
+        ft = { "vimwiki" },
       },
     },
     config = function()
