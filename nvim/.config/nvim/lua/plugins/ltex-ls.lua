@@ -11,7 +11,7 @@ local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
 local additionalRules
 if vim.fn.isdirectory(ngrams_path) == 1 then
   additionalRules = {
-    motherTonge = "es",
+    motherTongue = "es",
     languageModel = ngrams_path,
   }
 else
