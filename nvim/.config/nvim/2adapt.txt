@@ -12,15 +12,6 @@ let g:vimwiki_list = [{
 let g:vimwiki_diary_index_header = '# Session Log\n\n'
 
 ## Mappings
-augroup vimwiki_diary
-  autocmd!
-  " <leader>wd → create/open today’s note
-  autocmd FileType vimwiki nnoremap <buffer> <Leader>wd :VimwikiMakeDiaryNote<CR>
-  " <leader>wi → open the diary index
-  autocmd FileType vimwiki nnoremap <buffer> <Leader>wi :VimwikiDiaryIndex<CR>
-  " <leader>ws → rebuild links in the index
-  autocmd FileType vimwiki nnoremap <buffer> <Leader>ws :VimwikiDiaryGenerateLinks<CR>
-augroup END
 
 " Boilerplate (log: Palimpsest)
 augroup vimwiki_diary_template
