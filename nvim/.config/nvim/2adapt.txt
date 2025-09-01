@@ -9,7 +9,6 @@ let g:vimwiki_list = [{
   \ 'diary_rel_path': 'log',
   \ 'diary_index': 'index'
   \ }]
-let g:vimwiki_global_ext = 0
 let g:vimwiki_diary_index_header = '# Session Log\n\n'
 
 ## Mappings
