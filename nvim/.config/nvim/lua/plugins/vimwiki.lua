@@ -3,54 +3,51 @@ return {
   {
     "vimwiki/vimwiki",
     event = "BufReadPre",
+    init = function()
+      vim.g.vimwiki_map_prefix = "<leader>v"
+    end,
     -- TODO: Make sure that local keymaps work correctly.
-    keys = {
-      -- Global mapping (any filetype)
-      {
-        "<leader>vw",
-        "<Plug>VimwikiIndex",
-        group = "Vimwiki",
-        desc = "Vimwiki Index",
-      },
-      {
-        "<leader>vt",
-        "<Plug>VimwikiTabIndex",
-        group = "Vimwiki",
-        desc = "Vimwiki Index (New tab)",
-      },
-      {
-        "<leader>vl",
-        "<Plug>VimwikiDiaryIndex",
-        group = "Vimwiki",
-        desc = "Vimwiki Log",
-      },
 
-      -- Filetype-restricted mappings
-      {
-        "<leader>v<leader>w",
-        "<Plug>VimwikiMakeDiaryNote",
-        group = "Vimwiki",
-        desc = "Vimwiki Log (Today)",
-        ft = { "vimwiki" },
-      },
-      {
-        "<leader>v<leader>t",
-        "<Plug>VimwikiTabMakeDiaryNote",
-        group = "Vimwiki",
-        desc = "Palimpsest Log (Today, new tab)",
-        ft = { "vimwiki" },
-      },
-      {
-        "<leader>vr",
-        "<Plug>VimwikiDiaryGenerateLinks",
-        group = "Vimwiki",
-        desc = "Rebuild log links",
-        ft = { "vimwiki" },
-      },
-    },
+    -- keys = {
+    --   -- Global mapping (any filetype)
+    --   {
+    --     "<leader>vw",
+    --     "<Plug>VimwikiIndex",
+    --     desc = "Vimwiki Index",
+    --   },
+    --   {
+    --     "<leader>vt",
+    --     "<Plug>VimwikiTabIndex",
+    --     desc = "Vimwiki Index (New tab)",
+    --   },
+    --   {
+    --     "<leader>vl",
+    --     "<Plug>VimwikiDiaryIndex",
+    --     desc = "Vimwiki Log",
+    --   },
+    --
+    --   -- Filetype-restricted mappings
+    --   {
+    --     "<leader>v<leader>w",
+    --     "<Plug>VimwikiMakeDiaryNote",
+    --     desc = "Vimwiki Log (Today)",
+    --     ft = { "vimwiki" },
+    --   },
+    --   {
+    --     "<leader>v<leader>t",
+    --     "<Plug>VimwikiTabMakeDiaryNote",
+    --     desc = "Palimpsest Log (Today, new tab)",
+    --     ft = { "vimwiki" },
+    --   },
+    --   {
+    --     "<leader>vr",
+    --     "<Plug>VimwikiDiaryGenerateLinks",
+    --     desc = "Rebuild log links",
+    --     ft = { "vimwiki" },
+    --   },
+    -- },
     config = function()
       vim.g.vimwiki_key_mappings = {
-        global = 0,
         table_format = 0,
         table_mappings = 0,
         html = 0,

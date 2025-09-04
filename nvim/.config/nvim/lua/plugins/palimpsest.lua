@@ -6,6 +6,7 @@ if vim.fn.isdirectory(palimpsest_path .. "/nvim") == 1 then
       "palimpsest/local",
       name = "palimpsest.nvim",
       dir = palimpsest_path .. "/nvim",
+      dependencies = { "vimwiki/vimwiki" },
       config = function()
         require("palimpsest").setup()
       end,
