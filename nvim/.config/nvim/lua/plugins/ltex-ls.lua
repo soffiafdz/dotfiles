@@ -15,7 +15,16 @@ if vim.fn.isdirectory(ngrams_path) == 1 then
     languageModel = ngrams_path,
   }
 else
-  additionalRules = { motherTonge = "es" }
+  additionalRules = { motherTongue = "es" }
+end
+
+-- Use built in dictionary
+local words = {}
+local dict_file = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
+if vim.fn.filereadable(dict_file) == 1 then
+  for word in io.open(dict_file, "r"):lines() do
+    table.insert(words, word)
+  end
 end
 
 return {
@@ -32,8 +41,19 @@ return {
         ltex = {
           filetypes = { "markdown", "tex", "text" },
           settings = {
-            language = "en-CA",
-            additionalRules = additionalRules,
+            ltex = {
+              language = "en-CA",
+              additionalRules = additionalRules,
+              dictionary = {
+                ["en-CA"] = words,
+              },
+              disabledRules = {
+                ["en-CA"] = { "WHITESPACE_RULE" },
+                ["es"] = { "WHITESPACE_RULE" },
+                ["fr"] = { "WHITESPACE_RULE" },
+              },
+              trace = { server = "verbose" },
+            },
           },
         },
       },
