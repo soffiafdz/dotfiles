@@ -1,18 +1,5 @@
 # Vimwiki
-## Configuration
-let g:palimpsest_path = '/home/soffiafdz/Documents/palimpsest'
-let g:vimwiki_list = [{
-  \ 'path': expand(g:palimpsest_path . '/wiki'),
-  \ 'syntax': 'markdown',
-  \ 'ext': '.md',
-  \ 'name': 'Palimpsest',
-  \ 'diary_rel_path': 'log',
-  \ 'diary_index': 'index'
-  \ }]
-let g:vimwiki_diary_index_header = '# Session Log\n\n'
-
-## Mappings
-
+## Snippet
 " Boilerplate (log: Palimpsest)
 augroup vimwiki_diary_template
   autocmd!
@@ -52,6 +39,7 @@ endfunction
 
 
 ## Integration with Telescope
+## Searching
 ### Setup
 local builtin  = require('telescope.builtin')
 local vimwiki  = require('telescope').extensions.vimwiki
