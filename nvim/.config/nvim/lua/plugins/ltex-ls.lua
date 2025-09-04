@@ -39,7 +39,8 @@ return {
     opts = {
       servers = {
         ltex = {
-          filetypes = { "markdown", "tex", "text" },
+          filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
+          -- cmd = { "ltes-ls", "--jvm-opts=-Xmx1g" },
           settings = {
             ltex = {
               language = "en-CA",
@@ -52,7 +53,7 @@ return {
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },
-              trace = { server = "verbose" },
+              -- trace = { server = "verbose" },
             },
           },
         },
