@@ -40,7 +40,9 @@ return {
       servers = {
         ltex = {
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
-          -- cmd = { "ltes-ls", "--jvm-opts=-Xmx1g" },
+          cmd_env = {
+            JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
+          },
           settings = {
             ltex = {
               language = "en-CA",
@@ -49,7 +51,7 @@ return {
                 ["en-CA"] = words,
               },
               disabledRules = {
-                ["en-CA"] = { "WHITESPACE_RULE" },
+                ["en-CA"] = { "WHITESPACE_RULE", "ENGLISH_WORD_REPEAT_BEGINNING_RULE" },
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },
