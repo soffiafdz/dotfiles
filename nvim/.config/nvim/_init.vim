@@ -89,8 +89,8 @@ set scrolloff=5 sidescrolloff=5       " Keep context around cursor
 set signcolumn=yes                    " Always show signcolumn
 
 " Appearance
-set termguicolors
-set background=dark
+"set termguicolors
+"set background=dark
 colorscheme gruvbox
 "
 " Transparent backgrounds
