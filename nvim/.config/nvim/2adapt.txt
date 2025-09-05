@@ -1,0 +1,103 @@
+# Vimwiki
+## Snippet
+" Boilerplate (log: Palimpsest)
+augroup vimwiki_diary_template
+  autocmd!
+  " When a brand-new file is created in the diary folder, insert our skeleton
+  autocmd BufNewFile */wiki/log/*.md call s:InsertDiaryTemplate()
+augroup END
+
+function! s:InsertDiaryTemplate()
+  " 1) Date heading
+  call append(0, '# ' .. strftime('%Y-%m-%d'))
+  " 2) Blank line + timestamp fields
+  call append(1, '')
+  call append(2, 'Started: ' . strftime('%H:%M'))
+  call append(3, 'Finished: ')
+  call append(4, '')
+  call append(5, '---')
+  call append(6, '')
+  " 3) Tasks section
+  call append(7, 'Tasks:')
+  call append(8, '- [ ]')
+  call append(9, '')
+  call append(10, '---')
+  call append(11, '')
+  " 4) Worked on section
+  call append(12, 'Worked on:')
+  call append(13, '- ')
+  call append(14, '')
+  call append(15, '---')
+  call append(16, '')
+  " 5) Notes
+  call append(17, 'Notes:')
+  call append(18, '- ')
+  call append(19, '')
+  " 5) Position cursor on the first task bullet
+  exec "normal! 8G"
+endfunction
+
+
+## Integration with Telescope
+## Searching
+### Setup
+local builtin  = require('telescope.builtin')
+local vimwiki  = require('telescope').extensions.vimwiki
+
+local function wiki_root()
+  return vim.fn.expand(vim.g.palimpsest_path .. '/wiki')
+end
+
+local function vignette_root()
+  return vim.fn.expand(vim.g.palimpsest_path .. '/vignettes')
+end
+
+local function source_root()
+  return vim.fn.expand(vim.g.palimpsest_path .. '/journal/raw-txt')
+end
+
+-- Find any file in wiki
+function WikiFiles()
+  builtin.find_files({
+    prompt_title = 'Wiki files',
+    cwd          = wiki_root(),
+    find_command = { 'fd', '--type', 'f', '--extension', 'md' },
+  })
+end
+
+-- Live grep inside wiki
+function WikiGrep()
+  builtin.live_grep({
+    prompt_title = 'Search in wiki',
+    cwd          = wiki_root(),
+    search_dirs  = { wiki_root() },
+  })
+end
+
+-- Find in vignettes only
+function VignetteFiles()
+  builtin.find_files({
+    prompt_title = 'Vignettes',
+    cwd          = vignette_root(),
+    find_command = { 'fd', '--type', 'f', '--extension', 'md' },
+  })
+end
+
+-- Live grep inside raw-txt
+function JournalRaw()
+  builtin.live_grep({
+    prompt_title = 'Search in Raw txts',
+    cwd          = source_root(),
+    search_dirs  = { source_root() },
+  })
+end
+
+### Mappings
+augroup vimwiki_telescope
+  autocmd!
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>ff :lua WikiFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fg :lua WikiGrep()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fv :lua VignetteFiles()<CR>
+  autocmd FileType vimwiki nnoremap <silent><buffer> <Leader>fj :lua JournalRaw()<CR>
+  autocmd FileType vimwiki nnoremap <Leader>gs :Git -C <C-R>=g:palimpsest_path<CR> status<CR>
+augroup END

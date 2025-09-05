@@ -1,0 +1,63 @@
+-- ltex.lua integration
+--[[
+To use different a language in Markdown,
+it is necessary to use magic comments: 
+  <!-- LTeX: language-es -->
+  <!-- LTeX: language-en-CA -->
+  <!-- LTeX: language-fr -->
+--]]
+-- Conditionally load ngrams
+local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
+local additionalRules
+if vim.fn.isdirectory(ngrams_path) == 1 then
+  additionalRules = {
+    motherTongue = "es",
+    languageModel = ngrams_path,
+  }
+else
+  additionalRules = { motherTongue = "es" }
+end
+
+-- Use built in dictionary
+local words = {}
+local dict_file = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
+if vim.fn.filereadable(dict_file) == 1 then
+  for word in io.open(dict_file, "r"):lines() do
+    table.insert(words, word)
+  end
+end
+
+return {
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = { "ltex" },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        ltex = {
+          filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
+          -- cmd = { "ltes-ls", "--jvm-opts=-Xmx1g" },
+          settings = {
+            ltex = {
+              language = "en-CA",
+              additionalRules = additionalRules,
+              dictionary = {
+                ["en-CA"] = words,
+              },
+              disabledRules = {
+                ["en-CA"] = { "WHITESPACE_RULE" },
+                ["es"] = { "WHITESPACE_RULE" },
+                ["fr"] = { "WHITESPACE_RULE" },
+              },
+              -- trace = { server = "verbose" },
+            },
+          },
+        },
+      },
+    },
+  },
+}
