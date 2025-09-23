@@ -100,19 +100,13 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 GPG_TTY=$(tty)
 export GPG_TTY
 
-# Go
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/Go
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+# # Go
+# export GOROOT=/usr/local/go
+# export GOPATH=$HOME/Go
+# export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
-# Source Miniconda3
-# [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh" ] &&
-# 	source "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh"
-
-# Autocompletion conda
-# [ -e $REPOS_DIR/conda-zsh-completion ] &&
-# 	fpath+=$REPOS/conda-zsh-completion **
-# 	compinit conda
+# direnv
+eval "$(direnv hook zsh)"
 
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
@@ -126,22 +120,3 @@ else
 fi
 unset __mamba_setup
 ## <<< mamba initialize <<<
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/soffiafdz/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-    #eval "$__conda_setup"
-#else
-    #if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh" ]; then
-        #. "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh"
-    #else
-        #export PATH="/home/soffiafdz/mambaforge/bin:$PATH"
-    #fi
-#fi
-#unset __conda_setup
-
-#if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh" ]; then
-    #. "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh"
-#fi
-# <<< conda initialize <<<
