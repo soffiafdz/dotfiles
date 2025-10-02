@@ -1,21 +1,65 @@
 #!/bin/sh
 
-# If Lazarus, use binary in .local/share/nvim
-[ "$(uname -n)" = "Lazarus" ] &&
-  alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
-
-# Use neovim (if installed)
-[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
-
 # Use $XINITRC
 [ -f "$XINITRC" ] && alias startx="startx $XINITRC"
 
-# Implicit sudo in most used commands
-for bin in mount umount sv pacman su light; do
-  alias $bin="sudo $bin"
-done
+case "$(uname -n)" in
+Lazarus)
+  alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
+  alias \ # Move from exa - >eza
+  ls="exa --group-directories-first" \
+    la="exa --group-directories-first -a" \
+    ll="exa --group-directories-first -la"
+  # Check if batcat is Lazarus and/or Lettera & Tango
+  alias bat="batcat"
+  ;;
+*mcgill*)
+  alias \
+    _tmux="init_tmux" \
+    _mamba=". /export02/data/sfernand/mamba/etc/profile.d/conda.sh" \
+    _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
+  ;;
+*)
+  # Check if batcat is Lazarus and/or Lettera & Tango
+  alias bat="batcat"
+  # Abbreviations
+  alias \
+    trem="transmission-remote" \
+    p="sudo pacman"
+  # Implicit sudo in most used commands
+  for bin in mount umount sv pacman su light; do
+    alias $bin="sudo $bin"
+  done
+  ;;
+esac
 
-# Verbosiyt/interactivity
+# Use neovim (if installed) rather than vim
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# Radian
+alias r="radian"
+
+# eza / exa / ls
+if [ -n $(which eza) ]; then
+  alias \
+    ls='eza -l --color=auto' \
+    ll='eza -l --color=auto' \
+    la='eza -A --color=auto' \
+    l='eza -F --color=auto'
+elif [ -n $(which exa) ]; then
+  alias \
+    ls="exa --group-directories-first" \
+    la="exa --group-directories-first -a" \
+    ll="exa --group-directories-first -la"
+else
+  alias \
+    ls='ls --color=auto' \
+    ll='ls -l --color=auto' \
+    la='ls -A --color=auto' \
+    l='ls -CF --color=auto'
+fi
+
+# Verbosity/interactivity
 alias \
   cp="cp -iv" \
   mv="mv -iv" \
@@ -23,29 +67,19 @@ alias \
   mkd="mkdir -pv"
 
 # Prettify
-
 alias \
-  ls="exa --group-directories-first" \
-  la="exa --group-directories-first -a" \
-  ll="exa --group-directories-first -la" \
-  bat="batcat" \
   grep="grep --color=auto" \
   diff="diff --color=auto"
 
 # Abbreviations
 alias \
+  sdn="sudo shutdown -h now" \
   ka="killall" \
   g="git" \
   gs="git status" \
   gd="git diff" \
   ga="git add" \
   gc="git commit" \
-  trem="transmission-remote" \
-  sdn="sudo shutdown -h now" \
   e="$EDITOR" \
   v="$EDITOR" \
-  p="sudo pacman" \
   z="zathura"
-
-# Radian
-alias r="radian"
