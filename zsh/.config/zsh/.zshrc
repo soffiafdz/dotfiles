@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
@@ -6,7 +7,7 @@ p10k_sources=( \
 
 for p10k_source in ${p10k_sources[@]}
 do
-    [ -f $p10k_source ] && source $p10k_source
+  [ -f $p10k_source ] && source $p10k_source
 done
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -55,7 +56,7 @@ bindkey '^R' history-incremental-pattern-search-backward
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^v' edit-command-line
 # Enter vim buffer from normal mode
-autoload -U edit-commant-line \
+autoload -U edit-command-line \
 	&& zle -N edit-command-line \
 	&& bindkey -M vicmd '^v' edit-command-line
 
@@ -75,12 +76,12 @@ bindkey "^?" backward-delete-char
 # Change cursor shape for different vi modes
 function zle-keymap-select {
 	if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-		echo - ne '\e[1 q'
+		echo -ne '\e[1 q'
 	elif [[ ${KEYMAP} == main ]] ||
 		[[ ${KEYMAP} == viins ]] ||
 		[[ ${KEYMAP} == '' ]] ||
 		[[ $1 = 'beam' ]]; then
-		echo -ne 'e[5 q'
+		echo -ne '\e[5 q'
 	fi
 }
 zle -N zle-keymap-select
@@ -92,27 +93,25 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/key-bindings.zsh" ] &&
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/key-bindings.zsh"
 
-
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh" ] &&
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh"
+
+# Direnv
+eval "$(direnv hook zsh)"
+
+[[ $HOSTNAME == *mcgill* ]] && exit 0
 
 # GPG
 GPG_TTY=$(tty)
 export GPG_TTY
 
-# Go
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/Go
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+# # Go
+# export GOROOT=/usr/local/go
+# export GOPATH=$HOME/Go
+# export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
-# Source Miniconda3
-# [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh" ] &&
-# 	source "${XDG_CONFIG_HOME:-$HOME/.config}/miniconda3startup.sh"
-
-# Autocompletion conda
-# [ -e $REPOS_DIR/conda-zsh-completion ] &&
-# 	fpath+=$REPOS/conda-zsh-completion **
-# 	compinit conda
+# direnv
+eval "$(direnv hook zsh)"
 
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
@@ -126,22 +125,3 @@ else
 fi
 unset __mamba_setup
 ## <<< mamba initialize <<<
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/soffiafdz/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#if [ $? -eq 0 ]; then
-    #eval "$__conda_setup"
-#else
-    #if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh" ]; then
-        #. "/home/soffiafdz/mambaforge/etc/profile.d/conda.sh"
-    #else
-        #export PATH="/home/soffiafdz/mambaforge/bin:$PATH"
-    #fi
-#fi
-#unset __conda_setup
-
-#if [ -f "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh" ]; then
-    #. "/home/soffiafdz/mambaforge/etc/profile.d/mamba.sh"
-#fi
-# <<< conda initialize <<<
