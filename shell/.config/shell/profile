@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Profile file; runs when logging in. Useful for Environmental/Config variables
 
@@ -10,12 +10,13 @@ export PATH="$PATH:$HOME/.local/bin"
 # Default programs:
 export EDITOR="nvim"
 export TERMINAL="st"
-export BROWSER="brave"
 export READER="zathura"
 export FILE="lf"
+export BROWSER="brave"
 
 # XDG Base Dirs
 export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_BIN_HOME="$HOME/.local/bin"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
@@ -30,7 +31,8 @@ export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME:-/.config}/ja
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
-export TMUX_TMPDIR="XDG_RUNTIME_DIR"
+export PASSWORD_STORE_GPG_OPTS="--pinentry-mode loopback"
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 
 # MINC-TOOLKIT-1.9.18.1
 #source /opt/minc/1.9.18.1/minc-toolkit-config.sh
@@ -50,9 +52,23 @@ export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export AWT_TOOLKIT="MToolkit wmname LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-[ "$(uname -n)" = "hyde" ] \
-	|| [ "$(uname -n)" = "tango" ] \
-	|| [ "$(uname -n)" = "lettera" ] \
-	&& [ "$(tty)" = "/dev/tty1" ] \
-	&& ! pidof -s Xorg >/dev/null 2>&1 \
-	&& exec startx "$XINITRC"
+# [ "$(uname -n)" = "hyde" ] \
+# 	|| [ "$(uname -n)" = "tango" ] \
+# 	|| [ "$(uname -n)" = "lettera" ] \
+# 	&& [ "$(tty)" = "/dev/tty1" ] \
+# 	|| ! pidof -s Xorg >/dev/null 2>&1 \
+# 	|| exec startx "$XINITRC"
+
+case "$(uname -n)" in
+*mcgill*)
+  export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+  ;;
+Lazarus)
+  :
+  ;;
+*)
+  [ "$(tty)" = "/dev/tty1" ] &&
+    ! pidof -s Xorg >/dev/null 2>&1 &&
+    exec startx "$XINITRC"
+  ;;
+esac
