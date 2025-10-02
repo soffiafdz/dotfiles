@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
@@ -6,7 +7,7 @@ p10k_sources=( \
 
 for p10k_source in ${p10k_sources[@]}
 do
-    [ -f $p10k_source ] && source $p10k_source
+  [ -f $p10k_source ] && source $p10k_source
 done
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -55,7 +56,7 @@ bindkey '^R' history-incremental-pattern-search-backward
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^v' edit-command-line
 # Enter vim buffer from normal mode
-autoload -U edit-commant-line \
+autoload -U edit-command-line \
 	&& zle -N edit-command-line \
 	&& bindkey -M vicmd '^v' edit-command-line
 
@@ -75,12 +76,12 @@ bindkey "^?" backward-delete-char
 # Change cursor shape for different vi modes
 function zle-keymap-select {
 	if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
-		echo - ne '\e[1 q'
+		echo -ne '\e[1 q'
 	elif [[ ${KEYMAP} == main ]] ||
 		[[ ${KEYMAP} == viins ]] ||
 		[[ ${KEYMAP} == '' ]] ||
 		[[ $1 = 'beam' ]]; then
-		echo -ne 'e[5 q'
+		echo -ne '\e[5 q'
 	fi
 }
 zle -N zle-keymap-select
@@ -92,9 +93,13 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/key-bindings.zsh" ] &&
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/key-bindings.zsh"
 
-
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh" ] &&
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh"
+
+# Direnv
+eval "$(direnv hook zsh)"
+
+[[ $HOSTNAME == *mcgill* ]] && exit 0
 
 # GPG
 GPG_TTY=$(tty)

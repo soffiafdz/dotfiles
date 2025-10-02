@@ -1,4 +1,8 @@
 options(radian.color_scheme = "gruvbox-dark")
 options(radian.editing_mode = "vi")
+options(radian.auto_match = FALSE)
+options(radian.indent_lines = FALSE)
+options(radian.auto_indentation = FALSE)
 options(radian.highlight_matching_bracket = TRUE)
 options(radian.global_history_file = "~/.local/share/radian/radian_history")
+options(radian.history_search_no_duplicates = TRUE)
