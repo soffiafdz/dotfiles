@@ -29,7 +29,7 @@ end
 
 return {
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = { "ltex" },
     },
@@ -51,7 +51,14 @@ return {
                 ["en-CA"] = words,
               },
               disabledRules = {
-                ["en-CA"] = { "WHITESPACE_RULE", "ENGLISH_WORD_REPEAT_BEGINNING_RULE" },
+                ["en-CA"] = {
+                  "WHITESPACE_RULE",
+                  "ENGLISH_WORD_REPEAT_BEGINNING_RULE",
+                  "MORFOLOGIK_RULE_EN_CA",
+                  "WANNA",
+                  "ARROWS",
+                  "IDK",
+                },
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },

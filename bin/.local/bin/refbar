@@ -1,6 +1,6 @@
 #!/bin/sh
+# Kill all dwmbar processes to refresh
+pkill -f dwmbar
 
-# Refresh the dwmbar.
-# Right now, now this is done is by killing the sleep in the bar script.
-
-kill "$(pstree -lp | grep -- -dwmbar\([0-9] | sed "s/.*sleep(\([0-9]\+\)).*/\1/")"
+# Start a new one if dwm is running
+pgrep dwm >/dev/null && dwmbar &
