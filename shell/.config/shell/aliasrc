@@ -1,16 +1,11 @@
 #!/bin/sh
 
 # Use $XINITRC
-[ -f "$XINITRC" ] && alias startx="startx $XINITRC"
+[ -f "$XINITRC" ] && alias startx='startx "$XINITRC"'
 
 case "$(uname -n)" in
 Lazarus)
   alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
-  alias \ # Move from exa - >eza
-  ls="exa --group-directories-first" \
-    la="exa --group-directories-first -a" \
-    ll="exa --group-directories-first -la"
-  # Check if batcat is Lazarus and/or Lettera & Tango
   alias bat="batcat"
   ;;
 *mcgill*)
@@ -28,7 +23,7 @@ Lazarus)
     p="sudo pacman"
   # Implicit sudo in most used commands
   for bin in mount umount sv pacman su light; do
-    alias $bin="sudo $bin"
+    alias '"$bin"'='sudo "$bin"'
   done
   ;;
 esac
@@ -40,13 +35,13 @@ esac
 alias r="radian"
 
 # eza / exa / ls
-if [ -n $(which eza) ]; then
+if [ -n "$(which eza)" ]; then
   alias \
     ls='eza -l --color=auto' \
     ll='eza -l --color=auto' \
     la='eza -A --color=auto' \
     l='eza -F --color=auto'
-elif [ -n $(which exa) ]; then
+elif [ -n "$(which exa)" ]; then
   alias \
     ls="exa --group-directories-first" \
     la="exa --group-directories-first -a" \
@@ -80,6 +75,6 @@ alias \
   gd="git diff" \
   ga="git add" \
   gc="git commit" \
-  e="$EDITOR" \
-  v="$EDITOR" \
+  e='"$EDITOR"' \
+  v='"$EDITOR"' \
   z="zathura"
