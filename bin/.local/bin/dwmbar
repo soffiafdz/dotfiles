@@ -1,5 +1,18 @@
-#!/bin/bash
+#!/bin/sh
 # This script sets the statusbar with the xsetroot command at the end.
+for pid in $(pgrep -f dwmbar); do
+  if [ "$pid" != "$$" ]; then
+    kill "$pid"
+  fi
+done
+
+sleep 1
+
+# Exit if dwm isn't running
+if ! pgrep dwm >/dev/null 2>&1; then
+  echo "dwm not running"
+  exit 1
+fi
 
 # Set delimeter
 delim=""
@@ -12,44 +25,86 @@ status() {
   # Get current mpd track filename or artist - title if possible.
   # mpc -f "[[%artist% - [%title%]" 2>/dev/null | grep -v "volume:" | head -n 1 && echo "$delim"
 
-  # If the weather report is current, show daily precipitation chance,
-  # low and high.	Don't even bother to understand this one unless you
-  # have all day. Takes the weather report format from wttr.in and makes
-  # it look like how I want it for the status bar.
-
-  # [ "$(stat -c %y "$HOME/.local/share/weatherreport" 2>/dev/null | awk '{print $1}')" = "$(date '+%Y-%m-%d')" ] &&
-  # sed '16q;d' "$HOME/.local/share/weatherreport" | grep -wo "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/  /g" | tr -d '\n' &&
-  # sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print " ",$1 "°","",$2 "°"}' &&
-  # echo "$delim"
-
-  # printf "  %d°  %d° |" \
-  # "$(sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $1}')" \
-  # "$(sed '13q;d' "$HOME/.local/share/weatherreport" | grep -o "m\\(-\\)*[0-9]\\+" | sort -n -t 'm' -k 2n | sed -e 1b -e '$!d' | tr '\n|m' ' ' | awk '{print $2}')"
-
   ### Volume
-  # Get the volume of ALSA's master volume output.	Show an icon if or not muted.
-  # mute=$(amixer get Master | awk '/\[/ {print $6; exit}')
-  # vol=$(amixer get Master | awk '/\[/ {print $5; exit}' | sed "s/\[//g; s/\]//g")
-  # amixer get Master | awk '/\[/ {print $6 $4}' | sed "s/\[//g; s/\]//g" | sed "s/on/ 墳 /;s/off/ ﱝ /"
-  mute=$(pamixer --get-mute)
-  vol=$(pamixer --get-volume-human)
-  case $mute in
-  "true") echo "   $delim" ;;
-  "false") case $vol in
-    0%) echo " $vol   $delim" ;;
-    [0-9]% | [1-2][0-9]%) echo " $vol 奄 $delim" ;;
-    [3-6][0-9]%) echo " $vol  $delim" ;;
-    [7-9][0-9]% | 1[0-9][0-9]%) echo " $vol   $delim" ;;
-    esac ;;
+  case $HOSTNAME in
+  *mcgill*)
+    # Use PulseAudio on mcgill systems - get default sink info
+    sink_info=$(pactl info | grep "Default Sink" | cut -d: -f2 | tr -d ' ')
+    if [ -n "$sink_info" ]; then
+      # Get mute status and volume from sink info
+      mute=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Mute:" | awk '{print $2}')
+      vol=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Volume:" | head -n1 | awk '{print $5}' | sed 's/%//')
+
+      case $mute in
+      "yes") echo "   $delim" ;;
+      "no")
+        case $vol in
+        0) echo " $vol   $delim" ;;
+        [0-9]% | [1-2][0-9]%) echo " $vol 奄 $delim" ;;
+        [3-6][0-9]%) echo " $vol  $delim" ;;
+        [7-9][0-9]% | 1[0-9][0-9]%) echo " $vol   $delim" ;;
+        esac
+        ;;
+      esac
+    else
+      # Fallback if we can't determine default sink
+      echo "   $delim"
+    fi
+    ;;
+  *)
+    # Use pamixer on other systems
+    mute=$(pamixer --get-mute)
+    vol=$(pamixer --get-volume-human)
+    case $mute in
+    "true") echo "   $delim" ;;
+    "false") case $vol in
+      0%) echo " $vol   $delim" ;;
+      [0-9]% | [1-2][0-9]%) echo " $vol 奄 $delim" ;;
+      [3-6][0-9]%) echo " $vol  $delim" ;;
+      [7-9][0-9]% | 1[0-9][0-9]%) echo " $vol   $delim" ;;
+      esac ;;
+    esac
+    ;;
   esac
 
   ### Internet
   # Wifi quality percentage and  icon if ethernet is connected.
   # Make if for when there is no network
-  sed "s/down/󰈂 $delim/;s/up/ $delim/" /sys/class/net/e*/operstate
+  case $HOSTNAME in
+  *mcgill*)
+    # Different network interface handling for mcgill systems
+    # Check if eth0 exists first (since we can see it in your output)
+    if [ -f "/sys/class/net/eth0/operstate" ]; then
+      eth_state=$(cat /sys/class/net/eth0/operstate)
+      case $eth_state in
+      "up") echo "󰈁 $delim" ;;
+      "down") echo "󰈂 $delim" ;;
+      *) echo "󰈂 $delim" ;;
+      esac
+    else
+      # Try to find any ethernet interface
+      eth_interface=$(ls /sys/class/net/ | grep '^eth' | head -n1)
+      if [ -n "$eth_interface" ] && [ -f "/sys/class/net/$eth_interface/operstate" ]; then
+        eth_state=$(cat "/sys/class/net/$eth_interface/operstate")
+        case $eth_state in
+        "up") echo "󰈁 $delim" ;;
+        "down") echo "󰈂 $delim" ;;
+        *) echo "󰈂 $delim" ;;
+        esac
+      else
+        # No ethernet found, show disconnected
+        echo "󰈂 $delim"
+      fi
+    fi
+    ;;
+  *)
+    # Original logic for other systems
+    sed "s/down/󰈂 $delim/;s/up/󰈁 $delim/" /sys/class/net/e*/operstate
+    ;;
+  esac
+
   wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
   [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
-
   # Show unread mail if mutt-wizard is installed.
   # command -v mw >/dev/null 2>&1 &&
   #		 echo "$delim" &&
@@ -58,18 +113,38 @@ status() {
 
   ### Disk
   # Disk space available
-
-  if [ "$HOSTNAME" = "hyde" ]; then
+  case $HOSTNAME in
+  "hyde")
     disk=$(df -h | awk '/^\/dev\/nvme0n1p6/ {print $5}')
     disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
-  elif [ "$HOSTNAME" = "lettera" ]; then
+    ;;
+  "lettera")
     disk=$(df -h | awk '/^\/dev\/sda1/ {print $5}')
     disk2=$(df -h | awk '/^\/dev\/sda3/ {print $5}')
-  elif [ "$HOSTNAME" = "tango" ]; then
+    ;;
+  "tango")
     disk=$(df -h | awk '/^\/dev\/nvme0n1p2/ {print $5}')
     disk2=$(df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}')
+    ;;
+  *mcgill*)
+    # Add mcgill system disk configuration here if needed
+    disk=$(df -h | awk '/^home:\/home/ {print $5}')
+    ;;
+  *)
+    # Default/unknown system
+    disk=""
+    disk2=""
+    ;;
+  esac
+
+  # Only echo if we have disk info
+  if [ -n "$disk" ] && [ -n "$disk2" ]; then
+    echo "$disk|$disk2  $delim"
+  elif [ -n "$disk" ]; then
+    echo "$disk  $delim"
+  elif [ -n "$disk2" ]; then
+    echo "$disk2 󰋊 $delim"
   fi
-  echo "$disk|$disk2  $delim"
 
   ### Memory
   # Memory used/total
@@ -77,42 +152,55 @@ status() {
   echo " $delim"
 
   ### CPU temp
-  if [ "$HOSTNAME" = "hyde" ]; then
-    sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//"
-  elif [ "$HOSTNAME" = "lettera" ]; then
-    sensors | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//"
-  else
-    sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//"
+  case $HOSTNAME in
+  "hyde")
+    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+    ;;
+  "lettera")
+    temp=$(sensors | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//")
+    ;;
+  *mcgill*)
+    # Add mcgill system temperature sensor here if needed
+    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+    ;;
+  *)
+    temp=$(sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//")
+    ;;
+  esac
+  if [ -n "$temp" ]; then
+    echo "$temp󰔄 $delim"
   fi
-  echo "󰔄 $delim"
 
   ### Battery
   # Will show battery with approximate icon for remaining power.
-  batt=$(cat /sys/class/power_supply/BAT0/capacity)
-  bstat=$(cat /sys/class/power_supply/BAT0/status)
-  case $batt in
-  9[5-9] | 1[0-2][0-9]) bcap=" " ;;
-  8[5-9] | 9[0-4]) bcap=" " ;;
-  7[5-9] | 8[0-4]) bcap=" " ;;
-  6[5-9] | 7[0-4]) bcap=" " ;;
-  5[5-9] | 6[0-4]) bcap=" " ;;
-  4[5-9] | 5[0-4]) bcap=" " ;;
-  3[5-9] | 4[0-4]) bcap=" " ;;
-  2[5-9] | 3[0-4]) bcap=" " ;;
-  1[5-9] | 2[0-4]) bcap=" " ;;
-  [5-9] | 1[0-4]) bcap=" " ;;
-  [0-5]) bcap=" " ;;
-  esac
+  if [ -f "/sys/class/power_supply/BAT0/capacity" ] &&
+    [ -f "/sys/class/power_supply/BAT0/status" ]; then
+    batt=$(cat /sys/class/power_supply/BAT0/capacity)
+    bstat=$(cat /sys/class/power_supply/BAT0/status)
+    case $batt in
+    9[5-9] | 1[0-2][0-9]) bcap=" " ;;
+    8[5-9] | 9[0-4]) bcap=" " ;;
+    7[5-9] | 8[0-4]) bcap=" " ;;
+    6[5-9] | 7[0-4]) bcap=" " ;;
+    5[5-9] | 6[0-4]) bcap=" " ;;
+    4[5-9] | 5[0-4]) bcap=" " ;;
+    3[5-9] | 4[0-4]) bcap=" " ;;
+    2[5-9] | 3[0-4]) bcap=" " ;;
+    1[5-9] | 2[0-4]) bcap=" " ;;
+    [5-9] | 1[0-4]) bcap=" " ;;
+    [0-5]) bcap=" " ;;
+    *) : ;;
+    esac
 
-  [ "$bstat" = "Charging" ] &&
-    echo "$bcap" |
-    awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
-  # echo "${bstat:1:1} $batt% $delim"
-  [ "$bstat" = "Discharging" ] ||
-    [ "$bstat" = "Full" ] ||
-    [ "$bstat" = "Unknown" ] &&
-    echo "$bcap" |
-    awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
+    # Only print if bcap is set (battery icon found)
+    if [ -n "$bcap" ]; then
+      if [ "$bstat" = "Charging" ]; then
+        echo "$bcap" | awk -v batt="$batt% " -v delim=" $delim" '{print batt $2 delim}'
+      elif [ "$bstat" = "Discharging" ] || [ "$bstat" = "Full" ] || [ "$bstat" = "Unknown" ]; then
+        echo "$bcap" | awk -v batt="$batt% " -v delim=" $delim" '{print batt $1 delim}'
+      fi
+    fi
+  fi
 
   ### TIME
   time=$(date '+%H:%M')
@@ -140,17 +228,7 @@ status() {
   echo "$(date '+%y:%m:%d') "
 }
 
-while :; do
-  # So all that big status function was just a command that quicking gets
-  # what we want to be the statusbar. This xsetroot command is what sets
-  # it.
+while pgrep dwm >/dev/null 2>&1; do
   xsetroot -name "$(status | tr '\n' ' ')"
-
-  # Check to see if new weather report is needed.
-  # testweather &
-
-  # Sleep for a minute after changing the status bar before updating it
-  # again. Note that the `refbar` "refreshes" the statusbar by killing
-  # this command. Feel free to change the time interval if you want.
   sleep 60s
 done

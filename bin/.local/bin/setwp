@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # This script does the following:
 #	Run by itself, set the wallpaper (at X start).
 #	If given a file, set that as the new wallpaper.
@@ -8,27 +7,89 @@
 
 # Location of link to wallpaper link.
 wplink="${XDG_DATA_HOME:-$HOME/.local/share/}/wallpaper"
+wplink_vertical="${XDG_DATA_HOME:-$HOME/.local/share/}/wallpaper_vertical"
 
-wporigin="$(readlink -f "$1")" &&
-case "$(file --mime-type -b "$wporigin")" in
-	image/* )
-		ln -sf "$(readlink -f "$1")" "$wplink" \
-			&& notify-send -i "$wplink" "Changing wallpaper..." ;;
-	inode/directory )
-		ln -sf "$(find "$wporigin" \
-			-iregex '.*.\(jpg\|jpeg\|png\|gif\)' \
-			-type f | shuf -n 1)" "$wplink" \
-			&& notify-send -i "$wplink" "Random Wallpaper chosen." ;;
-	*)
-		notify-send "Error" "Not a valid image."
-		exit 1 ;;
-esac
+# Only process arguments if provided
+if [ -n "$1" ]; then
+  wporigin="$(readlink -f "$1")" &&
+    case "$(file --mime-type -b "$wporigin")" in
+    image/*)
+      ln -sf "$(readlink -f "$1")" "$wplink" &&
+        notify-send -i "$wplink" "Changing wallpaper..."
+      ;;
+    inode/directory)
+      # Find all images and categorize them
+      temp_dir="/tmp/setwp_$"
+      mkdir -p "$temp_dir"
 
-# If pywal is installed, use it.
-command -v wal >/dev/null 2>&1 \
-	&& wal \
-		-i "$wporigin" \
-		-o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1 \
-	&& pidof dwm >/dev/null #\ && xdotool key super+F12
+      find "$wporigin" -iregex '.*\.\(jpg\|jpeg\|png\|gif\)' -type f | while read -r img; do
+        # Get image dimensions
+        dimensions=$(identify -ping -format "%w %h" "$img" 2>/dev/null)
+        if [ -n "$dimensions" ]; then
+          img_width=$(echo "$dimensions" | cut -d' ' -f1)
+          img_height=$(echo "$dimensions" | cut -d' ' -f2)
 
-xwallpaper --zoom "$wplink"
+          if [ "$img_height" -gt "$img_width" ]; then
+            # Portrait image
+            echo "$img" >>"$temp_dir/portrait"
+          else
+            # Landscape image
+            echo "$img" >>"$temp_dir/landscape"
+          fi
+        fi
+      done
+
+      # Choose appropriate images
+      if [ -f "$temp_dir/landscape" ]; then
+        main_image="$(shuf -n 1 "$temp_dir/landscape")"
+      else
+        # Fallback to any image if no landscapes found
+        main_image="$(find "$wporigin" -iregex '.*\.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)"
+      fi
+
+      if [ -f "$temp_dir/portrait" ]; then
+        vertical_image="$(shuf -n 1 "$temp_dir/portrait")"
+      else
+        # Fallback to landscape or any image if no portraits found
+        if [ -f "$temp_dir/landscape" ]; then
+          vertical_image="$(shuf -n 1 "$temp_dir/landscape")"
+        else
+          vertical_image="$main_image"
+        fi
+      fi
+
+      # Clean up temp files
+      rm -rf "$temp_dir"
+
+      # Set the wallpaper links
+      ln -sf "$main_image" "$wplink" &&
+        ln -sf "$vertical_image" "$wplink_vertical" &&
+        notify-send -i "$wplink" "Smart wallpapers chosen: landscape for horizontal, portrait for vertical."
+      ;;
+    *)
+      notify-send "Error" "Not a valid image."
+      exit 1
+      ;;
+    esac
+fi
+
+# Apply wallpapers (this runs whether arguments were provided or not)
+xrandr --listmonitors | tail -n +2 | while read -r line; do
+  monitor=$(echo "$line" | awk '{print $NF}')
+  geometry=$(echo "$line" | awk '{print $3}' | cut -d+ -f1)
+  # Extract width and height, removing DPI info (e.g., "1920/324x1080/344" -> "1920x1080")
+  width=$(echo "$geometry" | cut -dx -f1 | cut -d/ -f1)
+  height=$(echo "$geometry" | cut -dx -f2 | cut -d/ -f1)
+
+  if [ "$height" -gt "$width" ]; then
+    # Vertical monitor - use wallpaper_vertical if it exists, otherwise fallback to main
+    if [ -f "$wplink_vertical" ]; then
+      xwallpaper --output "$monitor" --stretch "$wplink_vertical"
+    else
+      xwallpaper --output "$monitor" --stretch "$wplink"
+    fi
+  else
+    # Horizontal monitor - always use main wallpaper
+    xwallpaper --output "$monitor" --zoom "$wplink"
+  fi
+done
