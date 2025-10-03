@@ -205,24 +205,20 @@ status() {
   ### TIME
   time=$(date '+%H:%M')
   hr=$(date '+%I')
-  if [ "$HOSTNAME" = "tango" ]; then
-    echo "$time  $delim"
-  else
-    case $hr in
-    01) echo "$time 󱐿 $delim" ;;
-    02) echo "$time 󱑀 $delim" ;;
-    03) echo "$time 󱑁 $delim" ;;
-    04) echo "$time 󱑂 $delim" ;;
-    05) echo "$time 󱑃 $delim" ;;
-    06) echo "$time 󱑄 $delim" ;;
-    07) echo "$time 󱑅 $delim" ;;
-    08) echo "$time 󱑆 $delim" ;;
-    09) echo "$time 󱑇 $delim" ;;
-    10) echo "$time 󱑈 $delim" ;;
-    11) echo "$time 󱑉 $delim" ;;
-    12) echo "$time 󱑊 $delim" ;;
-    esac
-  fi
+  case $hr in
+  01) echo "$time 󱐿 $delim" ;;
+  02) echo "$time 󱑀 $delim" ;;
+  03) echo "$time 󱑁 $delim" ;;
+  04) echo "$time 󱑂 $delim" ;;
+  05) echo "$time 󱑃 $delim" ;;
+  06) echo "$time 󱑄 $delim" ;;
+  07) echo "$time 󱑅 $delim" ;;
+  08) echo "$time 󱑆 $delim" ;;
+  09) echo "$time 󱑇 $delim" ;;
+  10) echo "$time 󱑈 $delim" ;;
+  11) echo "$time 󱑉 $delim" ;;
+  12) echo "$time 󱑊 $delim" ;;
+  esac
 
   ### Date
   echo "$(date '+%y:%m:%d') "
