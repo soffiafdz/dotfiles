@@ -139,9 +139,9 @@ status() {
 
   # Only echo if we have disk info
   if [ -n "$disk" ] && [ -n "$disk2" ]; then
-    echo "$disk|$disk2  $delim"
+    echo "$disk|$disk2 󰋊 $delim"
   elif [ -n "$disk" ]; then
-    echo "$disk  $delim"
+    echo "$disk 󰋊 $delim"
   elif [ -n "$disk2" ]; then
     echo "$disk2 󰋊 $delim"
   fi
