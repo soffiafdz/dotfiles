@@ -226,5 +226,5 @@ status() {
 
 while pgrep dwm >/dev/null 2>&1; do
   xsetroot -name "$(status | tr '\n' ' ')"
-  sleep 60s
+  sleep 5s
 done
