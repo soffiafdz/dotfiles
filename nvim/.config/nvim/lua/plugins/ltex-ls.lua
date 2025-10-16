@@ -31,14 +31,14 @@ return {
   {
     "mason-org/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { "ltex" },
+      ensure_installed = { "ltex_plus" },
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ltex = {
+        ltex_plus = {
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",

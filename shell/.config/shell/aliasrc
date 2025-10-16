@@ -5,7 +5,7 @@
 
 case "$(uname -n)" in
 Lazarus)
-  alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
+  # alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
   alias bat="batcat"
   ;;
 *mcgill*)
