@@ -4,7 +4,7 @@ st.alpha: 0.9
 !! Font
 ! *.font: Monospace:size=13:antialias=true:autohint=true
 !*.font: FiraCode Nerd Font:style=Retina,Regular:size=12:antialias=true
-*.font: CaskaydiaCove Nerd Font:style=Book:size=12:antialias=true
+*.font: CaskaydiaCove Nerd Font:style=Book:size=16:antialias=true
 !*.font: MesloLGL Nerd Font Mono:style=Regular:size=12
 
 !! gruvbox:
