@@ -15,15 +15,13 @@ Lazarus)
     _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
   ;;
 *)
-  # Check if batcat is Lazarus and/or Lettera & Tango
-  alias bat="batcat"
   # Abbreviations
   alias \
     trem="transmission-remote" \
     p="sudo pacman"
   # Implicit sudo in most used commands
   for bin in mount umount sv pacman su light; do
-    alias '"$bin"'='sudo "$bin"'
+    alias "$bin"="sudo $bin"
   done
   ;;
 esac
