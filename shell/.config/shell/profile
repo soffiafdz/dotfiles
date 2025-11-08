@@ -36,6 +36,8 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 # MINC-TOOLKIT-1.9.18.1
 #source /opt/minc/1.9.18.1/minc-toolkit-config.sh
 
+export PYTHONNOUSERSITE=1
+
 # Other programs
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
@@ -69,7 +71,7 @@ Lazarus)
   :
   ;;
 *)
-  export TERMINAL="st"
+  export TERMINAL="kitty"
   [ "$(tty)" = "/dev/tty1" ] &&
     ! pidof -s Xorg >/dev/null 2>&1 &&
     exec startx "$XINITRC"
