@@ -55,7 +55,6 @@ bindkey '^R' history-incremental-pattern-search-backward
 # Edit line in vim buffer ctrl-v
 autoload edit-command-line; zle -N edit-command-line
 bindkey '^v' edit-command-line
-# Enter vim buffer from normal mode
 autoload -U edit-command-line \
 	&& zle -N edit-command-line \
 	&& bindkey -M vicmd '^v' edit-command-line
@@ -109,9 +108,6 @@ export GPG_TTY
 # export GOROOT=/usr/local/go
 # export GOPATH=$HOME/Go
 # export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-
-# direnv
-eval "$(direnv hook zsh)"
 
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
