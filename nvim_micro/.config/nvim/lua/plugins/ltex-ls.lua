@@ -35,16 +35,16 @@ return {
     opts = {
       ensure_installed = {
         "ltex_plus", -- Grammar checking
-        "pyright", -- Python
-        "lua_ls", -- Lua
       },
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
+      autoformat = false,
       servers = {
         ltex_plus = {
+          autostart = false,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx256m -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
@@ -67,19 +67,6 @@ return {
                 },
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
-              },
-              -- trace = { server = "verbose" },
-            },
-          },
-        },
-        -- Minimal Python support
-        pyright = {},
-        -- Minimal Lua support
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = {
-                checkThirdParty = false,
               },
             },
           },

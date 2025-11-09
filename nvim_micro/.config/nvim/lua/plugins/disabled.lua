@@ -18,32 +18,40 @@ return {
   { "MagicDuck/grug-far.nvim", enabled = false },
   { "lukas-reineke/indent-blankline.nvim", enabled = false },
   { "iamcco/markdown-preview.nvim", enabled = false },
-  { "mason-org/mason-lspconfig.nvim", enabled = false },
-  { "mason-org/mason.nvim", enabled = false },
   { "nvim-mini/mini.ai", enabled = false },
   { "nvim-mini/mini.comment", enabled = false },
-  -- { "nvim-mini/mini.icons", enabled = false },
   { "nvim-mini/mini.pairs", enabled = false },
   { "nvim-mini/mini.surround", enabled = false },
-  -- { "folke/noice.nvim", enabled = false },
-  -- { "MunifTanjim/nui.nvim", enabled = false },
   { "hrsh7th/nvim-cmp", enabled = false },
-  { "mfussenegger/nvim-lint", enabled = false },
-  { "neovim/nvim-lspconfig", enabled = false },
   { "nvim-treesitter/nvim-treesitter", enabled = false },
   { "nvim-treesitter/nvim-treesitter-textobjects", enabled = false },
   { "windwp/nvim-ts-autotag", enabled = false },
   { "JoosepAlviste/nvim-ts-context-commentstring", enabled = false },
   { "folke/persistence.nvim", enabled = false },
-  -- { "nvim-lua/plenary.nvim", enabled = false },
   { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
-  -- { "folke/snacks.nvim", enabled = false },
   { "nvim-telescope/telescope-fzf-native.nvim", enabled = false },
   { "nvim-telescope/telescope.nvim", enabled = false },
-  { "folke/todo-comments.nvim", enabled = false },
   { "folke/tokyonight.nvim", enabled = false },
   { "folke/trouble.nvim", enabled = false },
   { "folke/ts-comments.nvim", enabled = false },
   { "linux-cultists/venv-selector.nvim", enabled = false },
   { "lervag/vimtex", enabled = false },
+
+  -- Light Linters
+  -- { "mfussenegger/nvim-lint", enabled = false },
+
+  -- Ltex-Plus
+  -- { "mason-org/mason.nvim", enabled = false },
+  -- { "mason-org/mason-lspconfig.nvim", enabled = false },
+  -- { "neovim/nvim-lspconfig", enabled = false },
+
+  -- ToDo
+  -- { "folke/todo-comments.nvim", enabled = false },
+
+  -- UI required
+  -- { "nvim-mini/mini.icons", enabled = false },
+  -- { "folke/noice.nvim", enabled = false },
+  -- { "MunifTanjim/nui.nvim", enabled = false },
+  -- { "nvim-lua/plenary.nvim", enabled = false },
+  -- { "folke/snacks.nvim", enabled = false },
 }
