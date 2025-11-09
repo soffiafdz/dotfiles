@@ -1,5 +1,12 @@
--- Grammar checking with ltex_plus (from your config)
--- Keep this for writing tasks
+-- Grammar checking with ltex_plus
+
+--[[
+To use different a language in Markdown,
+it is necessary to use magic comments: 
+  <!-- LTeX: language-es -->
+  <!-- LTeX: language-en-CA -->
+  <!-- LTeX: language-fr -->
+--]]
 
 -- Conditionally load ngrams if available
 local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
@@ -26,10 +33,10 @@ return {
   {
     "mason-org/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { 
-        "ltex_plus",  -- Grammar checking
-        "pyright",    -- Python
-        "lua_ls",     -- Lua
+      ensure_installed = {
+        "ltex_plus", -- Grammar checking
+        "pyright", -- Python
+        "lua_ls", -- Lua
       },
     },
   },
@@ -38,10 +45,9 @@ return {
     opts = {
       servers = {
         ltex_plus = {
-          filetypes = { "markdown", "text", "plaintext", "vimwiki" },
+          filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
-            -- Reduced memory for Pi Zero 2W
-            JAVA_OPTS = "-Xmx512m -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
+            JAVA_OPTS = "-Xmx256m -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
           },
           settings = {
             ltex = {
@@ -62,6 +68,7 @@ return {
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },
+              -- trace = { server = "verbose" },
             },
           },
         },
