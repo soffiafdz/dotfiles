@@ -1,27 +1,49 @@
 -- Disable unnecessary LazyVim plugins for writerdeck
--- Keep: markdown, python, lua, yaml, grammar checking
--- Remove: R, Quarto, Docker, Git extras, heavy UI
 
 return {
-  -- -- DISABLE LANGUAGE SUPPORT YOU WON'T USE ON WRITERDECK
-  -- { "R-nvim/R.nvim", enabled = false },
-  -- { "quarto-dev/quarto-nvim", enabled = false },
-  -- { "jmbuhr/otter.nvim", enabled = false },
-  --
-  -- -- DISABLE HEAVY UI PLUGINS
-  -- { "folke/noice.nvim", enabled = false },
-  -- { "rcarriga/nvim-notify", enabled = false },
-  -- { "stevearc/dressing.nvim", enabled = false },
-  --
-  -- -- DISABLE NAVIGATION/MOTION (if too heavy)
-  -- { "folke/flash.nvim", enabled = false },
-  --
-  -- -- DISABLE GIT INTEGRATIONS (optional - re-enable if you need)
-  -- { "lewis6991/gitsigns.nvim", enabled = false },
-  -- { "tpope/vim-fugitive", enabled = false },
-  --
-  -- -- DISABLE EXTRAS YOU DON'T NEED
-  -- { "folke/trouble.nvim", enabled = false },
-  -- { "folke/todo-comments.nvim", enabled = false },
-  -- { "folke/persistence.nvim", enabled = false },
+  { "L3MON4D3/LuaSnip", enabled = false },
+  { "b0o/SchemaStore.nvim", enabled = false },
+  { "akinsho/bufferline.nvim", enabled = false },
+  { "catppuccin/nvim", enabled = false },
+  { "hrsh7th/cmp-buffer", enabled = false },
+  { "hrsh7th/cmp-git", enabled = false },
+  { "hrsh7th/cmp-nvim-lsp", enabled = false },
+  { "hrsh7th/cmp-path", enabled = false },
+  { "saadparwaiz1/cmp_luasnip", enabled = false },
+  { "stevearc/conform.nvim", enabled = false },
+  { "stevearc/dressing.nvim", enabled = false },
+  { "folke/flash.nvim", enabled = false },
+  { "rafamadriz/friendly-snippets", enabled = false },
+  { "lewis6991/gitsigns.nvim", enabled = false },
+  { "MagicDuck/grug-far.nvim", enabled = false },
+  { "lukas-reineke/indent-blankline.nvim", enabled = false },
+  { "iamcco/markdown-preview.nvim", enabled = false },
+  { "mason-org/mason-lspconfig.nvim", enabled = false },
+  { "mason-org/mason.nvim", enabled = false },
+  { "nvim-mini/mini.ai", enabled = false },
+  { "nvim-mini/mini.comment", enabled = false },
+  { "nvim-mini/mini.icons", enabled = false },
+  { "nvim-mini/mini.pairs", enabled = false },
+  { "nvim-mini/mini.surround", enabled = false },
+  { "folke/noice.nvim", enabled = false },
+  { "MunifTanjim/nui.nvim", enabled = false },
+  { "hrsh7th/nvim-cmp", enabled = false },
+  { "mfussenegger/nvim-lint", enabled = false },
+  { "neovim/nvim-lspconfig", enabled = false },
+  { "nvim-treesitter/nvim-treesitter", enabled = false },
+  { "nvim-treesitter/nvim-treesitter-textobjects", enabled = false },
+  { "windwp/nvim-ts-autotag", enabled = false },
+  { "JoosepAlviste/nvim-ts-context-commentstring", enabled = false },
+  { "folke/persistence.nvim", enabled = false },
+  { "nvim-lua/plenary.nvim", enabled = false },
+  { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
+  { "folke/snacks.nvim", enabled = false },
+  { "nvim-telescope/telescope-fzf-native.nvim", enabled = false },
+  { "nvim-telescope/telescope.nvim", enabled = false },
+  { "folke/todo-comments.nvim", enabled = false },
+  { "folke/tokyonight.nvim", enabled = false },
+  { "folke/trouble.nvim", enabled = false },
+  { "folke/ts-comments.nvim", enabled = false },
+  { "linux-cultists/venv-selector.nvim", enabled = false },
+  { "lervag/vimtex", enabled = false },
 }
