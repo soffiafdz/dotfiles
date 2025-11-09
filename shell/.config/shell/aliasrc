@@ -8,6 +8,9 @@ Lazarus)
   # alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
   alias bat="batcat"
   ;;
+Calliope)
+  alias bat="batcat"
+  ;;
 *mcgill*)
   alias \
     _tmux="init_tmux" \

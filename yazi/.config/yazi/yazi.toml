@@ -3,7 +3,9 @@
 edit = [{ run = 'nvim "$@"', block = true }]
 
 # Open images
-image = [{ run = 'chafa "$@"' }]
+image = [{ run = 'chafa "$@"', block = true }]
+preview = [{ run = 'chafa "$@"', block = true }]
+view = [{ run = 'imv "$@' }]
 
 # Open PDFs
 pdf = [{ run = 'zathura "$@"' }]
