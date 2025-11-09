@@ -1,0 +1,21 @@
+[opener]
+# Edit text files
+edit = [{ run = 'nvim "$@"', block = true }]
+
+# Open images
+image = [{ run = 'chafa "$@"' }]
+
+# Open PDFs
+pdf = [{ run = 'zathura "$@"' }]
+
+# Open videos (if you add mpv later)
+video = [{ run = 'mpv "$@"' }]
+
+[open]
+# Rules for file types
+rules = [
+  { mime = "text/*", use = "edit" },
+  { mime = "image/*", use = "image" },
+  { mime = "application/pdf", use = "pdf" },
+  { mime = "video/*", use = "video" },
+]
