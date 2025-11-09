@@ -10,7 +10,7 @@ export PATH="$PATH:$HOME/.local/bin"
 # Default programs:
 export EDITOR="nvim"
 export READER="zathura"
-export FILE="lf"
+export FILE="yazi"
 export BROWSER="brave"
 
 # XDG Base Dirs
@@ -65,10 +65,12 @@ case "$(uname -n)" in
   export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
   export TERMINAL="kitty"
   ;;
+Calliope)
+  export TERMINAL="foot"
+  export EDITOR="nvim"
 Lazarus)
   # Figure out how to do wezterm
   # export TERMINAL="kitty"
-  :
   ;;
 *)
   export TERMINAL="kitty"
