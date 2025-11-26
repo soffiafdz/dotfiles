@@ -10,7 +10,7 @@ export PATH="$PATH:$HOME/.local/bin"
 # Default programs:
 export EDITOR="nvim"
 export READER="zathura"
-export FILE="lf"
+export FILE="yazi"
 export BROWSER="brave"
 
 # XDG Base Dirs
@@ -35,6 +35,8 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 
 # MINC-TOOLKIT-1.9.18.1
 #source /opt/minc/1.9.18.1/minc-toolkit-config.sh
+
+export PYTHONNOUSERSITE=1
 
 # Other programs
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
@@ -63,12 +65,16 @@ case "$(uname -n)" in
   export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
   export TERMINAL="kitty"
   ;;
+Calliope)
+  export TERMINAL="foot"
+  export EDITOR="nvim"
+  ;;
 Lazarus)
   # Figure out how to do wezterm
   export TERMINAL="wezterm"
   ;;
 *)
-  export TERMINAL="st"
+  export TERMINAL="kitty"
   [ "$(tty)" = "/dev/tty1" ] &&
     ! pidof -s Xorg >/dev/null 2>&1 &&
     exec startx "$XINITRC"
