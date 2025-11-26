@@ -65,8 +65,7 @@ case "$(uname -n)" in
   ;;
 Lazarus)
   # Figure out how to do wezterm
-  # export TERMINAL="kitty"
-  :
+  export TERMINAL="wezterm"
   ;;
 *)
   export TERMINAL="st"
