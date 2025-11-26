@@ -8,6 +8,9 @@ Lazarus)
   # alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
   alias bat="batcat"
   ;;
+Calliope)
+  alias bat="batcat"
+  ;;
 *mcgill*)
   alias \
     _tmux="init_tmux" \
@@ -15,15 +18,13 @@ Lazarus)
     _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
   ;;
 *)
-  # Check if batcat is Lazarus and/or Lettera & Tango
-  alias bat="batcat"
   # Abbreviations
   alias \
     trem="transmission-remote" \
     p="sudo pacman"
   # Implicit sudo in most used commands
   for bin in mount umount sv pacman su light; do
-    alias '"$bin"'='sudo "$bin"'
+    alias "$bin"="sudo $bin"
   done
   ;;
 esac
@@ -37,10 +38,10 @@ alias r="radian"
 # eza / exa / ls
 if [ -n "$(which eza)" ]; then
   alias \
-    ls='eza -l --color=auto' \
-    ll='eza -l --color=auto' \
-    la='eza -A --color=auto' \
-    l='eza -F --color=auto'
+    ls='eza --color=auto --icons=auto' \
+    ll='eza -lA --color=auto --icons=auto' \
+    la='eza -A --color=auto --icons=auto' \
+    l='eza -F --color=auto --icons=auto'
 elif [ -n "$(which exa)" ]; then
   alias \
     ls="exa --group-directories-first" \
