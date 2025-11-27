@@ -45,6 +45,11 @@ return {
     opts = {
       servers = {
         ltex_plus = {
+          -- Start disabled by default
+          autostart = function()
+            -- Only autostart if not explicitly disabled
+            return vim.g.ltex_enabled ~= false
+          end,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
