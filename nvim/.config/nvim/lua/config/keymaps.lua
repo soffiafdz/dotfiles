@@ -17,8 +17,12 @@ wk.add({
         local clients = vim.lsp.get_clients({ name = "ltex" })
         if #clients > 0 then
           vim.cmd("LspStop ltex")
+          -- Disable autostart for ltex
+          vim.g.ltex_enabled = false
           vim.notify("ltex stopped", vim.log.levels.INFO)
         else
+          -- Enable autostart for ltex
+          vim.g.ltex_enabled = true
           vim.cmd("LspStart ltex")
           vim.notify("ltex started", vim.log.levels.INFO)
         end
@@ -38,24 +42,35 @@ wk.add({
       icon = "󰁨",
     },
 
-    -- Vale linter
+    -- Vale linter toggle
     {
       "<leader>lv",
       function()
-        require("lint").try_lint("vale")
-        vim.notify("Running vale...", vim.log.levels.INFO)
+        vim.g.vale_enabled = not vim.g.vale_enabled
+        if vim.g.vale_enabled then
+          require("lint").try_lint("vale")
+          vim.notify("vale enabled", vim.log.levels.INFO)
+        else
+          vim.notify("vale disabled", vim.log.levels.INFO)
+        end
       end,
-      desc = "Lint with vale",
+      desc = "Toggle vale linter",
       icon = "󰓆",
     },
 
+    -- Write-good linter toggle
     {
       "<leader>lw",
       function()
-        require("lint").try_lint("write_good")
-        vim.notify("Running write-good...", vim.log.levels.INFO)
+        vim.g.write_good_enabled = not vim.g.write_good_enabled
+        if vim.g.write_good_enabled then
+          require("lint").try_lint("write_good")
+          vim.notify("write-good enabled", vim.log.levels.INFO)
+        else
+          vim.notify("write-good disabled", vim.log.levels.INFO)
+        end
       end,
-      desc = "Lint with write-good",
+      desc = "Toggle write-good linter",
       icon = "󰓆",
     },
   },
