@@ -1,3 +1,4 @@
 bin/.local/bin/micromamba
 zsh/.config/zsh/history
 zsh/.config/zsh/.zcompdump
+vale/.config/vale/styles

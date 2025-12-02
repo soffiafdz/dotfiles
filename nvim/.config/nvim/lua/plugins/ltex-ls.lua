@@ -1,4 +1,5 @@
--- ltex.lua integration
+-- Grammar checking with ltex_plus
+
 --[[
 To use different a language in Markdown,
 it is necessary to use magic comments: 
@@ -6,7 +7,8 @@ it is necessary to use magic comments:
   <!-- LTeX: language-en-CA -->
   <!-- LTeX: language-fr -->
 --]]
--- Conditionally load ngrams
+
+-- Conditionally load ngrams if available
 local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
 local additionalRules
 if vim.fn.isdirectory(ngrams_path) == 1 then
@@ -18,7 +20,7 @@ else
   additionalRules = { motherTongue = "es" }
 end
 
--- Use built in dictionary
+-- Load built-in dictionary
 local words = {}
 local dict_file = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 if vim.fn.filereadable(dict_file) == 1 then
@@ -31,7 +33,11 @@ return {
   {
     "mason-org/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { "ltex_plus" },
+      ensure_installed = {
+        "ltex_plus", -- Grammar checking
+        "pyright", -- Python
+        "lua_ls", -- Lua
+      },
     },
   },
   {
@@ -39,6 +45,11 @@ return {
     opts = {
       servers = {
         ltex_plus = {
+          -- Start disabled by default
+          autostart = function()
+            -- Only autostart if not explicitly disabled
+            return vim.g.ltex_enabled ~= false
+          end,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
@@ -63,6 +74,18 @@ return {
                 ["fr"] = { "WHITESPACE_RULE" },
               },
               -- trace = { server = "verbose" },
+            },
+          },
+        },
+        -- Minimal Python support
+        pyright = {},
+        -- Minimal Lua support
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
             },
           },
         },
