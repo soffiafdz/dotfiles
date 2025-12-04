@@ -4,6 +4,7 @@ return {
   version = "0.99.1",
   opts = function(_, opts)
     opts.R_app = "radian" -- Use radian
+    opts.bracketed_paste = true
 
     -- Open data.frames with vd
     opts.view_df = { open_app = "terminal:vd" }
