@@ -44,7 +44,11 @@ return {
       autoformat = false,
       servers = {
         ltex_plus = {
-          autostart = false,
+          -- Start disabled by default
+          autostart = function()
+            -- Only autostart if not explicitly disabled
+            return vim.g.ltex_enabled ~= false
+          end,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx256m -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
