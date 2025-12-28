@@ -72,10 +72,10 @@ return {
   -- [HEAVY] Linters - disabled on Pi (too resource intensive)
   { "mfussenegger/nvim-lint", enabled = false },
 
-  -- Ltex-Plus
-  -- { "mason-org/mason.nvim", enabled = false },
-  -- { "mason-org/mason-lspconfig.nvim", enabled = false },
-  -- { "neovim/nvim-lspconfig", enabled = false },
+  -- [HEAVY] LSP/Grammar - Java-based, uses ~256MB RAM (half of Pi's 512MB)
+  { "mason-org/mason.nvim", enabled = false },
+  { "mason-org/mason-lspconfig.nvim", enabled = false },
+  { "neovim/nvim-lspconfig", enabled = false },
 
   -- ToDo
   -- { "folke/todo-comments.nvim", enabled = false },
