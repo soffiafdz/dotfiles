@@ -1,11 +1,14 @@
+[preview]
+max_width = 1920
+max_height = 1080
+image_quality = 50
+
 [opener]
 # Edit text files
 edit = [{ run = 'nvim "$@"', block = true }]
 
 # Open images
-image = [{ run = 'chafa "$@"', block = true }]
-preview = [{ run = 'chafa "$@"', block = true }]
-view = [{ run = 'imv "$@' }]
+image = [{ run = 'sxiv "$@"', orphan = true }]
 
 # Open PDFs
 pdf = [{ run = 'zathura "$@"' }]
