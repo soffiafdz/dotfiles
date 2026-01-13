@@ -7,13 +7,19 @@ image_quality = 50
 # Edit text files
 edit = [{ run = 'nvim "$@"', block = true }]
 
-# Open images
-image = [{ run = 'sxiv "$@"', orphan = true }]
+# Open images (sxiv on Linux, Preview on macOS)
+image = [
+  { run = 'sxiv "$@"', orphan = true, for = "linux" },
+  { run = 'open "$@"', orphan = true, for = "macos" },
+]
 
-# Open PDFs
-pdf = [{ run = 'zathura "$@"' }]
+# Open PDFs (zathura on Linux, Preview on macOS)
+pdf = [
+  { run = 'zathura "$@"', for = "linux" },
+  { run = 'open "$@"', for = "macos" },
+]
 
-# Open videos (if you add mpv later)
+# Open videos
 video = [{ run = 'mpv "$@"' }]
 
 [open]

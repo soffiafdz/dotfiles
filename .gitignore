@@ -1,4 +1,12 @@
 bin/.local/bin/micromamba
 zsh/.config/zsh/history
 zsh/.config/zsh/.zcompdump
+zsh/.config/zsh/.zcompcache
 vale/.config/vale/styles
+
+# GPG runtime/sensitive files
+gnupg/.config/gnupg/private-keys-v1.d
+gnupg/.config/gnupg/pubring.kbx
+gnupg/.config/gnupg/pubring.kbx~
+gnupg/.config/gnupg/random_seed
+gnupg/.config/gnupg/trustdb.gpg
