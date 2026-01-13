@@ -17,6 +17,14 @@ Calliope)
     _mamba=". /export02/data/sfernand/mamba/etc/profile.d/conda.sh" \
     _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
   ;;
+noctua*)
+  # macOS-specific aliases
+  alias xdg-open="open"
+  alias xclip="pbcopy"
+  alias xsel="pbcopy"
+  alias brewup="brew update && brew upgrade && brew cleanup"
+  alias keys="cat ~/.config/cheatsheets/keybindings.txt"
+  ;;
 *)
   # Abbreviations
   alias \
@@ -59,8 +67,13 @@ fi
 alias \
   cp="cp -iv" \
   mv="mv -iv" \
-  rm="rm -vI" \
   mkd="mkdir -pv"
+# rm: -I is GNU only (prompts once for >3 files), BSD/macOS only has -i
+if [ "$(uname -s)" = "Darwin" ]; then
+  alias rm="rm -v"
+else
+  alias rm="rm -vI"
+fi
 
 # Prettify
 alias \
