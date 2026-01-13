@@ -69,7 +69,7 @@ cmd-ctrl-alt-shift-n = 'focus-monitor --wrap-around next'
 cmd-ctrl-alt-shift-p = 'focus-monitor --wrap-around prev'
 
 # Launch terminal
-cmd-ctrl-alt-shift-return = 'exec-and-forget open -na kitty'
+cmd-ctrl-alt-shift-enter = 'exec-and-forget open -na kitty'
 
 # Move mode - for moving windows and sending to workspaces
 [mode.move.binding]
