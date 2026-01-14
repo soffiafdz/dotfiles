@@ -49,14 +49,18 @@ cmd-ctrl-alt-shift-7 = 'workspace 7'
 cmd-ctrl-alt-shift-8 = 'workspace 8'
 cmd-ctrl-alt-shift-9 = 'workspace 9'
 
-# Cycle through windows
-cmd-ctrl-alt-shift-tab = 'focus-monitor --wrap-around next'
+# Cycle through workspaces (like dwm shiftview)
+cmd-ctrl-alt-shift-g = 'workspace --wrap-around prev'
+cmd-ctrl-alt-shift-semicolon = 'workspace --wrap-around next'
+
+# macOS native fullscreen
+cmd-ctrl-alt-shift-0 = 'macos-native-fullscreen'
 
 # Close window
 cmd-ctrl-alt-shift-q = 'close'
 
 # Reload config
-cmd-ctrl-alt-shift-r = 'reload-config'
+cmd-ctrl-alt-shift-slash = 'reload-config'
 
 # Toggle last workspace (like dwm)
 cmd-ctrl-alt-shift-backtick = 'workspace-back-and-forth'
@@ -67,9 +71,19 @@ cmd-ctrl-alt-shift-b = 'balance-sizes'
 # Monitor navigation
 cmd-ctrl-alt-shift-n = 'focus-monitor --wrap-around next'
 cmd-ctrl-alt-shift-p = 'focus-monitor --wrap-around prev'
+cmd-ctrl-alt-shift-comma = 'move-node-to-monitor --wrap-around prev'
+cmd-ctrl-alt-shift-period = 'move-node-to-monitor --wrap-around next'
 
-# Launch terminal
+# Join windows (merge containers)
+cmd-ctrl-alt-shift-leftSquareBracket = 'join-with left'
+cmd-ctrl-alt-shift-rightSquareBracket = 'join-with right'
+
+# Launch applications
 cmd-ctrl-alt-shift-enter = 'exec-and-forget open -na kitty'
+cmd-ctrl-alt-shift-w = 'exec-and-forget open -a Firefox'
+cmd-ctrl-alt-shift-e = 'exec-and-forget open -na kitty --args nvim'
+cmd-ctrl-alt-shift-r = 'exec-and-forget open -na kitty --args yazi'
+cmd-ctrl-alt-shift-d = 'exec-and-forget open -a Raycast'
 
 # Move mode - for moving windows and sending to workspaces
 [mode.move.binding]
@@ -78,6 +92,10 @@ h = ['move left', 'mode main']
 j = ['move down', 'mode main']
 k = ['move up', 'mode main']
 l = ['move right', 'mode main']
+
+# Move to prev/next workspace (like dwm shifttag)
+g = ['move-node-to-workspace prev', 'workspace prev', 'mode main']
+semicolon = ['move-node-to-workspace next', 'workspace next', 'mode main']
 
 # Send to workspace (number key), then return to main
 1 = ['move-node-to-workspace 1', 'mode main']
