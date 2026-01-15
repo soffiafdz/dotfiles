@@ -23,7 +23,6 @@ noctua*)
   alias xclip="pbcopy"
   alias xsel="pbcopy"
   alias brewup="brew update && brew upgrade && brew cleanup"
-  alias keys="cat ~/.config/cheatsheets/keybindings.txt"
   ;;
 *)
   # Abbreviations
