@@ -3,8 +3,12 @@
 
 local linter_icon = ""
 local wk = require("which-key")
+local has_icons, MiniIcons = pcall(require, "mini.icons")
+local keywordprg_icon = has_icons and MiniIcons.get("filetype", "help") or ""
 
 wk.add({
+  -- Keywordprg
+  { "<leader>K", icon = { icon = keywordprg_icon, color = "cyan" } },
   {
     group = "Linter",
     icon = { icon = "󱆨", color = "orange" }, -- or use a lint-related icon
