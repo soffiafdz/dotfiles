@@ -1,6 +1,19 @@
 -- Local Palimpsest project integration
-local palimpsest_path = vim.fn.expand("~/Documents/palimpsest")
-if vim.fn.isdirectory(palimpsest_path .. "/dev") == 1 then
+-- Check multiple possible locations (varies by machine)
+local possible_paths = {
+  vim.fn.expand("~/Developer/palimpsest"),
+  vim.fn.expand("~/Documents/palimpsest"),
+}
+
+local palimpsest_path = nil
+for _, path in ipairs(possible_paths) do
+  if vim.fn.isdirectory(path .. "/dev") == 1 then
+    palimpsest_path = path
+    break
+  end
+end
+
+if palimpsest_path then
   return {
     {
       "palimpsest/local",
