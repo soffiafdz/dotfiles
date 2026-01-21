@@ -115,6 +115,8 @@ export GPG_TTY
 # export GOROOT=/usr/local/go
 # export GOPATH=$HOME/Go
 # export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+#
+[ -d "$HOME/quarto-1.8.26" ] && export PATH=$HOME/quarto-1.8.26/bin:$PATH
 
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
