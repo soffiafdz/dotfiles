@@ -1,5 +1,9 @@
 #!/bin/sh
 # This script sets the statusbar with the xsetroot command at the end.
+
+# Handle SIGUSR1 to force immediate update (useful for resume from sleep)
+trap 'update_now=1' USR1
+
 for pid in $(pgrep -f dwmbar); do
   if [ "$pid" != "$$" ]; then
     kill "$pid"
@@ -29,11 +33,12 @@ status() {
   case $HOSTNAME in
   *mcgill*)
     # Use PulseAudio on mcgill systems - get default sink info
-    sink_info=$(pactl info | grep "Default Sink" | cut -d: -f2 | tr -d ' ')
+    sink_info=$(timeout 2 pactl info 2>/dev/null | grep "Default Sink" | cut -d: -f2 | tr -d ' ')
     if [ -n "$sink_info" ]; then
       # Get mute status and volume from sink info
-      mute=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Mute:" | awk '{print $2}')
-      vol=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Volume:" | head -n1 | awk '{print $5}' | sed 's/%//')
+      sink_data=$(timeout 2 pactl list sinks 2>/dev/null | grep -A 15 "Name: $sink_info")
+      mute=$(echo "$sink_data" | grep "Mute:" | awk '{print $2}')
+      vol=$(echo "$sink_data" | grep "Volume:" | head -n1 | awk '{print $5}' | sed 's/%//')
 
       case $mute in
       "yes") echo "   $delim" ;;
@@ -53,8 +58,8 @@ status() {
     ;;
   *)
     # Use pamixer on other systems
-    mute=$(pamixer --get-mute)
-    vol=$(pamixer --get-volume-human)
+    mute=$(timeout 2 pamixer --get-mute 2>/dev/null)
+    vol=$(timeout 2 pamixer --get-volume-human 2>/dev/null)
     case $mute in
     "true") echo "   $delim" ;;
     "false") case $vol in
@@ -112,23 +117,24 @@ status() {
   #		 echo "$delim"
 
   ### Disk
-  # Disk space available
+  # Disk space available (use timeout for network mounts)
+  df_out=$(timeout 3 df -h 2>/dev/null)
   case $HOSTNAME in
   "hyde")
-    disk=$(df -h | awk '/^\/dev\/nvme0n1p6/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p6/ {print $5}')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/sda2/ {print $5}')
     ;;
   "lettera")
-    disk=$(df -h | awk '/^\/dev\/sda1/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/sda3/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^\/dev\/sda1/ {print $5}')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/sda3/ {print $5}')
     ;;
   "tango")
-    disk=$(df -h | awk '/^\/dev\/nvme0n1p2/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p2/ {print $5}')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p3/ {print $5}')
     ;;
   *mcgill*)
     # Add mcgill system disk configuration here if needed
-    disk=$(df -h | awk '/^home:\/home/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^home:\/home/ {print $5}')
     ;;
   *)
     # Default/unknown system
@@ -148,23 +154,23 @@ status() {
 
   ### Memory
   # Memory used/total
-  free -h | awk '/^Mem:/ {print $3}'
+  timeout 2 free -h 2>/dev/null | awk '/^Mem:/ {print $3}'
   echo " $delim"
 
   ### CPU temp
   case $HOSTNAME in
   "hyde")
-    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   "lettera")
-    temp=$(sensors | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   *mcgill*)
     # Add mcgill system temperature sensor here if needed
-    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   *)
-    temp=$(sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//")
     ;;
   esac
   if [ -n "$temp" ]; then

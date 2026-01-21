@@ -1,16 +1,25 @@
+[preview]
+max_width = 1920
+max_height = 1080
+image_quality = 50
+
 [opener]
 # Edit text files
 edit = [{ run = 'nvim "$@"', block = true }]
 
-# Open images
-image = [{ run = 'chafa "$@"', block = true }]
-preview = [{ run = 'chafa "$@"', block = true }]
-view = [{ run = 'imv "$@' }]
+# Open images (sxiv on Linux, Preview on macOS)
+image = [
+  { run = 'sxiv "$@"', orphan = true, for = "linux" },
+  { run = 'open "$@"', orphan = true, for = "macos" },
+]
 
-# Open PDFs
-pdf = [{ run = 'zathura "$@"' }]
+# Open PDFs (zathura on Linux, Preview on macOS)
+pdf = [
+  { run = 'zathura "$@"', for = "linux" },
+  { run = 'open "$@"', for = "macos" },
+]
 
-# Open videos (if you add mpv later)
+# Open videos
 video = [{ run = 'mpv "$@"' }]
 
 [open]
