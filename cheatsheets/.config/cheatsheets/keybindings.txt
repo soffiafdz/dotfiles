@@ -1,0 +1,50 @@
+═══════════════════════════════════════════════════════════════
+                    KEYBINDINGS CHEATSHEET
+═══════════════════════════════════════════════════════════════
+
+KARABINER
+─────────────────────────────────────────────────────────────────
+Caps Lock (tap)     →  Escape
+Caps Lock (hold)    →  Control
+Left Command        →  Hyper (Cmd+Ctrl+Alt+Shift)
+Fn + H/J/K/L        →  Arrow keys
+
+AEROSPACE (Hyper = Left Cmd)
+─────────────────────────────────────────────────────────────────
+Focus:
+  Hyper + H/J/K/L   →  Focus left/down/up/right
+  Hyper + Tab       →  Next monitor
+  Hyper + N/P       →  Next/prev monitor
+
+Workspaces:
+  Hyper + 1-9       →  Switch to workspace
+  Hyper + `         →  Toggle last workspace
+
+Layout:
+  Hyper + F         →  Fullscreen
+  Hyper + Space     →  Toggle float/tile
+  Hyper + T         →  Tiles layout
+  Hyper + S         →  Accordion layout
+  Hyper + B         →  Balance sizes
+  Hyper + -/=       →  Resize smaller/larger
+
+Actions:
+  Hyper + Q         →  Close window
+  Hyper + R         →  Reload config
+  Hyper + Enter     →  New Kitty terminal
+  Hyper + M         →  Enter MOVE MODE
+
+MOVE MODE (press Hyper+M first)
+─────────────────────────────────────────────────────────────────
+  H/J/K/L           →  Move window
+  1-9               →  Send to workspace
+  Esc               →  Cancel
+
+KITTY
+─────────────────────────────────────────────────────────────────
+  Cmd + =/-         →  Zoom in/out
+  Cmd + Enter       →  Fullscreen
+  Ctrl-A + [        →  Scroll mode (tmux)
+  Ctrl-A + Fn+Up    →  Page up (tmux)
+
+═══════════════════════════════════════════════════════════════

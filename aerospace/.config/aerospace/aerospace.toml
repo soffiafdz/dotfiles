@@ -1,0 +1,112 @@
+# Aerospace - Tiling Window Manager for macOS
+# Hyper key = Left Command (via Karabiner) = cmd+ctrl+alt+shift
+
+# Start at login
+start-at-login = true
+
+# Mouse follows focus
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# Gaps (like dwm)
+[gaps]
+inner.horizontal = 10
+inner.vertical = 10
+outer.left = 10
+outer.right = 10
+outer.top = 10
+outer.bottom = 10
+
+# Main mode keybindings (Hyper = cmd+ctrl+alt+shift)
+[mode.main.binding]
+
+# Focus windows (vim keys) - Hyper + hjkl
+cmd-ctrl-alt-shift-h = 'focus left'
+cmd-ctrl-alt-shift-j = 'focus down'
+cmd-ctrl-alt-shift-k = 'focus up'
+cmd-ctrl-alt-shift-l = 'focus right'
+
+# Enter move mode - Hyper + m
+cmd-ctrl-alt-shift-m = 'mode move'
+
+# Resize windows
+cmd-ctrl-alt-shift-minus = 'resize smart -50'
+cmd-ctrl-alt-shift-equal = 'resize smart +50'
+
+# Layout controls
+cmd-ctrl-alt-shift-t = 'layout tiles horizontal vertical'
+cmd-ctrl-alt-shift-s = 'layout accordion horizontal vertical'
+cmd-ctrl-alt-shift-f = 'fullscreen'
+cmd-ctrl-alt-shift-space = 'layout floating tiling'
+
+# Workspaces (1-9 like dwm) - Hyper + number
+cmd-ctrl-alt-shift-1 = 'workspace 1'
+cmd-ctrl-alt-shift-2 = 'workspace 2'
+cmd-ctrl-alt-shift-3 = 'workspace 3'
+cmd-ctrl-alt-shift-4 = 'workspace 4'
+cmd-ctrl-alt-shift-5 = 'workspace 5'
+cmd-ctrl-alt-shift-6 = 'workspace 6'
+cmd-ctrl-alt-shift-7 = 'workspace 7'
+cmd-ctrl-alt-shift-8 = 'workspace 8'
+cmd-ctrl-alt-shift-9 = 'workspace 9'
+
+# Cycle through workspaces (like dwm shiftview)
+cmd-ctrl-alt-shift-g = 'workspace --wrap-around prev'
+cmd-ctrl-alt-shift-semicolon = 'workspace --wrap-around next'
+
+# macOS native fullscreen
+cmd-ctrl-alt-shift-0 = 'macos-native-fullscreen'
+
+# Close window
+cmd-ctrl-alt-shift-q = 'close'
+
+# Reload config
+cmd-ctrl-alt-shift-slash = 'reload-config'
+
+# Toggle last workspace (like dwm)
+cmd-ctrl-alt-shift-backtick = 'workspace-back-and-forth'
+
+# Balance window sizes
+cmd-ctrl-alt-shift-b = 'balance-sizes'
+
+# Monitor navigation
+cmd-ctrl-alt-shift-n = 'focus-monitor --wrap-around next'
+cmd-ctrl-alt-shift-p = 'focus-monitor --wrap-around prev'
+cmd-ctrl-alt-shift-comma = 'move-node-to-monitor --wrap-around prev'
+cmd-ctrl-alt-shift-period = 'move-node-to-monitor --wrap-around next'
+
+# Join windows (merge containers)
+cmd-ctrl-alt-shift-leftSquareBracket = 'join-with left'
+cmd-ctrl-alt-shift-rightSquareBracket = 'join-with right'
+
+# Launch applications
+cmd-ctrl-alt-shift-enter = 'exec-and-forget open -na kitty'
+cmd-ctrl-alt-shift-w = 'exec-and-forget open -a Firefox'
+cmd-ctrl-alt-shift-e = 'exec-and-forget open -na kitty --args nvim'
+cmd-ctrl-alt-shift-r = 'exec-and-forget open -na kitty --args yazi'
+cmd-ctrl-alt-shift-d = 'exec-and-forget open -a Raycast'
+
+# Move mode - for moving windows and sending to workspaces
+[mode.move.binding]
+# Press hjkl to move window, then auto-return to main
+h = ['move left', 'mode main']
+j = ['move down', 'mode main']
+k = ['move up', 'mode main']
+l = ['move right', 'mode main']
+
+# Move to prev/next workspace (like dwm shifttag)
+g = ['move-node-to-workspace prev', 'workspace prev', 'mode main']
+semicolon = ['move-node-to-workspace next', 'workspace next', 'mode main']
+
+# Send to workspace (number key), then return to main
+1 = ['move-node-to-workspace 1', 'mode main']
+2 = ['move-node-to-workspace 2', 'mode main']
+3 = ['move-node-to-workspace 3', 'mode main']
+4 = ['move-node-to-workspace 4', 'mode main']
+5 = ['move-node-to-workspace 5', 'mode main']
+6 = ['move-node-to-workspace 6', 'mode main']
+7 = ['move-node-to-workspace 7', 'mode main']
+8 = ['move-node-to-workspace 8', 'mode main']
+9 = ['move-node-to-workspace 9', 'mode main']
+
+# Cancel
+esc = 'mode main'

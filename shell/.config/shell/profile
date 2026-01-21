@@ -2,6 +2,9 @@
 
 # Profile file; runs when logging in. Useful for Environmental/Config variables
 
+# Homebrew (macOS) - must be early for brew-installed tools
+[ "$(uname -s)" = "Darwin" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Adding local executables to $PATH
 export PATH="$PATH:$HOME/.local/bin"
 
@@ -39,7 +42,8 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PYTHONNOUSERSITE=1
 
 # Other programs
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# SUDO_ASKPASS: dmenupass is Linux/X11 only
+[ "$(uname -s)" != "Darwin" ] && export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
 #export LESS_TERMCAP_mb=$"\e[01;31m"
@@ -72,6 +76,9 @@ Calliope)
 Lazarus)
   # Figure out how to do wezterm
   export TERMINAL="wezterm"
+  ;;
+noctua*)
+  export TERMINAL="kitty"
   ;;
 *)
   export TERMINAL="kitty"
