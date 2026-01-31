@@ -29,19 +29,19 @@
                         ]
                     },
                     {
-                        "description": "Left Command → Hyper key (Cmd+Ctrl+Alt+Shift)",
+                        "description": "Right Command → Hyper key (Cmd+Ctrl+Alt+Shift)",
                         "enabled": true,
                         "manipulators": [
                             {
                                 "type": "basic",
                                 "from": {
-                                    "key_code": "left_command",
+                                    "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
                                     {
-                                        "key_code": "right_shift",
-                                        "modifiers": ["right_command", "right_control", "right_option"]
+                                        "key_code": "left_shift",
+                                        "modifiers": ["left_command", "left_control", "left_option"]
                                     }
                                 ]
                             }

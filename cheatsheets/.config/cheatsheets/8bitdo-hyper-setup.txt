@@ -1,0 +1,75 @@
+═══════════════════════════════════════════════════════════════
+           8BitDo Retro Keyboard - WM Key Setup
+═══════════════════════════════════════════════════════════════
+
+GOAL
+────
+Program a macro button to emit Hyper (Ctrl+Alt+Shift+Super) for macOS.
+On Linux, use the built-in Left Win/Super key directly.
+
+  macOS:  Macro button → Hyper → Aerospace
+  Linux:  Left Win key → Super → dwm
+
+KEYBOARD FEATURES
+─────────────────
+- Programmable A/B buttons
+- Dual Super Buttons (large, right side) ← Use one for Hyper
+- Fast Key Mapping mode (no software needed for simple mappings)
+- Ultimate Software V2 for complex macros (Windows only)
+- Profiles stored on keyboard (persist across devices)
+
+SETUP (Ultimate Software V2 - Windows required)
+═══════════════════════════════════════════════════════════════
+
+1. Download Ultimate Software V2 from:
+   https://support.8bitdo.com/ultimate/retro-mechanical-keyboard.html
+
+2. Connect keyboard via USB (required for programming)
+
+3. Open Ultimate Software V2
+
+4. Select the macro button (e.g., right-side Super Button)
+
+5. Create Hyper macro:
+   - Click "Macro" tab
+   - Record: Ctrl + Alt + Shift + Super (hold all simultaneously)
+   - Set to "Hold" mode (active while button held)
+
+6. Save to keyboard profile
+
+7. Settings persist on keyboard across all devices
+
+
+VERIFICATION
+────────────
+macOS:
+  - Open Karabiner EventViewer
+  - Press the macro button
+  - Should show: control + option + shift + command
+
+Linux:
+  - Use Left Win key directly for dwm (no macro needed)
+  - Run xev to verify: should show Super_L / mod4
+
+
+TROUBLESHOOTING
+───────────────
+- Bluetooth macros may have issues with long key combos
+  → Use 2.4GHz dongle or wired connection
+
+- Factory reset: Hold all 3 round buttons (pair + mapping + profile)
+
+- If macro doesn't register all modifiers, try recording slower
+
+
+PROFILE TIP
+───────────
+Store your Hyper macro in Profile 1 (default).
+The keyboard remembers profiles across reconnections.
+
+═══════════════════════════════════════════════════════════════
+Sources:
+- https://support.8bitdo.com/ultimate/retro-mechanical-keyboard.html
+- https://github.com/goncalor/8bitdo-kbd-mapper
+- https://alexandra-zaharia.github.io/posts/getting-a-functional-layout-8bitdo-linux/
+═══════════════════════════════════════════════════════════════

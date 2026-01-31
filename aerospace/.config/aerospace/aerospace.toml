@@ -1,5 +1,5 @@
 # Aerospace - Tiling Window Manager for macOS
-# Hyper key = Left Command (via Karabiner) = cmd+ctrl+alt+shift
+# Hyper key = Right Command (via Karabiner) = cmd+ctrl+alt+shift
 
 # Start at login
 start-at-login = true
