@@ -149,10 +149,10 @@ Decision: Keep **toggleview** (view multiple tags at once), drop **toggletag**.
 
 ## Freed Keys (Available for New Uses)
 
-| Key | Was | Now Available |
-|-----|-----|---------------|
+| Key | Was | Now |
+|-----|-----|-----|
 | A | Pulsemixer/Cider | FREE |
-| X | Gap adjust | FREE |
+| X | Gap adjust | **Clipboard history** (Raycast / clipmenu) |
 | , | Monitor prev | FREE |
 | . | Monitor next | FREE |
 | O | nmaster | FREE (moved to I) |
@@ -192,12 +192,22 @@ Decision: Keep **toggleview** (view multiple tags at once), drop **toggletag**.
 
 ---
 
+## Raycast / Utilities (macOS + Linux equivalents)
+
+| Key | macOS (Raycast) | Linux |
+|-----|-----------------|-------|
+| Hyper + D | Raycast launcher | dmenu |
+| Hyper + X | Clipboard history | clipmenu (TODO: set up) |
+| Hyper + Space | Raycast root / file search | — (dwm uses for zoom) |
+| Hyper + Shift + D | ??? | dmenupass |
+
+Note: `Hyper + Space` is macOS-only (Raycast). On Linux, `Super + Space` = zoom (swap with master).
+
 ## Open Questions
 
-1. **Raycast**: What features to bind? Clipboard history? Window management? Snippets?
-2. **Hyper + Space on Aerospace**: What should this do? (Raycast command?)
-3. **toggleview mode key**: Use C? Or keep Ctrl+1-9?
-4. **Freed keys (A, X, O, etc.)**: Any new uses?
+1. **toggleview mode key**: Use C? Or keep Ctrl+1-9?
+2. **Freed keys (A, O, etc.)**: Any new uses?
+3. **Hyper + Shift + D**: Password manager on both? (Raycast extension / dmenupass)
 
 ---
 
@@ -248,7 +258,7 @@ Decision: Keep **toggleview** (view multiple tags at once), drop **toggletag**.
 | Key | Super/Hyper | + Shift |
 |-----|-------------|---------|
 | Z | Gaps toggle | — |
-| X | FREE | FREE |
+| X | Clipboard history | — |
 | C | toggleview mode? | — |
 | V | Focus master | — |
 | B | Bar toggle | Alt tags? |
