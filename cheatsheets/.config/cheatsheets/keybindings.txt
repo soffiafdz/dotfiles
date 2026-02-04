@@ -11,73 +11,104 @@ KEYBOARD REMAPPING
 Caps Lock               Esc (tap) / Ctrl     Escape
 Right Cmd/Super         Hyper → Aerospace    Super → dwm
 Right Alt/Option        macOS compose        Compose key
-Fn + H/J/K/L            Arrow keys           (N/A)
 
 WINDOW MANAGER (Hyper/Super + key)
 ═══════════════════════════════════════════════════════════════
-Action                  Aerospace (macOS)    dwm (Linux)
+
+FOCUS & NAVIGATION
 ─────────────────────────────────────────────────────────────────
-FOCUS
-  Focus left            Hyper + H            Super + H (resize-)
-  Focus down            Hyper + J            Super + J (focus+)
-  Focus up              Hyper + K            Super + K (focus-)
-  Focus right           Hyper + L            Super + L (resize+)
-  Prev workspace        Hyper + G            Super + G
-  Next workspace        Hyper + ;            Super + ;
-  Last workspace        Hyper + `            Super + Tab
+  Focus (Aerospace)     Hyper + H/J/K/L      (spatial)
+  Focus stack (dwm)     Super + J/K          (stack-based)
+  Focus master (dwm)    Super + V
+  Prev workspace        Hyper/Super + G
+  Next workspace        Hyper/Super + ;
+  Last workspace        Hyper/Super + Tab
+  Switch to 1-9         Hyper/Super + 1-9
+  View all              Hyper/Super + 0
 
-WORKSPACES/TAGS
-  Switch to 1-9         Hyper + 1-9          Super + 1-9
-  View all              Hyper + 0 (native)   Super + 0
-
-LAYOUT
-  Fullscreen            Hyper + F            Super + F
-  Float toggle          Hyper + Space        Super + Shift + Space
-  Tile layout           Hyper + T            Super + T
-  Balance/Zoom          Hyper + B            Super + Space (zoom)
-  Resize -              Hyper + -            Super + H
-  Resize +              Hyper + =            Super + L
-
-ACTIONS
-  Close window          Hyper + Q            Super + Q
-  Terminal              Hyper + Enter        Super + Enter
-  Browser               Hyper + W            Super + W
-  Editor (nvim)         Hyper + E            Super + E
-  File manager (yazi)   Hyper + R            Super + R
-  Launcher              Hyper + D (Raycast)  Super + D (dmenu)
-  Reload config         Hyper + /            (recompile)
-
-MONITORS
-  Focus next            Hyper + N            Super + .
-  Focus prev            Hyper + P            Super + ,
-  Send to next          Hyper + .            Super + Shift + .
-  Send to prev          Hyper + ,            Super + Shift + ,
-
-MOVE MODE (Aerospace) / SHIFT MODIFIER (dwm)
+LAYOUTS (dwm only)
 ─────────────────────────────────────────────────────────────────
-Aerospace: Press Hyper + M, then:
-  Move window           H/J/K/L
+  Tile                  Super + T
+  Bstack                Super + Shift + T
+  Monocle               Super + Y
+  Deck                  Super + Shift + Y
+  CenteredMaster        Super + U
+  CFloatingMaster       Super + Shift + U
+  nmaster +             Super + I
+  nmaster -             Super + Shift + I
+
+WINDOW ACTIONS
+─────────────────────────────────────────────────────────────────
+  Close window          Hyper/Super + Q
+  Force kill (dwm)      Super + Shift + Q
+  Fullscreen            Hyper/Super + F
+  Float toggle          Hyper/Super + O
+  Zoom/Layout cycle     Hyper/Super + Space
+  Resize -              Hyper + - / Super + H
+  Resize +              Hyper + = / Super + L
+
+MOVE MODE (Hyper/Super + M, then...)
+─────────────────────────────────────────────────────────────────
+  Move window           H/J/K/L (Aerospace only)
   Send to workspace     1-9
+  Send to prev ws       G (Aerospace follows to ws)
+  Send to next ws       ; (Aerospace follows to ws)
+  Send to prev monitor  P
+  Send to next monitor  N
+  Mount drive (dwm)     M
+  Unmount drive (dwm)   U
   Cancel                Esc
 
-dwm: Use Super + Shift + key:
-  Send to tag           Super + Shift + 1-9
-  Send to monitor       Super + Shift + ,/.
-  Push in stack         Super + Shift + J/K
-
-DWM-SPECIFIC
+TOGGLEVIEW MODE (dwm only: Super + C, then...)
 ─────────────────────────────────────────────────────────────────
+  Toggle view tag       1-9
+
+MONITORS
+─────────────────────────────────────────────────────────────────
+  Focus next            Hyper/Super + N
+  Focus prev            Hyper/Super + P
+  Send to next          Move mode + N / Super + Shift + N
+  Send to prev          Move mode + P / Super + Shift + P
+
+APPLICATION LAUNCHERS
+─────────────────────────────────────────────────────────────────
+  Terminal              Hyper/Super + Return
+  Terminal + tmux       Super + Shift + Return (dwm)
+  Browser               Hyper/Super + W
+  Editor (nvim)         Hyper/Super + E
+  Vimwiki               Super + Shift + E (dwm)
+  File manager (yazi)   Hyper/Super + R
+  System monitor (btm)  Super + Shift + R (dwm)
+  Launcher              Hyper/Super + D (Raycast / dmenu)
+  Password manager      Super + Shift + D (dmenupass)
+
+SYSTEM (dwm only)
+─────────────────────────────────────────────────────────────────
+  Screenshot            Super + S (flameshot gui)
+  Full screenshot       Super + Shift + S
+  Clipboard history     Super + X (clipmenu)
+  Toggle gaps           Super + Z
+  Reset gaps            Super + Shift + Z
   Toggle bar            Super + Shift + B
   Toggle alt tags       Super + B
-  Screenshot            Super + P (flameshot)
-  Full screenshot       Super + Shift + P
-  Mount drive           Super + M
-  Unmount drive         Super + Shift + M
+  System menu           Super + Backspace
+  Refresh bar           Super + Shift + '
+  Audio mixer           Super + A
   Volume down           Super + -
   Volume up             Super + Shift + -
   Mute                  Super + =
-  Gaps toggle           Super + S
-  Gaps reset            Super + Shift + S
+
+FREE KEYS (dwm)
+─────────────────────────────────────────────────────────────────
+  Shift+O, Shift+A, Shift+F, Shift+G, Shift+;, Shift+Space, Shift+X, ,/.
+
+RAYCAST HOTKEYS (macOS - set up in Raycast Settings → Extensions)
+═══════════════════════════════════════════════════════════════
+  Hyper + S             Screenshot           (captures area)
+  Hyper + Shift + S     Screenshot           (full screen - if available)
+  Hyper + X             Clipboard History
+  Hyper + Backspace     System Commands      (shutdown/restart/sleep)
+  Hyper + Shift + D     1Password/Passwords  (like dmenupass)
 
 TMUX (Ctrl-A prefix)
 ═══════════════════════════════════════════════════════════════
@@ -89,10 +120,6 @@ TMUX (Ctrl-A prefix)
   Next window                Prefix + Ctrl-L
   Last window                Prefix + Tab
   Copy mode                  Prefix + Enter
-
-NEOVIM (Space leader)
-═══════════════════════════════════════════════════════════════
-  Linter commands            <leader>l + g/l/v/w
 
 ═══════════════════════════════════════════════════════════════
 Note: "Hyper" on macOS = Cmd+Ctrl+Alt+Shift (via Karabiner)

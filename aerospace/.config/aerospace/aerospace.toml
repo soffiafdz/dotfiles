@@ -34,9 +34,12 @@ cmd-ctrl-alt-shift-equal = 'resize smart +50'
 
 # Layout controls
 cmd-ctrl-alt-shift-t = 'layout tiles horizontal vertical'
-cmd-ctrl-alt-shift-s = 'layout accordion horizontal vertical'
+cmd-ctrl-alt-shift-a = 'layout accordion horizontal vertical'
 cmd-ctrl-alt-shift-f = 'fullscreen'
-cmd-ctrl-alt-shift-space = 'layout floating tiling'
+cmd-ctrl-alt-shift-o = 'layout floating tiling'
+# S and X are FREE - use Raycast for screenshot/clipboard
+# Space = cycle layout orientation (like dwm zoom concept)
+cmd-ctrl-alt-shift-space = 'layout tiles horizontal vertical'
 
 # Workspaces (1-9 like dwm) - Hyper + number
 cmd-ctrl-alt-shift-1 = 'workspace 1'
@@ -62,17 +65,16 @@ cmd-ctrl-alt-shift-q = 'close'
 # Reload config
 cmd-ctrl-alt-shift-slash = 'reload-config'
 
-# Toggle last workspace (like dwm)
-cmd-ctrl-alt-shift-backtick = 'workspace-back-and-forth'
+# Toggle last workspace (like dwm) - Tab instead of backtick
+cmd-ctrl-alt-shift-tab = 'workspace-back-and-forth'
 
 # Balance window sizes
 cmd-ctrl-alt-shift-b = 'balance-sizes'
 
-# Monitor navigation
+# Monitor navigation (N/P like dwm)
 cmd-ctrl-alt-shift-n = 'focus-monitor --wrap-around next'
 cmd-ctrl-alt-shift-p = 'focus-monitor --wrap-around prev'
-cmd-ctrl-alt-shift-comma = 'move-node-to-monitor --wrap-around prev'
-cmd-ctrl-alt-shift-period = 'move-node-to-monitor --wrap-around next'
+# Send to monitor via move mode (see below)
 
 # Join windows (merge containers)
 cmd-ctrl-alt-shift-leftSquareBracket = 'join-with left'
@@ -96,6 +98,10 @@ l = ['move right', 'mode main']
 # Move to prev/next workspace (like dwm shifttag)
 g = ['move-node-to-workspace prev', 'workspace prev', 'mode main']
 semicolon = ['move-node-to-workspace next', 'workspace next', 'mode main']
+
+# Send to monitor (like dwm tagmon)
+n = ['move-node-to-monitor --wrap-around next', 'mode main']
+p = ['move-node-to-monitor --wrap-around prev', 'mode main']
 
 # Send to workspace (number key), then return to main
 1 = ['move-node-to-workspace 1', 'mode main']
