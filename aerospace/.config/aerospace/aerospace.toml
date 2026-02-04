@@ -34,10 +34,10 @@ cmd-ctrl-alt-shift-equal = 'resize smart +50'
 
 # Layout controls
 cmd-ctrl-alt-shift-t = 'layout tiles horizontal vertical'
-cmd-ctrl-alt-shift-a = 'layout accordion horizontal vertical'
+cmd-ctrl-alt-shift-y = 'layout accordion horizontal vertical'
 cmd-ctrl-alt-shift-f = 'fullscreen'
 cmd-ctrl-alt-shift-o = 'layout floating tiling'
-# S and X are FREE - use Raycast for screenshot/clipboard
+# A, S, X are FREE - use Raycast for screenshot/clipboard, audio on dwm
 # Space = cycle layout orientation (like dwm zoom concept)
 cmd-ctrl-alt-shift-space = 'layout tiles horizontal vertical'
 
