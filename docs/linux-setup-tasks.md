@@ -19,7 +19,21 @@ Tasks to complete after setting up machines / installing software.
 
 ## Raycast Hotkeys (macOS)
 
-- [ ] Set up Raycast hotkeys as documented in `docs/raycast-hotkeys.md`
+- [x] Set up Raycast hotkeys (S, Shift+S, X configured)
+  - Note: Backspace and Shift+D cannot be used due to conflicts
+
+## Application Installation (Linux)
+
+- [ ] Install GUI applications
+  - `pacman -S foliate` - EPUB reader (pairs with Calibre)
+  - `pacman -S sioyek` - Academic PDF reader
+  - `pacman -S zotero` - Reference manager
+  - `pacman -S calibre` - E-book management
+  - `pacman -S digikam` - Photo management
+  - `pacman -S gimp` - Image editor
+  - `pacman -S thunderbird` - Email + calendar
+  - `pacman -S firefox` - Browser
+  - See `Brewfile` for complete macOS list
 
 ## Application Configuration (either platform)
 
@@ -43,10 +57,12 @@ Tasks to complete after setting up machines / installing software.
   - Run `atuin register` or `atuin login`
   - Add to shell config
 
-- [ ] Install browserpass Firefox extension
-  - Install extension from Firefox Add-ons: https://addons.mozilla.org/en-US/firefox/addon/browserpass-ce/
+- [x] Install browserpass Firefox extension (macOS)
+  - Extension: ✅ installed from Firefox Add-ons
   - macOS native host: ✅ installed via `brew install amar1729/formulae/browserpass`
+- [ ] Install browserpass on Linux
   - Linux native host: `pacman -S browserpass-firefox`
+  - Firefox extension: already installed (syncs via Firefox account)
 
 ## Post-Install Verification (Linux)
 

@@ -12,13 +12,13 @@ Hotkeys to configure in Raycast to match dwm keybindings.
 
 ## Hotkeys to Configure
 
-| Hotkey | Extension | Command | dwm Equivalent |
-|--------|-----------|---------|----------------|
-| `Hyper + S` | Screenshot | Capture Area | `Super + S` (flameshot gui) |
-| `Hyper + Shift + S` | Screenshot | Capture Fullscreen | `Super + Shift + S` |
-| `Hyper + X` | Clipboard History | Clipboard History | `Super + X` (clipmenu) |
-| `Hyper + Backspace` | System | System Commands | `Super + Backspace` (sysaction) |
-| `Hyper + Shift + D` | 1Password | Search Passwords | `Super + Shift + D` (dmenupass) |
+| Hotkey | Extension | Command | dwm Equivalent | Status |
+|--------|-----------|---------|----------------|--------|
+| `Hyper + S` | Screenshot | Capture Area | `Super + S` (flameshot gui) | ✅ Configured |
+| `Hyper + Shift + S` | Screenshot | Capture Fullscreen | `Super + Shift + S` | ✅ Configured |
+| `Hyper + X` | Clipboard History | Clipboard History | `Super + X` (clipmenu) | ✅ Configured |
+| `Hyper + Backspace` | System | System Commands | `Super + Backspace` (sysaction) | ❌ Cannot use (conflict) |
+| `Hyper + Shift + D` | 1Password | Search Passwords | `Super + Shift + D` (dmenupass) | ❌ Cannot use (conflict) |
 
 ## Extensions to Install (if not present)
 
