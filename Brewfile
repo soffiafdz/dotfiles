@@ -70,7 +70,7 @@ cask "karabiner-elements"  # Keyboard customization
 cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "quarto"         # Scientific publishing
-cask "calibre"        # E-book management
+cask "calibre"        # E-book management (includes EPUB reader)
 cask "zotero"         # Reference manager
 cask "sioyek"         # Academic PDF reader
 cask "digikam"        # Photo management
