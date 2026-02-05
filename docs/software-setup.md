@@ -15,7 +15,8 @@ Reference for setting up machines after formatting.
 | **Tasks** | Todoist | Flatpak or AUR | `brew install --cask todoist` | |
 | **Chat** | Ferdium | Flatpak or AUR | `brew install --cask ferdium` | WhatsApp, Telegram, Signal, Slack, Discord |
 | **References** | Zotero | `pacman -S zotero` | `brew install --cask zotero` | + Better BibTeX |
-| **E-books** | Calibre | `pacman -S calibre` | `brew install --cask calibre` | Can run as server |
+| **E-books** | Calibre | `pacman -S calibre` | `brew install --cask calibre` | E-book mgmt + reader |
+| **EPUB Reader** | Foliate | `pacman -S foliate` | Books.app (built-in) | Linux: dedicated reader; macOS: use Books or Calibre |
 | **PDF Reader** | Sioyek | AUR | `brew install --cask sioyek` | Academic PDFs, SyncTeX |
 | **PDF Simple** | Zathura | `pacman -S zathura` | `brew install zathura` | Vim-like, fast |
 | **Photo Mgmt** | DigiKam | `pacman -S digikam` | `brew install --cask digikam` | |

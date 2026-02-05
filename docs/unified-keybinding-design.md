@@ -164,15 +164,15 @@ This is an **accepted difference**. Window navigation will feel different but la
 
 ### Raycast (macOS)
 
-Configure in Raycast Settings → Extensions:
+Configured in Raycast Settings → Extensions:
 
 | Hotkey | Command | dwm Equivalent |
 |--------|---------|----------------|
 | Hyper + S | Screenshot (area) | Super + S |
 | Hyper + Shift + S | Screenshot (full) | Super + Shift + S |
 | Hyper + X | Clipboard History | Super + X |
-| Hyper + Backspace | System Commands | Super + Backspace |
-| Hyper + Shift + D | 1Password/Passwords | Super + Shift + D |
+
+**Note**: Hyper + Backspace and Hyper + Shift + D cannot be used with Raycast due to conflicts.
 
 ---
 
