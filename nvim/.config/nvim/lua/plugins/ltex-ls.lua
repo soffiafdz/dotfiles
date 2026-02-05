@@ -24,8 +24,12 @@ end
 local words = {}
 local dict_file = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 if vim.fn.filereadable(dict_file) == 1 then
-  for word in io.open(dict_file, "r"):lines() do
-    table.insert(words, word)
+  local f = io.open(dict_file, "r")
+  if f then
+    for word in f:lines() do
+      table.insert(words, word)
+    end
+    f:close()
   end
 end
 
@@ -45,11 +49,8 @@ return {
     opts = {
       servers = {
         ltex_plus = {
-          -- Start disabled by default
-          autostart = function()
-            -- Only autostart if not explicitly disabled
-            return vim.g.ltex_enabled ~= false
-          end,
+          -- Start disabled by default (toggle with <leader>lg)
+          autostart = false,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
