@@ -2,7 +2,8 @@
 return {
   {
     "vimwiki/vimwiki",
-    event = "BufReadPre",
+    -- No lazy-loading: vimwiki needs to load at startup for global keymaps
+    lazy = false,
     init = function()
       vim.g.vimwiki_map_prefix = "<leader>v"
     end,

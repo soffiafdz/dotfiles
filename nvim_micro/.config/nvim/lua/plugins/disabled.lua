@@ -57,8 +57,7 @@ return {
 
   -- [UNNEEDED] Mini plugins that are heavy or not needed
   { "nvim-mini/mini.ai", enabled = false },
-  { "nvim-mini/mini.comment", enabled = false },
-  { "nvim-mini/mini.surround", enabled = false },
+  -- mini.comment and mini.surround kept via lazyvim extras
 
   -- [UNNEEDED] Markdown preview (requires browser)
   { "iamcco/markdown-preview.nvim", enabled = false },

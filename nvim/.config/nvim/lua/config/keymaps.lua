@@ -1,8 +1,11 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 
-local linter_icon = ""
-local wk = require("which-key")
+local has_wk, wk = pcall(require, "which-key")
+if not has_wk then
+  return
+end
+
 local has_icons, MiniIcons = pcall(require, "mini.icons")
 local keywordprg_icon = has_icons and MiniIcons.get("filetype", "help") or ""
 

@@ -1,4 +1,7 @@
--- Linting configuration for microjournal
+-- Linting configuration for writing
+-- NOTE: vale and write-good require manual installation:
+--   brew install vale
+--   npm install -g write-good
 
 return {
   {

@@ -15,7 +15,7 @@ return {
     if tmux then
       opts.config_tmux = true
       opts.external_term = "tmux split-window -hf"
-      opts.view_df = { open_app = "tmux new-window 80 vd" }
+      opts.view_df = { open_app = "tmux new-window vd" }
     end
 
     return opts
