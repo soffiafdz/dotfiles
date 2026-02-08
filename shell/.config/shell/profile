@@ -14,7 +14,7 @@ export PATH="$PATH:$HOME/.local/bin"
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="yazi"
-export BROWSER="brave"
+export BROWSER="firefox"
 
 # XDG Base Dirs
 export XDG_CONFIG_HOME="$HOME/.config"
