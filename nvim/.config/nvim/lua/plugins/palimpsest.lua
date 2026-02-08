@@ -2,6 +2,7 @@
 -- Check multiple possible locations (varies by machine)
 local possible_paths = {
   vim.fn.expand("~/Developer/palimpsest"),
+  vim.fn.expand("~/repos/palimpsest"),
   vim.fn.expand("~/Documents/palimpsest"),
 }
 
