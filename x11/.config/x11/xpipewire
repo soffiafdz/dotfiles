@@ -1,9 +1,21 @@
 #!/bin/sh
 
-# Need to let snd load
-#sleep 5
-
-# Load services
 /usr/bin/pipewire &
 /usr/bin/pipewire-pulse &
+
+# Wait for pipewire socket before starting wireplumber
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  [ -e "${XDG_RUNTIME_DIR}/pipewire-0" ] && break
+  sleep 1
+done
+
 /usr/bin/wireplumber &
+
+# Wait for wireplumber to register sinks
+for i in 1 2 3 4 5; do
+  pactl list sinks short 2>/dev/null | grep -q "alsa_output" && break
+  sleep 1
+done
+
+pactl set-default-sink alsa_output.pci-0000_06_00.1.hdmi-stereo
+pamixer -u
