@@ -1,6 +1,9 @@
 !! Transparency (0-1):
 st.alpha: 0.9
 
+!! Cursor
+Xcursor.size: 24
+
 !! Font
 ! *.font: Monospace:size=13:antialias=true:autohint=true
 !*.font: FiraCode Nerd Font:style=Retina,Regular:size=12:antialias=true
