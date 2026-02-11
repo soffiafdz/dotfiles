@@ -9,7 +9,7 @@ Reference for setting up machines after formatting.
 | **Terminal** | Kitty | `pacman -S kitty` | `brew install --cask kitty` | Wezterm on Windows |
 | **Editor** | Neovim | `pacman -S neovim` | `brew install neovim` | |
 | **Shell** | Zsh + p10k | `pacman -S zsh` | included | + zsh-syntax-highlighting |
-| **File Manager** | Yazi | `pacman -S yazi` | `brew install yazi` | |
+| **File Manager** | Yazi | `pacman -S yazi` | `brew install yazi` | Requires: poppler (PDF preview) |
 | **Browser** | Firefox | `pacman -S firefox` | `brew install --cask firefox` | + browserpass extension |
 | **Email/Calendar** | Thunderbird | `pacman -S thunderbird` | `brew install --cask thunderbird` | |
 | **Tasks** | Todoist | Flatpak or AUR | `brew install --cask todoist` | |
@@ -69,6 +69,12 @@ Reference for setting up machines after formatting.
 | just | make | `pacman/brew install just` | `just` |
 | hyperfine | time | `pacman/brew install hyperfine` | benchmarking |
 | ouch | tar/zip | `pacman/brew install ouch` | compression |
+
+## Dependencies
+
+| Package | Purpose | Install |
+|---------|---------|---------|
+| poppler | PDF tools (pdftoppm) | `pacman/brew install poppler` |
 
 ## Backup Strategy
 
