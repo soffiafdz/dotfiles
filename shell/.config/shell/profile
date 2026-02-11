@@ -33,7 +33,6 @@ export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME:-/.config}/ja
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
-export PASSWORD_STORE_GPG_OPTS="--pinentry-mode loopback"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 
 # MINC-TOOLKIT-1.9.18.1
@@ -42,8 +41,8 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PYTHONNOUSERSITE=1
 
 # Other programs
-# SUDO_ASKPASS: dmenupass is Linux/X11 only
-[ "$(uname -s)" != "Darwin" ] && export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# SUDO_ASKPASS: dmenuask is Linux/X11 only (prompts for sudo password via dmenu)
+[ "$(uname -s)" != "Darwin" ] && export SUDO_ASKPASS="$HOME/.local/bin/dmenuask"
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
 #export LESS_TERMCAP_mb=$"\e[01;31m"
