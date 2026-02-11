@@ -1,176 +1,127 @@
-# Janus (Homestation) Setup Status
+# Janus Homestation Setup Status
 
-**Date:** 2026-02-08
-**System:** Artix Linux (runit) + Windows 11 Pro (AtlasOS) dual-boot
-**Hostname:** janus
-**User:** [username]
+Last updated: 2026-02-08
 
-## ✅ Completed
+## System Information
 
-### Dual-Boot Setup
-- [x] Fresh Windows 11 Pro install (300 GB partition)
-- [x] Applied AtlasOS playbook
-- [x] Disabled Fast Startup, hibernation, BitLocker
-- [x] Set hardware clock to UTC (RealTimeIsUniversal registry key)
-- [x] Disabled Secure Boot in UEFI
-- [x] Installed Artix Linux (runit) with custom partitions:
-  - 1 GB ESP (shared with Windows)
-  - 120 GB root (/)
-  - 8 GB swap
-  - ~500 GB home (/home)
-- [x] GRUB installed with Windows chainloader
-- [x] Vault HDD (1.8 TB NTFS) mounted at `/mnt/vault`
+- **Hostname:** Janus
+- **OS:** Artix Linux (runit)
+- **Kernel:** 6.18.6-artix1-1
+- **Desktop:** dwm (custom build)
 
-### Base System
-- [x] Base Artix packages installed (base, base-devel, runit, elogind-runit, linux, linux-firmware)
-- [x] NetworkManager + networkmanager-runit
-- [x] User created with wheel group, sudo configured
-- [x] Shell set to zsh
-- [x] SSH keys generated and added to GitHub
-- [x] Git configured
+## Installation Progress
 
-### Display & Window Manager
-- [x] Xorg installed (xorg-server, xorg-xinit, xorg-xrandr, xorg-xsetroot)
-- [x] X11 libraries (libx11, libxft, libxinerama)
-- [x] dwm compiled and installed from ~/Repos/dwm
-- [x] dwm autostart array configured (setwp, xcompmgr, dunst, unclutter, redshift, dwmbar)
-- [x] dmenu scripts: dmenumount, dmenuumount, dmenupass
+### Core System ✓
 
-### Dotfiles
-- [x] Cloned to ~/Repos/dotfiles
-- [x] Stowed packages: bin, dunst, fzf, gnupg, mpv, redshift, sioyek, ssh, yazi, zathura, zsh, shell, zprofile, x11, nvim, kitty, tmux, git
-- [x] xinitrc, xprofile, xresources configured
-- [x] PipeWire configured for janus (xpipewire script)
-- [x] Hostname-specific settings applied
+- [x] Artix Linux base installation
+- [x] dwm window manager (compiled)
+- [x] dmenu launcher
+- [x] kitty terminal
+- [x] neovim editor
+- [x] yay AUR helper
 
-### Core Software
-- [x] Terminal: Kitty
-- [x] Editor: Neovim
-- [x] Shell: Zsh (powerlevel10k pending)
-- [x] File manager: Yazi
-- [x] Browser: Firefox
-- [x] Email: Thunderbird
-- [x] Passwords: pass
-- [x] PDF readers: Zathura
-- [x] Video: mpv
-- [x] Image editor: GIMP
-- [x] E-book manager: Calibre
+### Essential Applications
 
-### CLI Tools (Rust)
-- [x] ripgrep (rg)
-- [x] fd
-- [x] eza
-- [x] bat
-- [x] zoxide
-- [x] tealdeer (tldr)
+#### Installed ✓
+- [x] Firefox browser
+- [x] Thunderbird email/calendar
+- [x] Calibre e-book management
+- [x] Sioyek PDF reader (academic)
+- [x] Foliate EPUB reader
+- [x] GIMP image editor
+- [x] clipmenu (package installed)
+- [x] rclone cloud sync
 
-### Compositor & Utilities
-- [x] xcompmgr (compositor)
-- [x] dunst (notifications)
-- [x] flameshot (screenshots)
-- [x] redshift (night mode)
-
-### System Utilities
-- [x] fuse3
-- [x] ntfs-3g (for Windows/Vault partition access)
-- [x] tmux
-- [x] wget, curl, unzip
-
-## ⏳ Pending
-
-### Audio
-- [ ] PipeWire packages: `sudo pacman -S pipewire pipewire-pulse wireplumber`
-
-### Fonts
-- [ ] Nerd Fonts: `sudo pacman -S nerd-fonts` or specific:
-  - ttf-cascadia-code-nerd (primary)
-  - ttf-firacode-nerd
-  - ttf-meslo-nerd
-  - ttf-iosevka-nerd
-
-### Shell Enhancements
-- [ ] Powerlevel10k: `git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.local/share/zsh/powerlevel10k`
-- [ ] direnv: `sudo pacman -S direnv`
-- [ ] micromamba: Manual install to `~/.local/bin/micromamba` or via pacman
-
-### Package Management
-- [ ] artix-archlinux-support: `sudo pacman -S artix-archlinux-support`
-- [ ] Edit `/etc/pacman.conf` to add Arch repos (extra, community)
-- [ ] yay (AUR helper): `git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si`
-
-### CLI Tools (AUR/Arch repos)
-- [ ] bottom (btm) - system monitor
-- [ ] dust - disk usage
-- [ ] procs - process viewer
-- [ ] sd - sed replacement
-- [ ] just - command runner
-- [ ] hyperfine - benchmarking
-- [ ] ouch - compression tool
-
-### Applications (AUR/Arch repos/Flatpak)
-- [ ] foliate - EPUB reader
-- [ ] sioyek - Academic PDF reader (might be in AUR)
-- [ ] zotero - Reference manager
-- [ ] digikam - Photo management
-- [ ] browserpass-firefox - pass browser integration
-- [ ] clipmenu - Clipboard manager (already stowed, needs install + daemon)
-- [ ] Todoist - Task manager (Flatpak or AUR)
-- [ ] Ferdium - Multi-messenger (Flatpak or AUR)
-- [ ] Feishin - Music client (Flatpak or AUR)
-- [ ] Steam - Gaming
-- [ ] RustDesk - Remote desktop
+#### Not Installed Yet
+- [ ] Zotero reference manager
+- [ ] DigiKam photo management
+- [ ] Restic backup tool
+- [ ] Atuin shell history sync
+- [ ] browserpass-firefox (native host)
+- [ ] Jellyfin media server
+- [ ] Feishin music client
+- [ ] flameshot screenshots
+- [ ] xcompmgr compositor
+- [ ] dunst notifications
+- [ ] redshift night mode
 
 ### Configuration Tasks
-- [ ] Configure Sioyek as Zotero external PDF reader
-- [ ] Configure Sioyek SyncTeX for Quarto/nvim
-- [ ] Set up clipmenud (runit service or dwm autostart)
-- [ ] Set up Restic + rclone for backups (Google Drive)
-- [ ] Set up Atuin shell history sync
-- [ ] Test all dwm keybindings (move mode, toggleview mode, layouts)
-- [ ] Configure Jellyfin media server (if needed)
+
+#### Clipboard Management
+- [x] clipmenu package installed
+- [ ] clipmenud daemon configured
+  - Need to either:
+    - Add `clipmenud &` to .xprofile
+    - Create runit user service
+    - Add to dwm autostart array
+- [ ] Test Super+X keybinding
+
+#### Password Management
 - [ ] Import GPG keys for pass
+- [ ] Initialize password store
+- [ ] Install browserpass-firefox native host
+- [ ] Test dmenupass integration
 
-### Windows Side
-- [x] Steam installed
-- [x] Firefox installed
-- [ ] Any other gaming-specific software
+#### PDF/Reference Workflow
+- [ ] Install Zotero
+- [ ] Configure Sioyek as Zotero external PDF reader
+- [ ] Set up Sioyek SyncTeX for Quarto/nvim
+  - See docs/sioyek-synctex-setup.md
 
-## 📋 Notes
+#### Backup Setup
+- [ ] Install restic
+- [ ] Configure rclone with Google Drive
+- [ ] Initialize restic repository
+- [ ] Set up backup schedule (runit cron alternative)
 
-### Hostname Setup
-- **janus**: Homestation (Artix Linux)
-- **noctua**: MacBook Pro (macOS)
-- **lettera**: WriterDeck (Raspberry Pi)
-- **phebe**, **tango**: Other Linux machines (unknown current status)
+#### Shell Configuration
+- [ ] Install atuin
+- [ ] Register/login to atuin sync
+- [ ] Configure shell integration
 
-### Key Paths
-- Dotfiles: `~/Repos/dotfiles`
-- dwm source: `~/Repos/dwm`
-- Vault (shared HDD): `/mnt/vault`
-- Micromamba root: `~/.local/share/micromamba`
-- Password store: `~/.local/share/password-store`
+#### Media Server (Homestation-specific)
+- [ ] Install Jellyfin
+- [ ] Configure media library paths
+- [ ] Install Feishin (Jellyfin frontend)
+- [ ] Test access from other devices
 
-### Important Commands
-- Stow: `cd ~/Repos/dotfiles && stow -t ~ <package>`
-- Compile dwm: `cd ~/Repos/dwm && sudo make clean install`
-- Start X: `startx` (auto-runs on tty1 via shell profile)
+#### Window Manager
+- [ ] Verify all dwm keybindings work
+- [ ] Test move mode (Super+M)
+- [ ] Test toggleview mode (Super+C)
+- [ ] Configure window rules for applications
 
-### Keybinding System
-- Linux: Super (Mod4) key via dwm
-- macOS: Hyper (Cmd+Ctrl+Alt+Shift via Right Command) → Aerospace
-- See: `docs/unified-keybinding-design.md` and `docs/keybindings.txt`
+#### Display/Desktop
+- [ ] Install xcompmgr for transparency
+- [ ] Install dunst for notifications
+- [ ] Install redshift for night mode
+- [ ] Install flameshot for screenshots
 
-## 🔧 Troubleshooting
+### dotfiles Stowing
 
-### GRUB Doesn't Show Windows
-- Windows entry added manually to `/etc/grub.d/40_custom`
-- ESP UUID: 31C3-F66C
-- If issues, regenerate: `grub-mkconfig -o /boot/grub/grub.cfg`
+Track which configurations have been stowed:
+- [ ] zsh
+- [ ] nvim
+- [ ] kitty
+- [ ] git
+- [ ] tmux
+- [ ] dwm config (if separate from build)
+- [ ] X11 (.xprofile, .xinitrc)
 
-### Audio Not Working
-- Install PipeWire packages
-- xpipewire script should auto-run from xprofile for janus hostname
+### Next Steps
 
-### dwm Keybindings Not Working
-- Verify keychord patch applied in dwm source
-- Recompile: `cd ~/Repos/dwm && sudo make clean install`
+Priority tasks to work on:
+
+1. Configure clipmenu daemon (Quick win - already installed)
+2. Install and configure password management (GPG + pass + browserpass)
+3. Install Zotero for reference management
+4. Set up backup solution (restic + rclone)
+5. Install remaining GUI applications
+6. Configure media server
+
+## Notes
+
+- System is dual-boot with Windows (AtlasOS) - see docs/dual-boot-install.md
+- Using runit init system (not systemd)
+- For AUR packages: use `yay -S package-name`
+- For official repos: use `pacman -S package-name`
