@@ -32,6 +32,7 @@ brew "fd"             # Fast find
 brew "eza"            # Modern ls
 brew "bat"            # Cat with syntax highlighting
 brew "yazi"           # File manager
+brew "poppler"        # PDF tools (pdftoppm for yazi preview)
 brew "zoxide"         # Smart cd - remembers frequent dirs
 
 # Development
