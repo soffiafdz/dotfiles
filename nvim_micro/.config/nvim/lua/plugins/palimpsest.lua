@@ -8,6 +8,7 @@ if vim.fn.isdirectory(palimpsest_path .. "/dev") == 1 then
       dir = palimpsest_path .. "/dev",
       dependencies = { "vimwiki/vimwiki" },
       config = function()
+        vim.g.palimpsest_deck_mode = true
         require("palimpsest").setup()
       end,
     },
