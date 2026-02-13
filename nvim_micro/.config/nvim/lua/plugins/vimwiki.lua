@@ -56,6 +56,16 @@ return {
       vim.g.vimwiki_global_ext = 0
       vim.g.ext2syntax = {}
       vim.g.vimwiki_markdown_link_ext = 1
+
+      -- Set default icons for vimwiki group (palimpsest will override when active)
+      local has_wk, wk = pcall(require, "which-key")
+      if has_wk then
+        local has_icons, MiniIcons = pcall(require, "mini.icons")
+        local vimwiki_icon = has_icons and MiniIcons.get("extension", "md") or ""
+        wk.add({
+          { "<leader>v", group = "vimwiki", icon = { icon = vimwiki_icon, color = "green" } },
+        })
+      end
     end,
   },
 }
