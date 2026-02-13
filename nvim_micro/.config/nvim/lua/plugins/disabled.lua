@@ -1,5 +1,5 @@
 -- Disable unnecessary LazyVim plugins for writerdeck (Raspberry Pi Zero 2W)
--- Last synced: 2025-12-18
+-- Last synced: 2026-02-13
 --
 -- Categories:
 -- [HEAVY] CPU/Memory intensive plugins
@@ -26,7 +26,7 @@ return {
   { "JoosepAlviste/nvim-ts-context-commentstring", enabled = false },
   { "folke/ts-comments.nvim", enabled = false },
 
-  -- [HEAVY] Telescope - memory intensive (using fzf-lua instead)
+  -- [HEAVY] Telescope - not needed (snacks.picker is the default now)
   { "nvim-telescope/telescope.nvim", enabled = false },
   { "nvim-telescope/telescope-fzf-native.nvim", enabled = false },
 
@@ -66,7 +66,7 @@ return {
   -- gitsigns.nvim - Git indicators (very lightweight)
   -- persistence.nvim - Session management (minimal overhead)
   -- mini.pairs - Auto-pairs (lightweight)
-  -- fzf-lua - Fuzzy finder (lighter than telescope, needed for palimpsest)
+  -- snacks.nvim - Picker/UI (replaces telescope, used by LazyVim core)
 
   -- [HEAVY] Linters - disabled on Pi (too resource intensive)
   { "mfussenegger/nvim-lint", enabled = false },
