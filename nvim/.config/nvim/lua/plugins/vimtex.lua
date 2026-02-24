@@ -4,7 +4,7 @@ return {
     "lervag/vimtex",
     -- Override config
     config = function()
-      vim.g.vimtex_view_method = "zathura"
+      vim.g.vimtex_view_method = "sioyek"
       vim.g.vimtex_compiler_method = "latexmk"
       -- disable `K` as it conflicts with LSP hover
       vim.g.vimtex_mappings_disable = { ["n"] = { "K" } }

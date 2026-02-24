@@ -2,6 +2,7 @@
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
+    /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme \
     ~/.local/share/zsh/powerlevel10k/powerlevel10k.zsh-theme \
     ~/powerlevel10k/powerlevel10k.zsh-theme )
 
@@ -86,7 +87,13 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 
 # Syntax highlighting
-source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
+syntax_hl_sources=( \
+    /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh \
+    /opt/homebrew/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh \
+    /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh )
+for syntax_hl in ${syntax_hl_sources[@]}; do
+    [ -f "$syntax_hl" ] && source "$syntax_hl" && break
+done
 
 # fzf Keybindings
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/key-bindings.zsh" ] &&
@@ -108,16 +115,20 @@ export GPG_TTY
 # export GOROOT=/usr/local/go
 # export GOPATH=$HOME/Go
 # export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+#
+[ -d "$HOME/quarto-1.8.26" ] && export PATH=$HOME/quarto-1.8.26/bin:$PATH
 
 ## >>> mamba initialize >>>
 # !! Contents within this block are managed by 'micromamba shell init' !!
-export MAMBA_EXE='/home/soffiafdz/.local/bin/micromamba';
-export MAMBA_ROOT_PREFIX='/home/soffiafdz/.local/share/micromamba';
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-if [ $? -eq 0 ]; then
-	eval "$__mamba_setup"
-else
-	alias micromamba="$MAMBA_EXE"  # Fallback on help from micromamba activate
+export MAMBA_EXE="$HOME/.local/bin/micromamba";
+export MAMBA_ROOT_PREFIX="$HOME/.local/share/micromamba";
+if [ -x "$MAMBA_EXE" ]; then
+    __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__mamba_setup"
+    else
+        alias micromamba="$MAMBA_EXE"  # Fallback on help from micromamba activate
+    fi
+    unset __mamba_setup
 fi
-unset __mamba_setup
 ## <<< mamba initialize <<<

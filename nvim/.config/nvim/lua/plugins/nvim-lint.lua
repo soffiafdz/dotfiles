@@ -1,6 +1,17 @@
--- Linting configuration for microjournal
+-- Linting configuration for writing
+-- NOTE: vale and write-good require manual installation:
+--   brew install vale
+--   npm install -g write-good
 
 return {
+  {
+    "mason-org/mason.nvim",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        "yamllint",
+      })
+    end,
+  },
   {
     "mfussenegger/nvim-lint",
     opts = {

@@ -4,18 +4,21 @@
 
 # For non-systemd init systems.
 case "$(readlink -f /sbin/init)" in
-	*runit*) hib="sudo -A zzz" ;;
-	*openrc*) reb="sudo -A openrc-shutdown -r"; shut="sudo -A openrc-shutdown -p 0" ;;
+*runit*) hib="sudo -A zzz" ;;
+*openrc*)
+  reb="sudo -A openrc-shutdown -r"
+  shut="sudo -A openrc-shutdown -p 0"
+  ;;
 esac
 
 cmds="\
   display off	xset dpms force off
  lock	slock
- leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
+󰠚 leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
 ⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
-ﰇ reboot	${reb:-sudo -A reboot}
+ reboot	${reb:-sudo -A reboot}
  shutdown	${shut:-sudo -A shutdown -h now}"
 
 choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu)" || exit 1
 
-`echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-`
+$(echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-)

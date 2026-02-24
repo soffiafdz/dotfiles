@@ -1,5 +1,11 @@
 #!/bin/sh
 # This script sets the statusbar with the xsetroot command at the end.
+
+HOSTNAME="${HOSTNAME:-$(cat /etc/hostname)}"
+
+# Handle SIGUSR1 to force immediate update (useful for resume from sleep)
+trap 'update_now=1' USR1
+
 for pid in $(pgrep -f dwmbar); do
   if [ "$pid" != "$$" ]; then
     kill "$pid"
@@ -29,18 +35,19 @@ status() {
   case $HOSTNAME in
   *mcgill*)
     # Use PulseAudio on mcgill systems - get default sink info
-    sink_info=$(pactl info | grep "Default Sink" | cut -d: -f2 | tr -d ' ')
+    sink_info=$(timeout 2 pactl info 2>/dev/null | grep "Default Sink" | cut -d: -f2 | tr -d ' ')
     if [ -n "$sink_info" ]; then
       # Get mute status and volume from sink info
-      mute=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Mute:" | awk '{print $2}')
-      vol=$(pactl list sinks | grep -A 15 "Name: $sink_info" | grep "Volume:" | head -n1 | awk '{print $5}' | sed 's/%//')
+      sink_data=$(timeout 2 pactl list sinks 2>/dev/null | grep -A 15 "Name: $sink_info")
+      mute=$(echo "$sink_data" | grep "Mute:" | awk '{print $2}')
+      vol=$(echo "$sink_data" | grep "Volume:" | head -n1 | awk '{print $5}' | sed 's/%//')
 
       case $mute in
       "yes") echo "   $delim" ;;
       "no")
         case $vol in
         0) echo " $vol   $delim" ;;
-        [0-9]% | [1-2][0-9]%) echo " $vol 奄 $delim" ;;
+        [0-9]% | [1-2][0-9]%) echo " $vol  $delim" ;;
         [3-6][0-9]%) echo " $vol  $delim" ;;
         [7-9][0-9]% | 1[0-9][0-9]%) echo " $vol   $delim" ;;
         esac
@@ -53,13 +60,13 @@ status() {
     ;;
   *)
     # Use pamixer on other systems
-    mute=$(pamixer --get-mute)
-    vol=$(pamixer --get-volume-human)
+    mute=$(timeout 2 pamixer --get-mute 2>/dev/null)
+    vol=$(timeout 2 pamixer --get-volume-human 2>/dev/null)
     case $mute in
     "true") echo "   $delim" ;;
     "false") case $vol in
       0%) echo " $vol   $delim" ;;
-      [0-9]% | [1-2][0-9]%) echo " $vol 奄 $delim" ;;
+      [0-9]% | [1-2][0-9]%) echo " $vol  $delim" ;;
       [3-6][0-9]%) echo " $vol  $delim" ;;
       [7-9][0-9]% | 1[0-9][0-9]%) echo " $vol   $delim" ;;
       esac ;;
@@ -68,67 +75,41 @@ status() {
   esac
 
   ### Internet
-  # Wifi quality percentage and  icon if ethernet is connected.
+  # Ethernet up: wired icon; else wifi signal or disconnected
+  # Old comment:  icon if ethernet is connected.
   # Make if for when there is no network
-  case $HOSTNAME in
-  *mcgill*)
-    # Different network interface handling for mcgill systems
-    # Check if eth0 exists first (since we can see it in your output)
-    if [ -f "/sys/class/net/eth0/operstate" ]; then
-      eth_state=$(cat /sys/class/net/eth0/operstate)
-      case $eth_state in
-      "up") echo "󰈁 $delim" ;;
-      "down") echo "󰈂 $delim" ;;
-      *) echo "󰈂 $delim" ;;
-      esac
-    else
-      # Try to find any ethernet interface
-      eth_interface=$(ls /sys/class/net/ | grep '^eth' | head -n1)
-      if [ -n "$eth_interface" ] && [ -f "/sys/class/net/$eth_interface/operstate" ]; then
-        eth_state=$(cat "/sys/class/net/$eth_interface/operstate")
-        case $eth_state in
-        "up") echo "󰈁 $delim" ;;
-        "down") echo "󰈂 $delim" ;;
-        *) echo "󰈂 $delim" ;;
-        esac
-      else
-        # No ethernet found, show disconnected
-        echo "󰈂 $delim"
-      fi
-    fi
-    ;;
-  *)
-    # Original logic for other systems
-    sed "s/down/󰈂 $delim/;s/up/󰈁 $delim/" /sys/class/net/e*/operstate
-    ;;
-  esac
+  eth_up=0
+  for f in /sys/class/net/e*/operstate; do
+    [ -f "$f" ] && [ "$(cat "$f")" = "up" ] && eth_up=1 && break
+  done
 
-  wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
-  [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
-  # Show unread mail if mutt-wizard is installed.
-  # command -v mw >/dev/null 2>&1 &&
-  #		 echo "$delim" &&
-  #		 du -a ~/.local/share/mail/*/INBOX/new/* 2>/dev/null | wc -l | sed 's/^/:/'
-  #		 echo "$delim"
+  if [ "$eth_up" = "1" ]; then
+    echo "󰈁 $delim"
+  else
+    wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
+    [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
+  fi
 
   ### Disk
-  # Disk space available
+  # Disk space available (use timeout for network mounts)
+  df_out=$(timeout 3 df -h 2>/dev/null)
   case $HOSTNAME in
-  "hyde")
-    disk=$(df -h | awk '/^\/dev\/nvme0n1p6/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/sda2/ {print $5}')
+  "janus")
+    disk=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p5/ {print $5}' | tr -d '%')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p7/ {print $5}' | tr -d '%')
+    disk3=$(echo "$df_out" | awk '/^\/dev\/sda2/ {print $5}' | tr -d '%')
     ;;
   "lettera")
-    disk=$(df -h | awk '/^\/dev\/sda1/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/sda3/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^\/dev\/sda1/ {print $5}' | tr -d '%')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/sda3/ {print $5}' | tr -d '%')
     ;;
   "tango")
-    disk=$(df -h | awk '/^\/dev\/nvme0n1p2/ {print $5}')
-    disk2=$(df -h | awk '/^\/dev\/nvme0n1p3/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p2/ {print $5}' | tr -d '%')
+    disk2=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p3/ {print $5}' | tr -d '%')
     ;;
   *mcgill*)
     # Add mcgill system disk configuration here if needed
-    disk=$(df -h | awk '/^home:\/home/ {print $5}')
+    disk=$(echo "$df_out" | awk '/^home:\/home/ {print $5}' | tr -d '%')
     ;;
   *)
     # Default/unknown system
@@ -138,33 +119,32 @@ status() {
   esac
 
   # Only echo if we have disk info
-  if [ -n "$disk" ] && [ -n "$disk2" ]; then
-    echo "$disk|$disk2 󰋊 $delim"
-  elif [ -n "$disk" ]; then
-    echo "$disk 󰋊 $delim"
-  elif [ -n "$disk2" ]; then
-    echo "$disk2 󰋊 $delim"
-  fi
+  disk_str=""
+  [ -n "$disk" ] && disk_str="/$disk"
+  [ -n "$disk2" ] && disk_str="$disk_str|~$disk2"
+  [ -n "$disk3" ] && disk_str="$disk_str|V$disk3"
+  disk_str="${disk_str#|}"
+  [ -n "$disk_str" ] && echo "$disk_str 󰋊 $delim"
 
   ### Memory
   # Memory used/total
-  free -h | awk '/^Mem:/ {print $3}'
+  timeout 2 free -h 2>/dev/null | awk '/^Mem:/ {print $3}'
   echo " $delim"
 
   ### CPU temp
   case $HOSTNAME in
-  "hyde")
-    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+  "janus")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   "lettera")
-    temp=$(sensors | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^temp1:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   *mcgill*)
     # Add mcgill system temperature sensor here if needed
-    temp=$(sensors | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/^Tctl:/ {print $2}' | sed -e "s/+//; s/C//")
     ;;
   *)
-    temp=$(sensors | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//")
+    temp=$(timeout 2 sensors 2>/dev/null | awk '/skylake/ {getline; getline; print $2}' | sed -e "s/+//; s/C//")
     ;;
   esac
   if [ -n "$temp" ]; then
