@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -x /opt/homebrew/bin/pinentry-mac ]; then
+  exec /opt/homebrew/bin/pinentry-mac "$@"
+else
+  exec /usr/bin/pinentry-qt "$@"
+fi
