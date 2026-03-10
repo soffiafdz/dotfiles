@@ -3,10 +3,10 @@
 # When HDMI-2 is active: "HDMI-2 connected 2560x1440+..."
 # When HDMI-2 is off:    "HDMI-2 connected (normal..."
 
-if xrandr --query | grep "^HDMI-2" | grep -q "[0-9]x[0-9]"; then
-  xrandr --output HDMI-2 --off
+if xrandr --query | grep "^HDMI-1" | grep -q "[0-9]x[0-9]"; then
+  xrandr --output HDMI-1 --off
 else
-  xrandr --output HDMI-2 --off
+  xrandr --output HDMI-1 --off
   xrandr --output DP-2 --mode 2560x1440 --rotate left --pos 0x0
-  xrandr --output HDMI-2 --mode 2560x1440 --rotate normal --right-of DP-2
+  xrandr --output HDMI-1 --mode 2560x1440 --rotate normal --right-of DP-2
 fi
