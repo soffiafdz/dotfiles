@@ -17,7 +17,7 @@ esac
 
 cmds="\
   display off	xset dpms force off
- lock	slock
+#  lock	slock
 󰠚 leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
 ⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
  reboot	${reb:-sudo -A reboot}
