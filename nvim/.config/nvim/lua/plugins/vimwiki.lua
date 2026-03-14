@@ -53,6 +53,13 @@ return {
         table_mappings = 0,
         html = 0,
       }
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "vimwiki",
+        callback = function()
+          vim.keymap.set("n", "<S-CR>", "<Plug>VimwikiVSplitLink", { buffer = true })
+        end,
+      })
       vim.g.vimwiki_global_ext = 0
       vim.g.ext2syntax = {}
       vim.g.vimwiki_markdown_link_ext = 1
