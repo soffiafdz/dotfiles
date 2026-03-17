@@ -1,12 +1,11 @@
--- Grammar checking with ltex_plus
+--[[ Grammar checking with ltex_plus — DISABLED
+-- To re-enable: uncomment this file and run :MasonInstall ltex-ls-plus
 
---[[
-To use different a language in Markdown,
-it is necessary to use magic comments: 
-  <!-- LTeX: language-es -->
-  <!-- LTeX: language-en-CA -->
-  <!-- LTeX: language-fr -->
---]]
+-- To use different a language in Markdown,
+-- it is necessary to use magic comments:
+--   <!-- LTeX: language-es -->
+--   <!-- LTeX: language-en-CA -->
+--   <!-- LTeX: language-fr -->
 
 -- Conditionally load ngrams if available
 local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
@@ -74,13 +73,43 @@ return {
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },
-              -- trace = { server = "verbose" },
             },
           },
         },
         -- Minimal Python support
         pyright = {},
         -- Minimal Lua support
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+--]]
+
+-- ltex disabled: pyright and lua_ls still need a home
+return {
+  {
+    "mason-org/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = {
+        "pyright",
+        "lua_ls",
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        pyright = {},
         lua_ls = {
           settings = {
             Lua = {
