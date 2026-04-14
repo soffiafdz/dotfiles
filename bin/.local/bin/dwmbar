@@ -84,7 +84,7 @@ status() {
   done
 
   if [ "$eth_up" = "1" ]; then
-    echo "󰈁 $delim"
+    echo " 󰈁 $delim"
   else
     wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
     [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
@@ -92,7 +92,7 @@ status() {
 
   ### Disk
   # Disk space available (use timeout for network mounts)
-  df_out=$(timeout 3 df -h 2>/dev/null)
+  df_out=$(timeout 3 df -h -x nfs -x cifs -x sshfs -x fuse.sshfs -x fuse.rclone 2>/dev/null)
   case $HOSTNAME in
   "janus")
     disk=$(echo "$df_out" | awk '/^\/dev\/nvme0n1p5/ {print $5}' | tr -d '%')
