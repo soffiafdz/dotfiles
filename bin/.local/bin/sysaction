@@ -16,7 +16,7 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 cmds="\
-  display off	xset dpms force off
+  display off	displayoff
 #  lock	slock
 󰠚 leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
 ⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
