@@ -10,3 +10,4 @@ gnupg/.config/gnupg/pubring.kbx
 gnupg/.config/gnupg/pubring.kbx~
 gnupg/.config/gnupg/random_seed
 gnupg/.config/gnupg/trustdb.gpg
+gnupg/.config/gnupg/crls.d
