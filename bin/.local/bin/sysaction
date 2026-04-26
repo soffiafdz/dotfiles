@@ -17,9 +17,9 @@ esac
 
 cmds="\
   display off	displayoff
-#  lock	slock
-󰠚 leave DWM	kill -TERM $(pgrep -u $USER "\bdwm$")
-⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
+ lock	slock
+󰠚 leave DWM	 kill -TERM $(pgrep -u $USER "\bdwm$")
+⏾ sleep	 ${hib:-systemctl suspend-then-hibernate -i}
  reboot	${reb:-sudo -A reboot}
  shutdown	${shut:-sudo -A shutdown -h now}"
 
