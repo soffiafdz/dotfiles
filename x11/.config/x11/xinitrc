@@ -15,5 +15,6 @@ pkill -x unclutter 2>/dev/null
 pkill -x redshift 2>/dev/null
 pkill -x dwmbar 2>/dev/null
 pkill -x clipmenud 2>/dev/null
+pkill -x mpd 2>/dev/null
 
 exec dwm
