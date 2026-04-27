@@ -91,3 +91,22 @@ alias \
   e='"$EDITOR"' \
   v='"$EDITOR"' \
   z="zathura"
+
+# Personal wiki: edit / sync / pull / push
+wiki() {
+  case "$1" in
+    sync)
+      ( cd "$HOME/Documents/wiki" || exit 1
+        git pull --rebase --autostash || exit 1
+        if [ -n "$(git status --porcelain)" ]; then
+          git add -A
+          git commit -m "wiki: ${2:-update $(date +%Y-%m-%d)}"
+          git push
+        fi )
+      ;;
+    pull) ( cd "$HOME/Documents/wiki" && git pull --rebase --autostash ) ;;
+    push) ( cd "$HOME/Documents/wiki" && git add -A && git commit -m "wiki: ${2:-update $(date +%Y-%m-%d)}" && git push ) ;;
+    "")   "$EDITOR" "$HOME/Documents/wiki/index.md" ;;
+    *)    echo "usage: wiki [sync|pull|push|<msg>]" ;;
+  esac
+}
