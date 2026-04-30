@@ -6,4 +6,15 @@ else
 	. "$HOME/.xprofile"
 fi
 
+# Kill orphaned autostart processes from previous sessions
+pkill -x setwp 2>/dev/null
+pkill -x picom 2>/dev/null
+pkill -x xcompmgr 2>/dev/null
+pkill -x dunst 2>/dev/null
+pkill -x unclutter 2>/dev/null
+pkill -x redshift 2>/dev/null
+pkill -x dwmbar 2>/dev/null
+pkill -x clipmenud 2>/dev/null
+pkill -x mpd 2>/dev/null
+
 exec dwm
