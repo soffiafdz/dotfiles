@@ -6,6 +6,18 @@ return {
     lazy = false,
     init = function()
       vim.g.vimwiki_map_prefix = "<leader>v"
+      vim.g.vimwiki_list = {
+        {
+          name = "Notes",
+          path = "~/Documents/wiki/",
+          syntax = "markdown",
+          ext = ".md",
+          links_space_char = "-",
+          diary_rel_path = "diary/",
+          diary_header = "Diary",
+          diary_index = "index",
+        },
+      }
     end,
     -- TODO: Make sure that local keymaps work correctly.
 

@@ -228,7 +228,7 @@ set render-loading-fg           "#ebdbb2" # fg
 # Recolor book content's color
 set recolor-lightcolor          "#32302f" # bg
 set recolor-darkcolor           "#ebdbb2" # fg
-set recolor                     "true"
+set recolor                     "false"
 # set recolor-keephue             true      # keep original color
 
 
