@@ -20,6 +20,7 @@ janus)
   xset s noblank
   source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
   deskflow &
+  mpd &
   ;;
 lettera)
   source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
