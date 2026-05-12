@@ -1,0 +1,22 @@
+#!/bin/sh
+export HOME="/home/soffiafdz"
+export XDG_RUNTIME_DIR="/run/user/1000"
+
+mkdir -p "$XDG_RUNTIME_DIR"
+chown soffiafdz:soffiafdz "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+
+exec 2>&1
+exec chpst -u soffiafdz podman run \
+  --rm \
+  --name jellyfin \
+  -p 8096:8096 \
+  -p 7359:7359/udp \
+  -v /home/soffiafdz/.local/share/jellyfin/config:/config \
+  -v /home/soffiafdz/.local/share/jellyfin/cache:/cache \
+  -v /mnt/vault/Videos/Movies:/media/movies:ro \
+  -v /mnt/vault/Videos/TV:/media/tv:ro \
+  -v /mnt/vault/Music:/media/music:ro \
+  -v /mnt/vault/Calibre:/media/books:ro \
+  -v /mnt/vault/Pictures:/media/photos:ro \
+  docker.io/jellyfin/jellyfin:latest
