@@ -21,6 +21,8 @@ janus)
   source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
   deskflow &
   mpd &
+  ! pidof -s protonmail-bridge >/dev/null 2>&1 &&
+    setsid -f protonmail-bridge --no-window >/dev/null 2>&1
   ;;
 lettera)
   source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
