@@ -1,15 +1,17 @@
--- Local Palimpsest project integration
+-- Local Palimpsest project integration — writerdeck (no-Python) variant.
+-- Loads palimpsest_deck.nvim from dev/lua-deck/, which contains only
+-- the pure-Lua surface (vimwiki, fzf browse/search, YAML float editor).
+-- No `plm` is invoked; sync happens on the main machine.
 local palimpsest_path = vim.fn.expand("~/Palimpsest")
-if vim.fn.isdirectory(palimpsest_path .. "/dev") == 1 then
+if vim.fn.isdirectory(palimpsest_path .. "/dev/lua-deck") == 1 then
   return {
     {
       "palimpsest/local",
-      name = "palimpsest.nvim",
-      dir = palimpsest_path .. "/dev",
+      name = "palimpsest_deck.nvim",
+      dir = palimpsest_path .. "/dev/lua-deck",
       dependencies = { "vimwiki/vimwiki" },
       config = function()
-        -- vim.g.palimpsest_deck_mode = true
-        require("palimpsest").setup()
+        require("palimpsest_deck").setup()
       end,
     },
   }

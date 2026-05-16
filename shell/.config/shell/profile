@@ -41,8 +41,11 @@ export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 export PYTHONNOUSERSITE=1
 
 # Other programs
-# SUDO_ASKPASS: dmenuask is Linux/X11 only (prompts for sudo password via dmenu)
-[ "$(uname -s)" != "Darwin" ] && export SUDO_ASKPASS="$HOME/.local/bin/dmenuask"
+# SUDO_ASKPASS: only export if the helper exists and is executable.
+# If unset, sudo -A fails with "no askpass" and does NOT register a PAM failure.
+if [ "$(uname -s)" != "Darwin" ] && [ -x "$HOME/.local/bin/dmenuask" ]; then
+	export SUDO_ASKPASS="$HOME/.local/bin/dmenuask"
+fi
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
 #export LESS_TERMCAP_mb=$"\e[01;31m"
