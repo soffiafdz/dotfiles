@@ -1,0 +1,43 @@
+[preview]
+max_width = 1920
+max_height = 1080
+image_quality = 50
+
+[opener]
+# Edit text files
+edit = [{ run = 'nvim "$@"', block = true }]
+
+# Open images (sxiv on Linux, Preview on macOS)
+image = [
+  { run = 'sxiv "$@"', orphan = true, for = "linux" },
+  { run = 'open "$@"', orphan = true, for = "macos" },
+]
+
+# Open PDFs (zathura on Linux, Preview on macOS)
+pdf = [
+  { run = 'zathura "$@"', for = "linux" },
+  { run = 'open "$@"', for = "macos" },
+]
+
+# Open videos
+video = [{ run = 'mpv "$@"' }]
+
+# Open office documents
+office = [
+  { run = 'libreoffice "$@"', orphan = true, for = "linux" },
+  { run = 'open "$@"', orphan = true, for = "macos" },
+]
+
+[open]
+# Rules for file types
+rules = [
+  { mime = "text/*", use = "edit" },
+  { mime = "image/*", use = "image" },
+  { mime = "application/pdf", use = "pdf" },
+  { mime = "video/*", use = "video" },
+  { mime = "application/vnd.openxmlformats-officedocument.*", use = "office" },
+  { mime = "application/vnd.oasis.opendocument.*", use = "office" },
+  { mime = "application/msword", use = "office" },
+  { mime = "application/vnd.ms-excel", use = "office" },
+  { mime = "application/vnd.ms-powerpoint", use = "office" },
+]

@@ -1,5 +1,5 @@
 [user]
-	name = Sofia Fernandez
+	name = Sofía Fernández
 	email = sofia.fernandezlozano@mail.mcgill.ca
 [core]
 	editor = nvim
@@ -15,3 +15,8 @@
     dark = true      # or light = true, or omit for auto-detection
 [merge]
     conflictstyle = zdiff3
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f

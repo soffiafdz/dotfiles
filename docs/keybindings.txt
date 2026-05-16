@@ -1,0 +1,118 @@
+==========================================
+    UNIFIED KEYBINDINGS CHEATSHEET
+==========================================
+WM Modifier: Right Cmd (Mac) /
+             Right Super (Linux)
+
+KEYBOARD REMAPPING
+==========================================
+Caps Lock    Esc (tap) / Ctrl
+Right Cmd    Hyper (macOS via Karabiner)
+Right Super  Super (Linux → dwm)
+
+FOCUS & NAVIGATION
+==========================================
+Focus (Aero)      Hyper + H/J/K/L
+Focus stack (dwm) Super + J/K
+Focus master      Super + V
+Prev workspace    Hyper/Super + G
+Next workspace    Hyper/Super + ;
+Last workspace    Hyper/Super + Tab
+Switch to 1-9     Hyper/Super + 1-9
+View all          Hyper/Super + 0
+
+LAYOUTS
+==========================================
+Tiles/Tile        Hyper/Super + T
+Accordion/Monocle Hyper/Super + Y
+Bstack (dwm)      Super + Shift + T
+Deck (dwm)        Super + Shift + Y
+CenteredMaster    Super + U
+CFloatingMaster   Super + Shift + U
+nmaster +/-       Super + I/Shift+I
+
+WINDOW ACTIONS
+==========================================
+Close window      Hyper/Super + Q
+Force kill (dwm)  Super + Shift + Q
+Fullscreen        Hyper/Super + F
+Float toggle      Hyper/Super + O
+Zoom/Layout cycle Hyper/Super + Space
+Resize -          Hyper + - / Super + H
+Resize +          Hyper + = / Super + L
+
+MOVE MODE (Hyper/Super + M, then...)
+==========================================
+Move window       H/J/K/L (Aero only)
+Send to ws        1-9
+Send to prev ws   G (Aero follows)
+Send to next ws   ; (Aero follows)
+Send to prev mon  P
+Send to next mon  N
+Mount (dwm)       M
+Unmount (dwm)     U
+Cancel            Esc
+
+TOGGLEVIEW MODE (dwm: Super + C, then)
+==========================================
+Toggle view tag   1-9
+
+MONITORS
+==========================================
+Focus next        Hyper/Super + N
+Focus prev        Hyper/Super + P
+Send to next      Move mode + N
+Send to prev      Move mode + P
+
+APPLICATION LAUNCHERS
+==========================================
+Terminal          Hyper/Super + Return
+Terminal + tmux   Super + Shift + Return
+Browser           Hyper/Super + W
+Editor (nvim)     Hyper/Super + E
+Vimwiki           Super + Shift + E (dwm)
+Yazi              Hyper/Super + R
+System monitor    Super + Shift + R (dwm)
+Launcher          Hyper/Super + D
+Password mgr      Super + Shift + D (dwm)
+
+SYSTEM (dwm only)
+==========================================
+Screenshot        Super + S
+Full screenshot   Super + Shift + S
+Clipboard         Super + X
+Toggle gaps       Super + Z
+Reset gaps        Super + Shift + Z
+Toggle bar        Super + Shift + B
+Toggle alt tags   Super + B
+System menu       Super + Backspace
+Refresh bar       Super + Shift + '
+Audio mixer       Super + Shift + A
+Volume down       Super + -
+Volume up         Super + Shift + -
+Mute              Super + =
+
+RAYCAST HOTKEYS (macOS)
+==========================================
+Screenshot        Hyper + S
+Full screenshot   Hyper + Shift + S
+Clipboard         Hyper + X
+
+TMUX (Ctrl-A prefix)
+==========================================
+Pane nav          Prefix + H/J/K/L
+Resize pane       Prefix + Shift + H/J/K/L
+Split horiz       Prefix + -
+Split vert        Prefix + _
+Prev window       Prefix + Ctrl-H
+Next window       Prefix + Ctrl-L
+Last window       Prefix + Tab
+Copy mode         Prefix + Enter
+
+==========================================
+FREE KEYS (dwm):
+A, Shift+O/F/G/;/N/P/Space/X, ,/.
+
+Hyper = Cmd+Ctrl+Alt+Shift (Karabiner)
+Super = Mod4 (Right GUI key)
+==========================================

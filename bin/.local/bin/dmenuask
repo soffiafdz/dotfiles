@@ -1,0 +1,14 @@
+#!/bin/sh
+# SUDO_ASKPASS helper. Arg: prompt. Output: password on stdout.
+# Exits non-zero on cancel/error so sudo aborts without registering a PAM failure.
+prompt="${1:-Sudo password required}"
+out=$({
+	printf 'SETTITLE sudo\n'
+	printf 'SETDESC %s\n' "$prompt"
+	printf 'SETPROMPT Password:\n'
+	printf 'GETPIN\n'
+} | pinentry 2>/dev/null)
+echo "$out" | grep -q '^ERR ' && exit 1
+pin=$(echo "$out" | sed -n 's/^D //p')
+[ -z "$pin" ] && exit 1
+printf '%s\n' "$pin"
