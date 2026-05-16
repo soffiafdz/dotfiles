@@ -1,12 +1,13 @@
--- ltex.lua integration
---[[
-To use different a language in Markdown,
-it is necessary to use magic comments: 
-  <!-- LTeX: language-es -->
-  <!-- LTeX: language-en-CA -->
-  <!-- LTeX: language-fr -->
---]]
--- Conditionally load ngrams
+--[[ Grammar checking with ltex_plus — DISABLED
+-- To re-enable: uncomment this file and run :MasonInstall ltex-ls-plus
+
+-- To use different a language in Markdown,
+-- it is necessary to use magic comments:
+--   <!-- LTeX: language-es -->
+--   <!-- LTeX: language-en-CA -->
+--   <!-- LTeX: language-fr -->
+
+-- Conditionally load ngrams if available
 local ngrams_path = vim.fn.expand("~/.local/share/nvim/models/ngrams/")
 local additionalRules
 if vim.fn.isdirectory(ngrams_path) == 1 then
@@ -18,12 +19,16 @@ else
   additionalRules = { motherTongue = "es" }
 end
 
--- Use built in dictionary
+-- Load built-in dictionary
 local words = {}
 local dict_file = vim.fn.expand("~/.config/nvim/spell/en.utf-8.add")
 if vim.fn.filereadable(dict_file) == 1 then
-  for word in io.open(dict_file, "r"):lines() do
-    table.insert(words, word)
+  local f = io.open(dict_file, "r")
+  if f then
+    for word in f:lines() do
+      table.insert(words, word)
+    end
+    f:close()
   end
 end
 
@@ -31,14 +36,20 @@ return {
   {
     "mason-org/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { "ltex" },
+      ensure_installed = {
+        "ltex_plus", -- Grammar checking
+        "pyright", -- Python
+        "lua_ls", -- Lua
+      },
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ltex = {
+        ltex_plus = {
+          -- Start disabled by default (toggle with <leader>lg)
+          autostart = false,
           filetypes = { "markdown", "tex", "text", "plaintext", "vimwiki" },
           cmd_env = {
             JAVA_OPTS = "-Xmx1g -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0",
@@ -62,7 +73,49 @@ return {
                 ["es"] = { "WHITESPACE_RULE" },
                 ["fr"] = { "WHITESPACE_RULE" },
               },
-              -- trace = { server = "verbose" },
+            },
+          },
+        },
+        -- Minimal Python support
+        pyright = {},
+        -- Minimal Lua support
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+--]]
+
+-- ltex disabled: pyright and lua_ls still need a home
+return {
+  {
+    "mason-org/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = {
+        "pyright",
+        "lua_ls",
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        pyright = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              workspace = {
+                checkThirdParty = false,
+              },
             },
           },
         },
