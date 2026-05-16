@@ -91,3 +91,51 @@ alias \
   e='"$EDITOR"' \
   v='"$EDITOR"' \
   z="zathura"
+
+# Personal wiki: edit / sync / pull / push
+wiki() {
+  local wiki_dir="$HOME/Documents/wiki"
+  case "$1" in
+    sync|pull|push)
+      if [ ! -d "$wiki_dir/.git" ]; then
+        echo "wiki: $wiki_dir is not a git repo" >&2
+        return 1
+      fi
+      if ! git -C "$wiki_dir" remote get-url origin >/dev/null 2>&1; then
+        echo "wiki: no 'origin' remote configured" >&2
+        return 1
+      fi
+      ;;
+  esac
+  case "$1" in
+    sync)
+      ( cd "$wiki_dir" || exit 1
+        if ! git pull --rebase --autostash; then
+          echo "wiki: pull failed (cd $wiki_dir to resolve)" >&2
+          exit 1
+        fi
+        if [ -n "$(git status --porcelain)" ]; then
+          git add -A
+          git commit -m "wiki: ${2:-update $(date +%Y-%m-%d)}"
+          git push
+        fi )
+      ;;
+    pull)
+      ( cd "$wiki_dir" || exit 1
+        if ! git pull --rebase --autostash; then
+          echo "wiki: pull failed (cd $wiki_dir to resolve)" >&2
+          exit 1
+        fi )
+      ;;
+    push)
+      ( cd "$wiki_dir" || exit 1
+        if [ -n "$(git status --porcelain)" ]; then
+          git add -A
+          git commit -m "wiki: ${2:-update $(date +%Y-%m-%d)}"
+          git push
+        fi )
+      ;;
+    "")   "$EDITOR" "$wiki_dir/index.md" ;;
+    *)    echo "usage: wiki [sync|pull|push|<msg>]" ;;
+  esac
+}
