@@ -2,9 +2,22 @@
 return {
   {
     "vimwiki/vimwiki",
-    event = "BufReadPre",
+    -- No lazy-loading: vimwiki needs to load at startup for global keymaps
+    lazy = false,
     init = function()
       vim.g.vimwiki_map_prefix = "<leader>v"
+      vim.g.vimwiki_list = {
+        {
+          name = "Notes",
+          path = "~/Documents/wiki/",
+          syntax = "markdown",
+          ext = ".md",
+          links_space_char = "-",
+          diary_rel_path = "diary/",
+          diary_header = "Diary",
+          diary_index = "index",
+        },
+      }
     end,
     -- TODO: Make sure that local keymaps work correctly.
 
@@ -52,9 +65,26 @@ return {
         table_mappings = 0,
         html = 0,
       }
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "vimwiki",
+        callback = function()
+          vim.keymap.set("n", "<S-CR>", "<Plug>VimwikiVSplitLink", { buffer = true })
+        end,
+      })
       vim.g.vimwiki_global_ext = 0
       vim.g.ext2syntax = {}
       vim.g.vimwiki_markdown_link_ext = 1
+
+      -- Set default icons for vimwiki group (palimpsest will override when active)
+      local has_wk, wk = pcall(require, "which-key")
+      if has_wk then
+        local has_icons, MiniIcons = pcall(require, "mini.icons")
+        local vimwiki_icon = has_icons and MiniIcons.get("extension", "md") or ""
+        wk.add({
+          { "<leader>v", group = "vimwiki", icon = { icon = vimwiki_icon, color = "green" } },
+        })
+      end
     end,
   },
 }

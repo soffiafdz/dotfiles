@@ -1,0 +1,16 @@
+mpd_host            = localhost
+mpd_port            = 6600
+mpd_music_dir       = /mnt/vault/Music
+
+# UI
+user_interface              = alternative
+alternative_header_first_line_format    = $b$6{%t}|{%f}$/b $3- $8{%a}
+alternative_header_second_line format   = {$4%b$9}{ ($4%y$9)}{ [$5%g$9]}
+song_list_format            = {$4%a - $9}{%t}|{%f}$R$3%l$9
+song_columns_list_format    = (5)[]{} (40)[white]{t} (40)[cyan]{a} (15)[green]{l}
+
+# Behaviour
+autocenter_mode             = yes
+centered_cursor             = yes
+follow_now_playing_lyrics   = yes
+fetch_lyrics_for_current_song_in_background = yes

@@ -2,6 +2,9 @@
 
 # Profile file; runs when logging in. Useful for Environmental/Config variables
 
+# Homebrew (macOS) - must be early for brew-installed tools
+[ "$(uname -s)" = "Darwin" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Adding local executables to $PATH
 export PATH="$PATH:$HOME/.local/bin"
 
@@ -10,8 +13,8 @@ export PATH="$PATH:$HOME/.local/bin"
 # Default programs:
 export EDITOR="nvim"
 export READER="zathura"
-export FILE="lf"
-export BROWSER="brave"
+export FILE="yazi"
+export BROWSER="firefox"
 
 # XDG Base Dirs
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -30,14 +33,19 @@ export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME:-/.config}/ja
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
-export PASSWORD_STORE_GPG_OPTS="--pinentry-mode loopback"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
 
 # MINC-TOOLKIT-1.9.18.1
 #source /opt/minc/1.9.18.1/minc-toolkit-config.sh
 
+export PYTHONNOUSERSITE=1
+
 # Other programs
-export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
+# SUDO_ASKPASS: only export if the helper exists and is executable.
+# If unset, sudo -A fails with "no askpass" and does NOT register a PAM failure.
+if [ "$(uname -s)" != "Darwin" ] && [ -x "$HOME/.local/bin/dmenuask" ]; then
+	export SUDO_ASKPASS="$HOME/.local/bin/dmenuask"
+fi
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export LESS=-R
 #export LESS_TERMCAP_mb=$"\e[01;31m"
@@ -63,13 +71,19 @@ case "$(uname -n)" in
   export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
   export TERMINAL="kitty"
   ;;
+Calliope)
+  export TERMINAL="foot"
+  export EDITOR="nvim"
+  ;;
 Lazarus)
   # Figure out how to do wezterm
-  # export TERMINAL="kitty"
-  :
+  export TERMINAL="wezterm"
+  ;;
+noctua*)
+  export TERMINAL="kitty"
   ;;
 *)
-  export TERMINAL="st"
+  export TERMINAL="kitty"
   [ "$(tty)" = "/dev/tty1" ] &&
     ! pidof -s Xorg >/dev/null 2>&1 &&
     exec startx "$XINITRC"
