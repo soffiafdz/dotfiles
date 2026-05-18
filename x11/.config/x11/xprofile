@@ -7,7 +7,7 @@
 #redshift &
 #dwmbar &
 
-export HOSTNAME="$(hostname)"
+export HOSTNAME="$(uname -n)"
 
 xrdb -merge ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xresources
 HOST_XRES="${XDG_CONFIG_HOME:-$HOME/.config}/x11/host-${HOSTNAME}.xresources"
