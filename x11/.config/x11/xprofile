@@ -17,9 +17,7 @@ setxkbmap -option compose:ralt -option caps:escape >/dev/null 2>&1
 
 case "$HOSTNAME" in
 janus)
-  xrandr --output HDMI-2 --off
-  xrandr --output DP-2 --mode 2560x1440 --rotate left --pos 0x0
-  xrandr --output HDMI-2 --mode 2560x1440 --rotate normal --right-of DP-2
+  autorandr --change --default dual
   xset -dpms
   xset s noblank
   source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
