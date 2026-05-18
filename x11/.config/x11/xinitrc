@@ -7,7 +7,6 @@ else
 fi
 
 # Kill orphaned autostart processes from previous sessions
-pkill -x setwp 2>/dev/null
 pkill -x picom 2>/dev/null
 pkill -x xcompmgr 2>/dev/null
 pkill -x dunst 2>/dev/null
