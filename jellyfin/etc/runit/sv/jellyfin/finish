@@ -1,0 +1,2 @@
+#!/bin/sh
+exec chpst -u soffiafdz podman stop -t 10 jellyfin

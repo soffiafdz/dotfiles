@@ -22,6 +22,12 @@ pdf = [
 # Open videos
 video = [{ run = 'mpv "$@"' }]
 
+# Open office documents
+office = [
+  { run = 'libreoffice "$@"', orphan = true, for = "linux" },
+  { run = 'open "$@"', orphan = true, for = "macos" },
+]
+
 [open]
 # Rules for file types
 rules = [
@@ -29,4 +35,9 @@ rules = [
   { mime = "image/*", use = "image" },
   { mime = "application/pdf", use = "pdf" },
   { mime = "video/*", use = "video" },
+  { mime = "application/vnd.openxmlformats-officedocument.*", use = "office" },
+  { mime = "application/vnd.oasis.opendocument.*", use = "office" },
+  { mime = "application/msword", use = "office" },
+  { mime = "application/vnd.ms-excel", use = "office" },
+  { mime = "application/vnd.ms-powerpoint", use = "office" },
 ]
