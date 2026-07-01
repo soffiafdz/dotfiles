@@ -1,1 +1,19 @@
-**/.claude/settings.local.json
+# Editor/tool artifacts ignored across all repos
+$RECYCLE.BIN/
+*.swo
+*.swp
+*~
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+.claude/
+.direnv/
+.idea/
+.netrwhist
+.vscode/
+._*
+Desktop.ini
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db

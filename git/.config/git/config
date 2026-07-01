@@ -4,6 +4,7 @@
 [core]
 	editor = nvim
 	pager = delta
+	excludesFile = /home/soffiafdz/.config/git/ignore
 [init]
 	defaultBranch = main
 [pull]
