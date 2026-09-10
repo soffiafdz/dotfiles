@@ -49,11 +49,11 @@ brew "tokei"          # Count lines of code by language
 
 # Documents and writing
 brew "pandoc"         # Document converter
-brew "vale"           # Prose linter
 brew "visidata"       # Tabular data viewer - R.nvim opens data.frames with `vd`
 cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
 
-# Media - kept because yazi uses mpv for video and poppler for PDF previews
+# yazi's video opener (yazi.toml). Optional - only fires when you open a
+# video from yazi; PDF previews come from poppler, not this.
 brew "mpv"
 
 # Security
