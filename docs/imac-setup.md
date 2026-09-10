@@ -311,7 +311,9 @@ one config across several Macs — it now searches both Homebrew prefixes.)
 
 ### Move the key over
 
-Your key is `rsa2048/034BE9474D7884B3` (`so1.618e@gmail.com`).
+Your key is `so1.618e@gmail.com`, fingerprint `3078F339B6C8EFE014668B7A034BE9474D7884B3`
+(the long key ID `034BE9474D7884B3` is just its last 16 characters; plain `gpg -K`
+prints the fingerprint, `gpg -K --keyid-format=long` prints the short form).
 
 Run the export **on janus, sitting at janus** — not over ssh. Exporting a secret
 key makes gpg-agent unlock it, and janus's agent is configured for
@@ -320,7 +322,7 @@ prompt has nowhere to appear and the export just fails.
 
 ```sh
 # on janus
-gpg --export-secret-keys --armor 034BE9474D7884B3 > ~/gpg-secret.asc
+gpg --export-secret-keys --armor 3078F339B6C8EFE014668B7A034BE9474D7884B3 > ~/gpg-secret.asc
 gpg --export-ownertrust > ~/gpg-ownertrust.txt
 ```
 
@@ -343,7 +345,7 @@ passphrase-protected material.
 Verify decryption works before moving on:
 
 ```sh
-echo test | gpg --encrypt --armor -r 034BE9474D7884B3 | gpg --decrypt
+echo test | gpg --encrypt --armor -r 3078F339B6C8EFE014668B7A034BE9474D7884B3 | gpg --decrypt
 ```
 
 The first `pinentry-mac` prompt has a "Save in Keychain" checkbox — ticking it
