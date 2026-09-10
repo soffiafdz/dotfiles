@@ -120,9 +120,9 @@ cd ~/Developer/dotfiles
 # -t "$HOME" is required: stow defaults to the parent dir, which here
 # would be ~/Developer, not ~
 stow -nv -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv bin           # dry run
+  git ssh tmux nvim yazi sioyek radian mpv atuin bin     # dry run
 stow -v -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv bin
+  git ssh tmux nvim yazi sioyek radian mpv atuin bin
 ```
 
 Deliberately not stowed on macOS:
@@ -229,6 +229,23 @@ the repo, and in most cases the integration is already there:
 | `pipx ensurepath` | **don't run it** — it rewrites shell rc files, and `shell/profile` already puts `~/.local/bin` on `$PATH` |
 | `git lfs install` | skip — the `[filter "lfs"]` block is already in the tracked `git/config` |
 | atuin, zoxide | neither is wired into `.zshrc` yet — a repo change, not a local edit |
+
+### atuin
+
+`.zshrc` initialises it automatically once the binary exists. One manual step —
+seed it from the history you already have, otherwise it starts empty:
+
+```sh
+atuin import auto
+atuin stats
+```
+
+`Ctrl+R` is atuin's from then on (it initialises after fzf, so it takes over
+fzf's history widget). Up-arrow stays vanilla zsh, and `Ctrl+X Ctrl+R` gives you
+zsh's pattern search.
+
+History stays on this machine. If you later decide you want it synced across
+janus/noctua, that is `atuin login` — a separate, reversible step.
 
 ### git
 
