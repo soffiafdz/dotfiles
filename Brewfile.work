@@ -56,6 +56,9 @@ cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
 # video from yazi; PDF previews come from poppler, not this.
 brew "mpv"
 
+# File sync (hestia is in the Syncthing mesh)
+brew "syncthing"
+
 # Security
 brew "gnupg"          # GPG encryption
 brew "pinentry-mac"   # GPG PIN entry for macOS
@@ -88,8 +91,7 @@ cask "font-iosevka-nerd-font"
 
 # --- Deliberately left out; uncomment if you decide otherwise ---
 
-# Personal file sync / backup on an employer-owned machine
-# brew "syncthing"
+# Backup tooling - still undecided for this machine (see docs/imac-setup.md)
 # brew "restic"
 # brew "rclone"
 
