@@ -4,7 +4,6 @@ kitty/.config/kitty/local.conf
 zsh/.config/zsh/history
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/.zcompcache
-vale/.config/vale/styles
 
 # GPG runtime/sensitive files
 gnupg/.config/gnupg/private-keys-v1.d

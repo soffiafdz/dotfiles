@@ -134,7 +134,6 @@ Deliberately not stowed on macOS:
 | `nvim_micro`, `vim` | Alternate editor configs |
 | `gnupg` | See §9 — only tracked file is a Linux-specific `gpg-agent.conf` |
 | `lf`, `bpytop`, `zathura` | Harmless, but the tools aren't in `Brewfile.work` |
-| `vale` | Retired in `5bda3da` — Harper handles prose now |
 
 `bin` is worth stowing for `init_tmux` and `pinentry-auto`, even though most of
 the scripts in it are dwm/X11 helpers that will never run here.
