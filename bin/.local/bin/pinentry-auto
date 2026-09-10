@@ -1,6 +1,19 @@
 #!/bin/sh
-if [ -x /opt/homebrew/bin/pinentry-mac ]; then
-  exec /opt/homebrew/bin/pinentry-mac "$@"
-else
-  exec /usr/bin/pinentry-qt "$@"
-fi
+# Pick the first pinentry available: macOS GUI, then Qt/GTK, then curses.
+# Absolute paths first, since gpg-agent may invoke this with a minimal $PATH.
+for p in \
+	/opt/homebrew/bin/pinentry-mac \
+	/usr/local/bin/pinentry-mac \
+	/usr/bin/pinentry-qt \
+	/usr/bin/pinentry-gtk-2 \
+	/usr/bin/pinentry-curses
+do
+	[ -x "$p" ] && exec "$p" "$@"
+done
+
+for p in pinentry-mac pinentry-qt pinentry-gtk-2 pinentry-curses pinentry; do
+	found="$(command -v "$p" 2>/dev/null)" && [ -x "$found" ] && exec "$found" "$@"
+done
+
+echo "pinentry-auto: no pinentry program found" >&2
+exit 1
