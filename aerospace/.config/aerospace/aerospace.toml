@@ -1,8 +1,16 @@
 # Aerospace - Tiling Window Manager for macOS
 # Hyper key = Right Command (via Karabiner) = cmd+ctrl+alt+shift
 
+# Config schema version (2 makes persistent-workspaces explicit instead of
+# inferring it from the keybindings, which v1 did)
+config-version = 2
+
 # Start at login
 start-at-login = true
+
+# Tags 1-9 always exist, even when empty (v1 inferred this from the bindings
+# below; v2 defaults to an empty list, so it has to be spelled out)
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # Mouse follows focus
 on-focus-changed = ['move-mouse window-lazy-center']
