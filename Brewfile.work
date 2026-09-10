@@ -78,9 +78,6 @@ cask "raycast"        # Launcher (Hyper + D)
 cask "zotero"         # Reference manager (+ Better BibTeX)
 cask "sioyek"         # Academic PDF reader, SyncTeX target for vimtex
 
-# Browser
-cask "firefox"
-
 # Nerd Fonts (kitty.conf sets font_family CaskaydiaCove Nerd Font)
 cask "font-caskaydia-cove-nerd-font"
 cask "font-fira-code-nerd-font"
@@ -97,6 +94,10 @@ cask "font-iosevka-nerd-font"
 # LaTeX: prefer `quarto install tinytex` (small, self-managing). Use this
 # instead only if you want a full TeX Live for vimtex/latexmk.
 # cask "mactex-no-gui"
+
+# Browser - install it yourself or take IT's copy; browserpass and the
+# Aerospace Hyper+W binding both expect Firefox to exist somewhere.
+# cask "firefox"
 
 # Work comms - most workplaces push these through MDM/Self Service.
 # Check what IT already provides before installing your own copies.
