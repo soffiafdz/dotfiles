@@ -108,6 +108,13 @@ eval "$(direnv hook zsh)"
 # zoxide - `z <fragment>` jumps to a frecent dir, `zi` picks interactively
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
+# atuin - searchable history db. Keeps vanilla up-arrow; the zsh pattern
+# search moves to ^X^R so it is still available.
+if command -v atuin >/dev/null; then
+  eval "$(atuin init zsh --disable-up-arrow)"
+  bindkey '^X^R' history-incremental-pattern-search-backward
+fi
+
 [[ $HOSTNAME == *mcgill* ]] && exit 0
 
 # GPG

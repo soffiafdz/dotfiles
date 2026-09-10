@@ -133,7 +133,7 @@ Deliberately not stowed on macOS:
 | `mpd`, `ncmpcpp`, `castero`, `jellyfin` | Personal media stack |
 | `nvim_micro`, `vim` | Alternate editor configs |
 | `gnupg` | See §9 — only tracked file is a Linux-specific `gpg-agent.conf` |
-| `lf`, `bpytop` | Harmless, but the tools aren't in `Brewfile.work` |
+| `bpytop`, `zathura` | Harmless, but the tools aren't in `Brewfile.work` |
 
 `bin` is worth stowing for `init_tmux` and `pinentry-auto`, even though most of
 the scripts in it are dwm/X11 helpers that will never run here.
