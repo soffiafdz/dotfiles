@@ -45,7 +45,6 @@ brew "hyperfine"      # Benchmarking tool
 
 # Documents and writing
 brew "pandoc"         # Document converter
-brew "vale"           # Prose linter
 
 # Media
 brew "mpv"            # Video player (for yazi)
