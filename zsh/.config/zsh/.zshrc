@@ -2,7 +2,7 @@
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
-    /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme \
+    ${HOMEBREW_PREFIX:-/opt/homebrew}/share/powerlevel10k/powerlevel10k.zsh-theme \
     ~/.local/share/zsh/powerlevel10k/powerlevel10k.zsh-theme \
     ~/powerlevel10k/powerlevel10k.zsh-theme )
 
@@ -89,8 +89,8 @@ zle -N zle-keymap-select
 # Syntax highlighting
 syntax_hl_sources=( \
     /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh \
-    /opt/homebrew/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh \
-    /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh )
+    ${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh \
+    ${HOMEBREW_PREFIX:-/opt/homebrew}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh )
 for syntax_hl in ${syntax_hl_sources[@]}; do
     [ -f "$syntax_hl" ] && source "$syntax_hl" && break
 done
@@ -122,6 +122,8 @@ export GPG_TTY
 # !! Contents within this block are managed by 'micromamba shell init' !!
 export MAMBA_EXE="$HOME/.local/bin/micromamba";
 export MAMBA_ROOT_PREFIX="$HOME/.local/share/micromamba";
+# Homebrew puts micromamba on $PATH instead of ~/.local/bin
+[ -x "$MAMBA_EXE" ] || MAMBA_EXE="$(command -v micromamba)"
 if [ -x "$MAMBA_EXE" ]; then
     __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
     if [ $? -eq 0 ]; then

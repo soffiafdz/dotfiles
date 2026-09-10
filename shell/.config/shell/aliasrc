@@ -3,38 +3,39 @@
 # Use $XINITRC
 [ -f "$XINITRC" ] && alias startx='startx "$XINITRC"'
 
-case "$(uname -n)" in
-Lazarus)
-  # alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
-  alias bat="batcat"
-  ;;
-Calliope)
-  alias bat="batcat"
-  ;;
-*mcgill*)
-  alias \
-    _tmux="init_tmux" \
-    _mamba=". /export02/data/sfernand/mamba/etc/profile.d/conda.sh" \
-    _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
-  ;;
-noctua*)
-  # macOS-specific aliases
+if [ "$(uname -s)" = "Darwin" ]; then
+  # macOS-specific aliases (every Mac, not just one hostname)
   alias xdg-open="open"
   alias xclip="pbcopy"
   alias xsel="pbcopy"
   alias brewup="brew update && brew upgrade && brew cleanup"
-  ;;
-*)
-  # Abbreviations
-  alias \
-    trem="transmission-remote" \
-    p="sudo pacman"
-  # Implicit sudo in most used commands
-  for bin in mount umount sv pacman su light; do
-    alias "$bin"="sudo $bin"
-  done
-  ;;
-esac
+else
+  case "$(uname -n)" in
+  Lazarus)
+    # alias nvim="~/.local/bin/nvim-linux-x86_64/bin/nvim"
+    alias bat="batcat"
+    ;;
+  Calliope)
+    alias bat="batcat"
+    ;;
+  *mcgill*)
+    alias \
+      _tmux="init_tmux" \
+      _mamba=". /export02/data/sfernand/mamba/etc/profile.d/conda.sh" \
+      _conda=". /ipl/quarantine/conda/etc/profile.d/conda.sh"
+    ;;
+  *)
+    # Abbreviations
+    alias \
+      trem="transmission-remote" \
+      p="sudo pacman"
+    # Implicit sudo in most used commands
+    for bin in mount umount sv pacman su light; do
+      alias "$bin"="sudo $bin"
+    done
+    ;;
+  esac
+fi
 
 # Use neovim (if installed) rather than vim
 [ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
