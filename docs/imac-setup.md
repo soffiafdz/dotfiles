@@ -217,11 +217,20 @@ quarto install tinytex              # provides latexmk for vimtex
 `quarto install tinytex` is the small option. Use `brew install --cask
 mactex-no-gui` instead only if you need a full TeX Live.
 
-### git
+### Homebrew caveats
 
-```sh
-git lfs install
-```
+Several formulae print "add this line to your `~/.zshrc`". **Ignore all of them.**
+`~/.config/zsh/.zshrc` is a symlink into this repo, so hand-editing it dirties
+the repo, and in most cases the integration is already there:
+
+| Caveat says | Do |
+|-------------|-----|
+| powerlevel10k, zsh-syntax-highlighting, fzf, direnv, micromamba | ignore — `.zshrc` already sources/hooks these |
+| `pipx ensurepath` | **don't run it** — it rewrites shell rc files, and `shell/profile` already puts `~/.local/bin` on `$PATH` |
+| `git lfs install` | skip — the `[filter "lfs"]` block is already in the tracked `git/config` |
+| atuin, zoxide | neither is wired into `.zshrc` yet — a repo change, not a local edit |
+
+### git
 
 The tracked `git/config` still carries your McGill address. It now ends with an
 `[include] path = config.local`, so set the work identity in an untracked file
