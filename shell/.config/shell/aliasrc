@@ -90,8 +90,7 @@ alias \
   ga="git add" \
   gc="git commit" \
   e='"$EDITOR"' \
-  v='"$EDITOR"' \
-  z="zathura"
+  v='"$EDITOR"'
 
 # Personal wiki: edit / sync / pull / push
 wiki() {

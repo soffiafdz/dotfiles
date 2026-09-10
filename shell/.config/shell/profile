@@ -21,7 +21,7 @@ export PATH="$PATH:$HOME/.local/bin"
 
 # Default programs:
 export EDITOR="nvim"
-export READER="zathura"
+export READER="sioyek"
 export FILE="yazi"
 export BROWSER="firefox"
 
