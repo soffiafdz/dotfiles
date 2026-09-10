@@ -187,7 +187,41 @@ See: `docs/unified-keybinding-design.md`
 - [ ] Set Sioyek as Zotero external PDF reader
 - [ ] Configure Sioyek SyncTeX for Quarto/nvim
 - [ ] Set up Jellyfin media library
-- [ ] Configure Atuin sync (if using)
+- [ ] Configure Atuin sync (see below)
+
+## Atuin Sync
+
+Hosted service (api.atuin.sh). History is encrypted client-side, so the server
+only ever holds ciphertext.
+
+**The encryption key is unrecoverable if lost** - capture it the moment it
+exists, before anything else.
+
+First machine:
+
+```sh
+atuin register -u <username> -e <email>
+atuin key | pass insert -m atuin/key    # do this immediately
+pass git push
+atuin sync
+```
+
+Every other machine:
+
+```sh
+pass show atuin/key                     # have it ready
+atuin login -u <username>               # prompts for password, then the key
+atuin sync
+```
+
+`atuin sync -f` forces a full re-sync if history looks incomplete. Auto-sync is
+on by default, hourly; `sync_frequency = "10m"` in the stowed
+`atuin/config.toml` changes it everywhere at once.
+
+**hestia is deliberately not synced.** Encryption keeps the server from reading
+anything, but sync would still put personal history on employer hardware and
+work commands in a personal account. It runs atuin local-only; `atuin login`
+there later is a reversible decision.
 
 ## Artix-Specific Notes
 
