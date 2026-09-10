@@ -64,6 +64,12 @@ on both Apple Silicon and Intel):
 eval "$(/opt/homebrew/bin/brew shellenv)"   # /usr/local/bin/brew on Intel
 ```
 
+**Do not run the `>> ~/.zprofile` snippet the installer prints at the end.** It
+would create a real `~/.zprofile`, and `stow zprofile` then refuses to place the
+repo's copy over it ("existing target is not a symlink"). `shell/profile` already
+runs `brew shellenv` on both prefixes. If you ran it already, `rm ~/.zprofile`
+before stowing.
+
 ## 3. SSH key, then clone
 
 Generate a *new* key for this machine rather than copying your personal one —
