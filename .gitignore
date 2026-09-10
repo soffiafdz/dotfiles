@@ -1,4 +1,6 @@
 bin/.local/bin/micromamba
+git/.config/git/config.local
+kitty/.config/kitty/local.conf
 zsh/.config/zsh/history
 zsh/.config/zsh/.zcompdump
 zsh/.config/zsh/.zcompcache
