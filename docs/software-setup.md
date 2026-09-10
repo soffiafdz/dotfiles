@@ -10,7 +10,7 @@ Reference for setting up machines after formatting.
 | **Editor** | Neovim | `pacman -S neovim` | `brew install neovim` | |
 | **Shell** | Zsh + p10k | `pacman -S zsh` | included | + zsh-syntax-highlighting |
 | **File Manager** | Yazi | `pacman -S yazi` | `brew install yazi` | Requires: poppler (PDF preview) |
-| **Browser** | Firefox | `pacman -S firefox` | `brew install --cask firefox` | + browserpass extension |
+| **Browser** | Firefox (Linux) / Zen (macOS) | `pacman -S firefox` | `brew install --cask zen` | Zen is Firefox-based |
 | **Email/Calendar** | Thunderbird | `pacman -S thunderbird` | `brew install --cask thunderbird` | |
 | **Tasks** | Todoist | Flatpak or AUR | `brew install --cask todoist` | |
 | **Chat** | Ferdium | Flatpak or AUR | `brew install --cask ferdium` | WhatsApp, Telegram, Signal, Slack, Discord |
@@ -24,7 +24,7 @@ Reference for setting up machines after formatting.
 | **Image Edit** | GIMP | `pacman -S gimp` | `brew install --cask gimp` | |
 | **Video** | mpv | `pacman -S mpv` | `brew install mpv` | |
 | **Gaming** | Steam | `pacman -S steam` | `brew install --cask steam` | |
-| **Passwords** | pass | `pacman -S pass` | `brew install pass` | + browserpass, dmenupass |
+| **Passwords** | pass | `pacman -S pass` | `brew install pass` | + dmenupass |
 | **Remote Desktop** | RustDesk | AUR: `rustdesk-bin` | `brew install --cask rustdesk` | Access homestation remotely |
 
 ## Linux-Only (Homestation)
@@ -186,7 +186,6 @@ See: `docs/unified-keybinding-design.md`
 - [ ] Import GPG keys for pass
 - [ ] Set Sioyek as Zotero external PDF reader
 - [ ] Configure Sioyek SyncTeX for Quarto/nvim
-- [ ] Install browserpass Firefox extension
 - [ ] Set up Jellyfin media library
 - [ ] Configure Atuin sync (if using)
 

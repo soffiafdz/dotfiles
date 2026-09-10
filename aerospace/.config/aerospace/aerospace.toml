@@ -82,7 +82,7 @@ cmd-ctrl-alt-shift-rightSquareBracket = 'join-with right'
 
 # Launch applications
 cmd-ctrl-alt-shift-enter = 'exec-and-forget open -na kitty'
-cmd-ctrl-alt-shift-w = 'exec-and-forget open -a Firefox'
+cmd-ctrl-alt-shift-w = 'exec-and-forget open -a Zen'
 cmd-ctrl-alt-shift-e = 'exec-and-forget open -na kitty --args nvim'
 cmd-ctrl-alt-shift-r = 'exec-and-forget open -na kitty --args yazi'
 cmd-ctrl-alt-shift-d = 'exec-and-forget open -a Raycast'

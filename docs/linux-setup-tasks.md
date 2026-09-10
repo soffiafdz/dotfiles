@@ -57,12 +57,6 @@ Tasks to complete after setting up machines / installing software.
   - Run `atuin register` or `atuin login`
   - Add to shell config
 
-- [x] Install browserpass Firefox extension (macOS)
-  - Extension: ✅ installed from Firefox Add-ons
-  - macOS native host: ✅ installed via `brew install amar1729/formulae/browserpass`
-- [ ] Install browserpass on Linux
-  - Linux native host: `pacman -S browserpass-firefox`
-  - Firefox extension: already installed (syncs via Firefox account)
 
 ## Post-Install Verification (Linux)
 

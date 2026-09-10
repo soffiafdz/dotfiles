@@ -217,7 +217,6 @@ A (dwm uses for audio), S (Raycast for screenshot), X (Raycast for clipboard)
 - Raycast hotkeys setup
 - Linux-specific tasks (clipmenu, dwm compilation)
 - Application configuration (Sioyek, Atuin, Restic)
-- Browserpass extension installation
 
 ---
 

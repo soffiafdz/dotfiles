@@ -7,7 +7,6 @@
 
 # Taps
 tap "nikitabobko/tap"  # aerospace
-tap "amar1729/formulae"  # browserpass
 
 # Core CLI tools
 brew "stow"           # Dotfiles management - install this first
@@ -61,7 +60,6 @@ brew "mpv"
 brew "gnupg"          # GPG encryption
 brew "pinentry-mac"   # GPG PIN entry for macOS
 brew "pass"           # Password store (clone Pass-Store after; see setup doc)
-brew "amar1729/formulae/browserpass"  # Firefox integration; see `brew info browserpass`
 
 # System monitoring
 brew "bottom"         # Resource monitor (run with 'btm')
@@ -73,6 +71,9 @@ cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "karabiner-elements"  # Right Cmd -> Hyper, Caps -> Esc/Ctrl
 cask "raycast"        # Launcher (Hyper + D)
+
+# Browser (Aerospace binds Hyper+W to it)
+cask "zen"
 
 # Academic
 cask "zotero"         # Reference manager (+ Better BibTeX)
@@ -94,10 +95,6 @@ cask "font-iosevka-nerd-font"
 # LaTeX: prefer `quarto install tinytex` (small, self-managing). Use this
 # instead only if you want a full TeX Live for vimtex/latexmk.
 # cask "mactex-no-gui"
-
-# Browser - install it yourself or take IT's copy; browserpass and the
-# Aerospace Hyper+W binding both expect Firefox to exist somewhere.
-# cask "firefox"
 
 # Work comms - most workplaces push these through MDM/Self Service.
 # Check what IT already provides before installing your own copies.
