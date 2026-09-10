@@ -1,0 +1,115 @@
+# Brewfile for the office iMac
+# Install with: brew bundle --file=~/Developer/dotfiles/Brewfile.work
+#
+# Subset of the main Brewfile: everything the dotfiles actually depend on,
+# minus the personal/media apps. Items commented out below are deliberate
+# decisions, not oversights - see docs/imac-setup.md.
+
+# Taps
+tap "nikitabobko/tap"  # aerospace
+tap "amar1729/formulae"  # browserpass
+
+# Core CLI tools
+brew "stow"           # Dotfiles management - install this first
+brew "neovim"         # Editor
+brew "tmux"           # Terminal multiplexer
+brew "git"            # Version control
+brew "git-delta"      # Better git diffs (git config sets pager = delta)
+brew "git-lfs"        # Large file storage (run `git lfs install` after)
+brew "gitui"          # Git TUI
+brew "rsync"          # Fast file sync (newer than macOS built-in)
+brew "tealdeer"       # Simplified man pages (tldr)
+brew "ouch"           # Universal compression tool
+
+# Shell
+brew "zsh-syntax-highlighting"
+brew "powerlevel10k"
+brew "atuin"          # Synced shell history - see setup doc before logging in
+
+# Search and navigation
+brew "fzf"            # Fuzzy finder
+brew "ripgrep"        # Fast grep
+brew "fd"             # Fast find
+brew "eza"            # Modern ls (aliasrc prefers it over exa/ls)
+brew "bat"            # Cat with syntax highlighting
+brew "sd"             # Modern sed
+brew "yazi"           # File manager
+brew "poppler"        # PDF tools (pdftoppm for yazi preview)
+brew "zoxide"         # Smart cd - remembers frequent dirs
+
+# Development
+brew "direnv"         # Per-directory env vars (.zshrc hooks it unconditionally)
+brew "node"           # Required by LazyVim/Mason LSP servers
+brew "python"         # Base Python
+brew "pipx"           # For radian (see setup doc)
+brew "r"              # R language
+brew "micromamba"     # Conda environment manager
+brew "just"           # Modern make alternative
+brew "hyperfine"      # Benchmarking tool
+brew "tokei"          # Count lines of code by language
+
+# Documents and writing
+brew "pandoc"         # Document converter
+brew "vale"           # Prose linter
+brew "visidata"       # Tabular data viewer - R.nvim opens data.frames with `vd`
+cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
+
+# Media - kept because yazi uses mpv for video and poppler for PDF previews
+brew "mpv"
+
+# Security
+brew "gnupg"          # GPG encryption
+brew "pinentry-mac"   # GPG PIN entry for macOS
+brew "pass"           # Password store (clone Pass-Store after; see setup doc)
+brew "amar1729/formulae/browserpass"  # Firefox integration; see `brew info browserpass`
+
+# System monitoring
+brew "bottom"         # Resource monitor (run with 'btm')
+brew "dust"           # Disk usage viewer
+brew "procs"          # Modern ps replacement
+
+# Window management and keyboard (needs Accessibility / Input Monitoring grants)
+cask "kitty"          # Terminal emulator
+cask "nikitabobko/tap/aerospace"  # Tiling window manager
+cask "karabiner-elements"  # Right Cmd -> Hyper, Caps -> Esc/Ctrl
+cask "raycast"        # Launcher (Hyper + D)
+
+# Academic
+cask "zotero"         # Reference manager (+ Better BibTeX)
+cask "sioyek"         # Academic PDF reader, SyncTeX target for vimtex
+
+# Browser
+cask "firefox"
+
+# Nerd Fonts (kitty.conf sets font_family CaskaydiaCove Nerd Font)
+cask "font-caskaydia-cove-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-meslo-lg-nerd-font"
+cask "font-iosevka-nerd-font"
+
+# --- Deliberately left out; uncomment if you decide otherwise ---
+
+# Personal file sync / backup on an employer-owned machine
+# brew "syncthing"
+# brew "restic"
+# brew "rclone"
+
+# LaTeX: prefer `quarto install tinytex` (small, self-managing). Use this
+# instead only if you want a full TeX Live for vimtex/latexmk.
+# cask "mactex-no-gui"
+
+# Work comms - most workplaces push these through MDM/Self Service.
+# Check what IT already provides before installing your own copies.
+# cask "slack"
+# cask "microsoft-teams"
+# cask "zoom"
+# cask "microsoft-office"
+# cask "thunderbird"
+
+# Personal apps from the main Brewfile, not needed for work
+# cask "calibre"
+# cask "digikam"
+# cask "gimp"
+# cask "todoist"
+# cask "ferdium"
+# cask "rustdesk"

@@ -50,6 +50,9 @@ Reference for setting up machines after formatting.
 | **Key Remap** | Karabiner | `brew install --cask karabiner-elements` | Right Cmd → Hyper |
 | **PDF Signatures** | Preview | included | For signing documents |
 
+Full bring-up runbook for the office iMac: `docs/imac-setup.md`
+(package set: `Brewfile.work`).
+
 ## CLI Tools (Rust-based)
 
 | Tool | Replaces | Install (both) | Command |
