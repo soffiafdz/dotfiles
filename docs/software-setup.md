@@ -93,7 +93,7 @@ Full bring-up runbook for the office iMac: `docs/imac-setup.md`
 | Service | Space | Cost | Notes |
 |---------|-------|------|-------|
 | Google One | 5TB | Cancelled - access ends 2026-11-22 | Use via rclone until then |
-| Backblaze B2 | Pay per use | $5/TB/month | Native Restic support |
+| Backblaze B2 | Pay per use | $6.95/TB/mo (first 10GB free) | Native Restic support; no minimum retention, free egress to 3x stored |
 | Dropbox | 13GB | Free | Too small for backups, file sync only |
 
 ### Local Backup (External HDD)
