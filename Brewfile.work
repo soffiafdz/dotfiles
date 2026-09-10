@@ -56,8 +56,9 @@ cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
 # video from yazi; PDF previews come from poppler, not this.
 brew "mpv"
 
-# File sync (hestia is in the Syncthing mesh)
-brew "syncthing"
+# Syncthing: hestia is in the mesh, but installed outside Homebrew.
+# Leave commented so `brew bundle` does not add a second copy.
+# brew "syncthing"
 
 # Security
 brew "gnupg"          # GPG encryption
