@@ -77,7 +77,8 @@ cask "zen"
 
 # Academic
 cask "zotero"         # Reference manager (+ Better BibTeX)
-cask "sioyek"         # Academic PDF reader, SyncTeX target for vimtex
+# sioyek: the cask is DISABLED upstream (pinned to the x64-only v2.0.0 from
+# 2022). Install by hand instead - see docs/imac-setup.md.
 
 # Nerd Fonts (kitty.conf sets font_family CaskaydiaCove Nerd Font)
 cask "font-caskaydia-cove-nerd-font"
