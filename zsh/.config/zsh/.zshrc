@@ -48,10 +48,9 @@ export KEYTIMEOUT=1
 # Enable searching through history
 SAVEHIST=10000000
 HISTSIZE=10000000
-HISTFILE="$XDG_CONFIG_HOME/zsh/history"
+export HISTFILE="$XDG_CONFIG_HOME/zsh/history"
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
-bindkey '^R' history-incremental-pattern-search-backward
 
 # Edit line in vim buffer ctrl-v
 autoload edit-command-line; zle -N edit-command-line

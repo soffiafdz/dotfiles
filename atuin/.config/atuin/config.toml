@@ -1,0 +1,10 @@
+# Atuin - shell history in a searchable database.
+# Only non-default settings live here; everything else uses atuin's defaults.
+# Sync is opt-in and deliberately not configured: it starts only after
+# `atuin login`, and until then history never leaves the machine.
+
+# Installed via brew/pacman, so let the package manager handle updates.
+update_check = false
+
+# Default is 40 lines, which swallows most of the screen.
+inline_height = 20
