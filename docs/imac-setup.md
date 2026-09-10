@@ -264,7 +264,44 @@ did on Linux.
 
 ### Sioyek
 
-Follow `docs/sioyek-synctex-setup.md`. If inverse search does nothing, it's
+Not installable via Homebrew — the cask is disabled because it points at the
+x64-only v2.0.0 tag from December 2022. The project itself is alive (commits
+through August 2026); it just hasn't cut a tagged release since.
+
+The best prebuilt option is the `sioyek3-alpha0` preview, which does ship a
+native Apple Silicon binary. Check your architecture first:
+
+```sh
+uname -m        # arm64 = Apple Silicon, x86_64 = Intel
+```
+
+On Apple Silicon:
+
+```sh
+cd ~/Downloads
+curl -LO https://github.com/ahrm/sioyek/releases/download/sioyek3-alpha0/sioyek-release-mac-arm.zip
+unzip sioyek-release-mac-arm.zip
+ls                                    # confirm the .app name and case
+mv sioyek.app /Applications/          # adjust if it unpacks as Sioyek.app
+xattr -dr com.apple.quarantine /Applications/sioyek.app
+open /Applications/sioyek.app
+```
+
+The `xattr` line matters: the build is unsigned, so Gatekeeper blocks it
+otherwise.
+
+On Intel, use `sioyek-release-mac.zip` from the `v2.0.0` release instead — same
+steps.
+
+Two caveats on the alpha: its bookmark/highlight database format is incompatible
+with sioyek 2.x, so don't copy a database over from janus; and confirm the
+installed app's name and case, because `docs/sioyek-synctex-setup.md` assumes
+`/Applications/Sioyek.app/Contents/MacOS/sioyek` for
+`vimtex_view_sioyek_exe`. Fix that path if the alpha unpacks lowercase.
+
+If the alpha misbehaves, building current master natively is the fallback.
+
+Then follow `docs/sioyek-synctex-setup.md`. If inverse search does nothing, it's
 because `prefs_user.config` calls `kitty` by bare name and GUI apps don't inherit
 your shell `$PATH` — use the absolute path:
 
