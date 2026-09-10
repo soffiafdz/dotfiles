@@ -105,6 +105,9 @@ done
 # Direnv
 eval "$(direnv hook zsh)"
 
+# zoxide - `z <fragment>` jumps to a frecent dir, `zi` picks interactively
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
 [[ $HOSTNAME == *mcgill* ]] && exit 0
 
 # GPG

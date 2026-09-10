@@ -13,9 +13,9 @@ image = [
   { run = 'open "$@"', orphan = true, for = "macos" },
 ]
 
-# Open PDFs (zathura on Linux, Preview on macOS)
+# Open PDFs (sioyek on Linux, default app on macOS)
 pdf = [
-  { run = 'zathura "$@"', for = "linux" },
+  { run = 'sioyek "$@"', for = "linux" },
   { run = 'open "$@"', for = "macos" },
 ]
 
