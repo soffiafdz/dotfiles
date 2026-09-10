@@ -452,7 +452,6 @@ GPG keys and `pass` are settled (§9). These are open:
 
 | Item | Consideration |
 |------|---------------|
-| Syncthing | Would sync personal directories onto a work disk |
 | Atuin sync | Pushes work shell history to your personal Atuin account, and pulls personal history down |
 | Restic/rclone backups | Backing up a work machine to your personal cloud storage |
 | `ssh/config` personal hosts | It ships `hyde` (home server) alongside the BIC/LAVIS hosts; the BIC ones are probably still relevant, `hyde` probably isn't |

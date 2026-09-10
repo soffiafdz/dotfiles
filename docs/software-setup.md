@@ -92,7 +92,7 @@ Full bring-up runbook for the office iMac: `docs/imac-setup.md`
 
 | Service | Space | Cost | Notes |
 |---------|-------|------|-------|
-| Google One | 2TB | Already paid (until Nov) | Use via rclone |
+| Google One | 5TB | Cancelled - access ends 2026-11-22 | Use via rclone until then |
 | Backblaze B2 | Pay per use | $5/TB/month | Native Restic support |
 | Dropbox | 13GB | Free | Too small for backups, file sync only |
 
@@ -135,7 +135,7 @@ restic -r rclone:gdrive:backups/restic-repo backup ~/Documents ~/Projects
 restic -r rclone:gdrive:backups/restic-repo snapshots
 ```
 
-### Backblaze B2 (Alternative after Google One expires)
+### Backblaze B2 (Alternative once Google One ends, 2026-11-22)
 
 ```bash
 # Configure rclone with B2
@@ -151,7 +151,7 @@ restic -r b2:bucket-name:restic-repo init
 ### Future Task: Consolidate Cloud Storage
 
 Files currently scattered across:
-- Google Drive (2TB until Nov)
+- Google Drive (5TB, access ends 2026-11-22)
 - Dropbox (13GB)
 - Local machines
 
@@ -181,7 +181,7 @@ See: `docs/unified-keybinding-design.md`
 
 ## Post-Install Tasks
 
-- [ ] Set up Syncthing between machines
+- [x] Set up Syncthing between machines
 - [ ] Configure Restic backup schedule
 - [ ] Import GPG keys for pass
 - [ ] Set Sioyek as Zotero external PDF reader
