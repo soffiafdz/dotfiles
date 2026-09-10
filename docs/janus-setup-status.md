@@ -37,7 +37,6 @@ Last updated: 2026-02-08
 - [ ] DigiKam photo management
 - [ ] Restic backup tool
 - [ ] Atuin shell history sync
-- [ ] browserpass-firefox (native host)
 - [ ] Jellyfin media server
 - [ ] Feishin music client
 - [ ] flameshot screenshots
@@ -59,7 +58,6 @@ Last updated: 2026-02-08
 #### Password Management
 - [ ] Import GPG keys for pass
 - [ ] Initialize password store
-- [ ] Install browserpass-firefox native host
 - [ ] Test dmenupass integration
 
 #### PDF/Reference Workflow
@@ -113,7 +111,7 @@ Track which configurations have been stowed:
 Priority tasks to work on:
 
 1. Configure clipmenu daemon (Quick win - already installed)
-2. Install and configure password management (GPG + pass + browserpass)
+2. Install and configure password management (GPG + pass)
 3. Install Zotero for reference management
 4. Set up backup solution (restic + rclone)
 5. Install remaining GUI applications

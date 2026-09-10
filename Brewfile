@@ -3,7 +3,6 @@
 
 # Taps
 tap "nikitabobko/tap"  # aerospace
-tap "amar1729/formulae"  # browserpass
 
 # Core CLI tools
 brew "stow"           # Dotfiles management
@@ -55,7 +54,6 @@ brew "mpv"            # Video player (for yazi)
 brew "gnupg"          # GPG encryption
 brew "pinentry-mac"   # GPG PIN entry for macOS
 brew "pass"           # Password store
-brew "amar1729/formulae/browserpass"  # Browser integration for pass (run post-install cmd)
 brew "restic"         # Backup tool (encrypted, deduplicated)
 
 # System monitoring
@@ -81,7 +79,7 @@ cask "gimp"           # Image editor
 cask "todoist"        # Task management
 
 # Communication
-cask "firefox"        # Browser
+cask "zen"            # Browser (Zen, Firefox-based)
 cask "thunderbird"    # Email + calendar
 cask "ferdium"        # Multi-messenger (WhatsApp, Telegram, etc.)
 

@@ -40,7 +40,7 @@ driver extension needs a reboot:
 | shell history | optional `scp`, or let atuin carry it |
 | everything else | reinstalled by `Brewfile.work` — nothing to migrate |
 
-Zotero, Firefox and Thunderbird each sync through their own accounts; don't copy
+Zotero, Zen and Thunderbird each sync through their own accounts; don't copy
 their profile directories.
 
 ## 1. Xcode Command Line Tools
@@ -366,18 +366,6 @@ It's a git repo, so this is just a clone. `PASSWORD_STORE_DIR` is already set by
 git clone git@github.com:soffiafdz/Pass-Store.git ~/.local/share/password-store
 pass ls | head
 ```
-
-### Browserpass (Firefox)
-
-The formula needs a post-install step to register the native messaging host, and
-the exact command is printed by the formula's caveats — read it rather than
-guessing:
-
-```sh
-brew info browserpass
-```
-
-Then install the Browserpass extension in Firefox.
 
 ## 10. Verify
 
