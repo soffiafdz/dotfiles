@@ -120,9 +120,9 @@ cd ~/Developer/dotfiles
 # -t "$HOME" is required: stow defaults to the parent dir, which here
 # would be ~/Developer, not ~
 stow -nv -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian vale mpv bin      # dry run
+  git ssh tmux nvim yazi sioyek radian mpv bin           # dry run
 stow -v -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian vale mpv bin
+  git ssh tmux nvim yazi sioyek radian mpv bin
 ```
 
 Deliberately not stowed on macOS:
@@ -134,6 +134,7 @@ Deliberately not stowed on macOS:
 | `nvim_micro`, `vim` | Alternate editor configs |
 | `gnupg` | See §9 — only tracked file is a Linux-specific `gpg-agent.conf` |
 | `lf`, `bpytop`, `zathura` | Harmless, but the tools aren't in `Brewfile.work` |
+| `vale` | Retired in `5bda3da` — Harper handles prose now |
 
 `bin` is worth stowing for `init_tmux` and `pinentry-auto`, even though most of
 the scripts in it are dwm/X11 helpers that will never run here.
