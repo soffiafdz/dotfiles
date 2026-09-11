@@ -79,6 +79,11 @@ cask "raycast"        # Launcher (Hyper + D)
 # Browser (Aerospace binds Hyper+W to it)
 cask "zen"
 
+# Mail
+# Bridge exposes Proton as IMAP/SMTP on 127.0.0.1 (1143/1025) so any client
+# can read it. Must be a Login Item or mail stops working after a reboot.
+cask "proton-mail-bridge"
+
 # Academic
 cask "zotero"         # Reference manager (+ Better BibTeX)
 # sioyek: the cask is DISABLED upstream (pinned to the x64-only v2.0.0 from
