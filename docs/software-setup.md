@@ -31,13 +31,13 @@ Reference for setting up machines after formatting.
 
 | Category | App | Install | Notes |
 |----------|-----|---------|-------|
-| **WM** | dwm | build from source | ~/Developer/dwm |
+| **WM** | dwm | build from source | ~/Repos/dwm |
 | **Launcher** | dmenu | `pacman -S dmenu` | + dmenupass, dmenumount |
 | **Clipboard** | clipmenu | AUR | Super+X |
 | **Screenshots** | flameshot | `pacman -S flameshot` | |
-| **Media Server** | Jellyfin | `pacman -S jellyfin` | Access from Fire TV, other devices |
+| **Media Server** | Jellyfin | rootless podman container, runit service | Not from pacman; access from Fire TV, other devices |
 | **Music Client** | Feishin | Flatpak or AUR | Jellyfin frontend |
-| **Compositor** | xcompmgr | `pacman -S xcompmgr` | For transparency |
+| **Compositor** | picom | `pacman -S picom` | For transparency |
 | **Notifications** | dunst | `pacman -S dunst` | |
 | **Redshift** | redshift | `pacman -S redshift` | Night mode |
 

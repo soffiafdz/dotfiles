@@ -8,8 +8,7 @@ Config files in `sioyek/.config/sioyek/`:
 
 Use stow to activate:
 ```bash
-cd ~/Developer/dotfiles
-stow sioyek
+stow -d ~/Repos/dotfiles -t ~ sioyek
 ```
 
 ---
@@ -47,9 +46,10 @@ From nvim with VimTeX:
 
 ### Inverse Search (PDF → Source)
 
-**Already configured** in `prefs_user.config`:
+**Already configured** in `prefs_user.config` (VimTeX-aware, so the jump
+lands in the already-running nvim instead of spawning a new one):
 ```
-inverse_search_command kitty nvim +%2 %1
+inverse_search_command kitty nvim --headless -c "VimtexInverseSearch %2 '%1'"
 ```
 
 **How to use:**
@@ -121,13 +121,14 @@ quarto preview example.qmd
 
 ## Alternative: Simple PDF → Source Jump
 
-If VimTeX setup is complex, use the simple command in `prefs_user.config`:
+If VimTeX setup is complex, swap in the simple command that is kept
+commented out in `prefs_user.config`:
 
 ```
 inverse_search_command kitty nvim +%2 %1
 ```
 
-This opens nvim at the correct line when you inverse-search from PDF.
+This opens a fresh nvim at the correct line when you inverse-search from PDF.
 
 **To test:**
 1. Open PDF in Sioyek

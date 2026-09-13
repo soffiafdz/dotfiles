@@ -257,14 +257,14 @@ cd yay && makepkg -si
 ### Stow Dotfiles
 
 ```bash
-cd ~/Developer/dotfiles && stow -t ~ <package>
+stow -d ~/Repos/dotfiles -t ~ <package>
 # Repeat for: zsh, nvim, kitty, git, tmux, etc.
 ```
 
 ### Compile dwm
 
 ```bash
-cd ~/Developer/dwm && sudo make clean install
+cd ~/Repos/dwm && sudo make clean install
 ```
 
 ## Troubleshooting
