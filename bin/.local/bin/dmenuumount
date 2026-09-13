@@ -20,7 +20,7 @@ unmountusb() {
 	}
 
 unmountandroid() {
-	chosen="$(awk '/simple-mtpfs/ {print $2}' /etc/mtab | sed 's/\\040/ /g' | dmenu -i -p "Unmount which device?")" || exit 1
+	chosen="$(awk '/simple-mtpfs/ {print $2}' /etc/mtab | sed 's/\\040/ /g' | dmenu -p "Unmount which device?")" || exit 1
 	[ -z "$chosen" ] && exit
 	if out=$(sudo -A umount -l "$chosen" 2>&1); then
 		notify-send "🤖 Android unmounting" "$chosen unmounted."
@@ -31,7 +31,7 @@ unmountandroid() {
 	}
 
 asktype() {
-	choice="$(printf "USB\\nAndroid" | dmenu -i -p "Unmount a USB drive or Android device?")" || exit 1
+	choice="$(printf "USB\\nAndroid" | dmenu -p "Unmount a USB drive or Android device?")" || exit 1
 	case "$choice" in
 		USB) unmountusb ;;
 		Android) unmountandroid ;;

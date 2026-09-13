@@ -59,7 +59,7 @@ mountandroid() {
 	}
 
 asktype() {
-	choice="$(printf "USB\\nAndroid" | dmenu -i -p "Mount a USB drive or Android device?")" || exit 1
+	choice="$(printf "USB\\nAndroid" | dmenu -p "Mount a USB drive or Android device?")" || exit 1
 	case $choice in
 		USB) mountusb ;;
 		Android) mountandroid ;;
