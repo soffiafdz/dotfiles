@@ -129,7 +129,7 @@ Deliberately not stowed on macOS:
 
 | Package | Why |
 |---------|-----|
-| `x11`, `picom`, `dunst`, `redshift`, `foot`, `mimeapps` | X11/Wayland only |
+| `x11`, `picom`, `dunst`, `redshift`, `foot` | X11/Wayland only |
 | `mpd`, `ncmpcpp`, `castero`, `jellyfin` | Personal media stack |
 | `nvim_micro`, `vim` | Alternate editor configs |
 | `gnupg` | See §9 — only tracked file is a Linux-specific `gpg-agent.conf` |
