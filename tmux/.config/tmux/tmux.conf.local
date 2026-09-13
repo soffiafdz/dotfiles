@@ -362,7 +362,13 @@ set -g history-limit 50000
 
 # terminal: proper tmux terminfo, true colour and underline styles passthrough
 set -g default-terminal "tmux-256color"
+# terminal-features is matched against the OUTER terminal's TERM, so every
+# terminal actually used has to be listed. kitty/foot advertise Smulx+Setulc in
+# their terminfo but tmux only infers RGB from it, so undercurl and coloured
+# underlines are dropped unless usstyle is declared here.
 set -as terminal-features ",xterm-256color:RGB:usstyle"
+set -as terminal-features ",xterm-kitty:RGB:usstyle:hyperlinks:sync"
+set -as terminal-features ",foot*:RGB:usstyle"
 
 # -- tpm -----------------------------------------------------------------------
 
