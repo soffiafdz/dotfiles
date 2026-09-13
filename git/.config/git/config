@@ -9,6 +9,12 @@
 	defaultBranch = main
 [pull]
 	rebase = false
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
 [interactive]
     diffFilter = delta --color-only
 [delta]
