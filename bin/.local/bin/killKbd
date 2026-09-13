@@ -1,11 +1,13 @@
 #!/bin/sh
 
 id=$(xinput list | grep "AT Translated Set 2 keyboard" | awk '{print $7}')
-stat=$(xinput list-props "${id#id=}" | grep "Device Enabled" | awk '{print $4}')
+id="${id#id=}"
+[ -z "$id" ] && { notify-send "⌨ Keyboard not found"; exit 1; }
+stat=$(xinput list-props "$id" | grep "Device Enabled" | awk '{print $4}')
+[ -z "$stat" ] && { notify-send "⌨ Could not read keyboard state"; exit 1; }
 
-if [ $stat = 1 ]; then
-    xinput disable "${id#id=}" && notify-send "⌨ Keyboard is DISABLED"
+if [ "$stat" = 1 ]; then
+    xinput disable "$id" && notify-send "⌨ Keyboard is DISABLED"
 else
-    xinput enable "${id#id=}" && notify-send "⌨ Keyboard is ENABLED"
-
+    xinput enable "$id" && notify-send "⌨ Keyboard is ENABLED"
 fi

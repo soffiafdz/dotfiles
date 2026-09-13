@@ -7,18 +7,30 @@
 unmountusb() {
 	[ -z "$drives" ] && exit
 	chosen="$(echo "$drives" | dmenu -p "Unmount which drive?")" || exit 1
-	chosen="$(echo "$chosen" | awk '{print $1}')"
+	# Entries look like "/mount/point (size)"; strip the size suffix so
+	# mountpoints containing spaces survive.
+	chosen="${chosen% (*}"
 	[ -z "$chosen" ] && exit
-	sudo -A umount "$chosen" && notify-send "💻 USB unmounting" "$chosen unmounted."
+	if out=$(sudo -A umount "$chosen" 2>&1); then
+		notify-send "💻 USB unmounting" "$chosen unmounted."
+	else
+		notify-send "💻 USB unmounting" "Failed to unmount $chosen: ${out:-unknown error}"
+		exit 1
+	fi
 	}
 
-unmountandroid() { \
-	chosen="$(awk '/simple-mtpfs/ {print $2}' /etc/mtab | dmenu -i -p "Unmount which device?")" || exit 1
+unmountandroid() {
+	chosen="$(awk '/simple-mtpfs/ {print $2}' /etc/mtab | sed 's/\\040/ /g' | dmenu -i -p "Unmount which device?")" || exit 1
 	[ -z "$chosen" ] && exit
-	sudo -A umount -l "$chosen" && notify-send "🤖 Android unmounting" "$chosen unmounted."
+	if out=$(sudo -A umount -l "$chosen" 2>&1); then
+		notify-send "🤖 Android unmounting" "$chosen unmounted."
+	else
+		notify-send "🤖 Android unmounting" "Failed to unmount $chosen: ${out:-unknown error}"
+		exit 1
+	fi
 	}
 
-asktype() { \
+asktype() {
 	choice="$(printf "USB\\nAndroid" | dmenu -i -p "Unmount a USB drive or Android device?")" || exit 1
 	case "$choice" in
 		USB) unmountusb ;;
@@ -26,7 +38,11 @@ asktype() { \
 	esac
 	}
 
-drives=$(lsblk -nrpo "name,type,size,mountpoint" | awk '$4!~/\/boot|\/home$|SWAP/&&length($4)>1{printf "%s (%s)\n",$4,$3}')
+# lsblk -r escapes spaces in mountpoints as \x20, so awk fields stay intact;
+# decode them once the line is assembled.
+drives=$(lsblk -nrpo "name,type,size,mountpoint" |
+	awk '$4!~/\/boot|\/home$|SWAP/&&length($4)>1{printf "%s (%s)\n",$4,$3}' |
+	sed 's/\\x20/ /g')
 
 #if ! grep simple-mtpfs /etc/mtab; then
 	#[ -z "$drives" ] && echo "No drives to unmount." &&  exit

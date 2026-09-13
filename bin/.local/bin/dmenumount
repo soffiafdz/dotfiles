@@ -5,43 +5,60 @@
 # be prompted to give a mountpoint from already existsing directories. If you
 # input a novel directory, it will prompt you to create that directory.
 
-getmount() { \
+# Arguments are passed straight to find(1).
+getmount() {
 	[ -z "$chosen" ] && exit 1
-        # shellcheck disable=SC2086
-	mp="$(find $1 2>/dev/null | dmenu -p "Type in mount point.")" || exit 1
+	mp="$(find "$@" 2>/dev/null | dmenu -p "Type in mount point.")" || exit 1
 	[ "$mp" = "" ] && exit 1
 	if [ ! -d "$mp" ]; then
 		mkdiryn=$(printf "No\\nYes" | dmenu -p "$mp does not exist. Create it?") || exit 1
-		[ "$mkdiryn" = "Yes" ] && (mkdir -p "$mp" || sudo -A mkdir -p "$mp")
+		[ "$mkdiryn" = "Yes" ] || exit 1
+		mkdir -p "$mp" || sudo -A mkdir -p "$mp" || exit 1
 	fi
 	}
 
-mountusb() { \
+mountusb() {
 	chosen="$(echo "$usbdrives" | dmenu -p "Mount which drive?")" || exit 1
 	chosen="$(echo "$chosen" | awk '{print $1}')"
 	sudo -A mount "$chosen" 2>/dev/null && notify-send "💻 USB mounting" "$chosen mounted." && exit 0
-	alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
-	getmount "/mnt /media /mount /home -maxdepth 5 -type d $alreadymounted"
+	# Exclude already-mounted trees; lsblk -r escapes spaces as \x20 so the
+	# awk fields stay intact, decode them afterwards.
+	alreadymounted=$(lsblk -nrpo "name,type,mountpoint" |
+		awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{print $3}' |
+		sed 's/\\x20/ /g')
+	set -- /mnt /media /mount /home -maxdepth 5 -type d
+	while IFS= read -r m; do
+		[ -n "$m" ] && set -- "$@" -not \( -path "$m" -prune \)
+	done <<-MOUNTED
+	$alreadymounted
+	MOUNTED
+	getmount "$@"
 	partitiontype="$(lsblk -no "fstype" "$chosen")"
 	case "$partitiontype" in
-		"vfat") sudo -A mount -t vfat "$chosen" "$mp" -o rw,umask=0000,uid="$(id -u)",gid="$(id -g)";;
-		"exfat") sudo -A mount "$chosen" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
-		*) sudo -A mount "$chosen" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo -A chown "$user":"$ug" "$mp";;
+		"vfat") out=$(sudo -A mount -t vfat "$chosen" "$mp" -o rw,umask=0000,uid="$(id -u)",gid="$(id -g)" 2>&1); rc=$? ;;
+		"exfat") out=$(sudo -A mount "$chosen" "$mp" -o uid="$(id -u)",gid="$(id -g)" 2>&1); rc=$? ;;
+		*) out=$(sudo -A mount "$chosen" "$mp" 2>&1); rc=$?
+		   [ "$rc" -eq 0 ] && sudo -A chown "$(id -un):$(id -gn)" "$mp" ;;
 	esac
-	notify-send "💻 USB mounting" "$chosen mounted to $mp."
+	if [ "$rc" -eq 0 ]; then
+		notify-send "💻 USB mounting" "$chosen mounted to $mp."
+	else
+		notify-send "💻 USB mounting" "Failed to mount $chosen: ${out:-unknown error}"
+		exit 1
+	fi
 	}
 
-mountandroid() { \
+mountandroid() {
 	chosen="$(echo "$anddrives" | dmenu -p "Which Android device?")" || exit 1
 	chosen="$(echo "$chosen" | cut -d : -f 1)"
-	getmount "$HOME -maxdepth 3 -type d"
-        simple-mtpfs --device "$chosen" "$mp"
+	getmount "$HOME" -maxdepth 3 -type d
+	simple-mtpfs --device "$chosen" "$mp"
 	echo "OK" | dmenu -p "Tap Allow on your phone if it asks for permission and then press enter" || exit 1
 	simple-mtpfs --device "$chosen" "$mp"
 	notify-send "🤖 Android Mounting" "Android device mounted to $mp."
 	}
 
-asktype() { \
+asktype() {
 	choice="$(printf "USB\\nAndroid" | dmenu -i -p "Mount a USB drive or Android device?")" || exit 1
 	case $choice in
 		USB) mountusb ;;

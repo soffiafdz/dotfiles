@@ -1,10 +1,10 @@
-#!/bin/env sh
+#!/usr/bin/env sh
 
 # If argument: check is a client name and attach it OR exit 1
 if [ "$#" -eq 1 ]; then
 	NAME="$1";
-	[ $(tmux ls | grep --count --word-regexp $NAME) -eq 1 ] \
-	&& tmux attach -t $NAME && exit 0 \
+	[ "$(tmux ls | grep --count --word-regexp "$NAME")" -eq 1 ] \
+	&& tmux attach -t "$NAME" && exit 0 \
 	|| exit 1;
 
 # Main program

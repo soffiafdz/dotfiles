@@ -19,8 +19,8 @@ if [ -n "$1" ]; then
       ;;
     inode/directory)
       # Find all images and categorize them
-      temp_dir="/tmp/setwp_$"
-      mkdir -p "$temp_dir"
+      temp_dir=$(mktemp -d)
+      trap 'rm -rf "$temp_dir"' EXIT
 
       find "$wporigin" -iregex '.*\.\(jpg\|jpeg\|png\|gif\)' -type f | while read -r img; do
         # Get image dimensions
@@ -58,8 +58,6 @@ if [ -n "$1" ]; then
         fi
       fi
 
-      # Clean up temp files
-      rm -rf "$temp_dir"
 
       # Set the wallpaper links
       ln -sf "$main_image" "$wplink" &&

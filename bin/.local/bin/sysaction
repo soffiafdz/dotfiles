@@ -16,13 +16,26 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 cmds="\
-  display off	displayoff
- lock	slock
-󰠚 leave DWM	 kill -TERM $(pgrep -u $USER "\bdwm$")
-⏾ sleep	 ${hib:-systemctl suspend-then-hibernate -i}
- reboot	${reb:-sudo -A reboot}
- shutdown	${shut:-sudo -A shutdown -h now}"
+  display off	displayoff
+ lock	slock
+󰠚 leave DWM	kill -TERM $(pgrep -u "$USER" -x dwm)
+⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
+ reboot	${reb:-sudo -A reboot}
+ shutdown	${shut:-sudo -A shutdown -h now}"
 
 choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu)" || exit 1
+[ -z "$choice" ] && exit 1
 
-$(echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-)
+cmd="$(echo "$cmds" | grep -F -- "$choice	" | cut -d '	' -f2-)"
+[ -z "$cmd" ] && exit 1
+
+case "$choice" in
+*lock)
+  command -v slock >/dev/null || { notify-send "slock is not installed"; exit 1; }
+  ;;
+*leave* | *sleep | *reboot | *shutdown)
+  [ "$(printf 'No\nYes' | dmenu -i -p "$choice?")" = "Yes" ] || exit 1
+  ;;
+esac
+
+exec sh -c "$cmd"

@@ -4,9 +4,9 @@
 HOSTNAME="${HOSTNAME:-$(cat /etc/hostname)}"
 
 # Handle SIGUSR1 to force immediate update (useful for resume from sleep)
-trap 'update_now=1' USR1
+trap ':' USR1
 
-for pid in $(pgrep -f dwmbar); do
+for pid in $(pgrep -x dwmbar); do
   if [ "$pid" != "$$" ]; then
     kill "$pid"
   fi
@@ -15,7 +15,7 @@ done
 sleep 1
 
 # Exit if dwm isn't running
-if ! pgrep dwm >/dev/null 2>&1; then
+if ! pgrep -x dwm >/dev/null 2>&1; then
   echo "dwm not running"
   exit 1
 fi
@@ -86,7 +86,7 @@ status() {
   if [ "$eth_up" = "1" ]; then
     echo " 󰈁 $delim"
   else
-    wifi=$(grep "^\s*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
+    wifi=$(grep "^[[:space:]]*w" /proc/net/wireless | awk '{ print int($3 * 100 / 70) "%"}')
     [ -z "$wifi" ] && echo "󰖪 $delim" || echo "$wifi 󰖩 $delim"
   fi
 
@@ -204,7 +204,8 @@ status() {
   echo "$(date '+%y:%m:%d') "
 }
 
-while pgrep dwm >/dev/null 2>&1; do
+while pgrep -x dwm >/dev/null 2>&1; do
   xsetroot -name "$(status | tr '\n' ' ')"
-  sleep 5s
+  # Background sleep so a USR1 (from refbar) interrupts the wait and refreshes now
+  sleep 5 & wait $!
 done
