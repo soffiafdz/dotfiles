@@ -7,9 +7,9 @@ image_quality = 50
 # Edit text files
 edit = [{ run = 'nvim "$@"', block = true }]
 
-# Open images (sxiv on Linux, Preview on macOS)
+# Open images (mpv on Linux, Preview on macOS)
 image = [
-  { run = 'sxiv "$@"', orphan = true, for = "linux" },
+  { run = 'mpv --image-display-duration=inf "$@"', orphan = true, desc = "Open image", for = "linux" },
   { run = 'open "$@"', orphan = true, for = "macos" },
 ]
 
