@@ -108,6 +108,9 @@ set clipboard+=unnamedplus
 set mouse=a
 "
 " Backup, swap & undo
+silent! call mkdir(expand('~/.vim/backup'), 'p')
+silent! call mkdir(expand('~/.vim/swap'), 'p')
+silent! call mkdir(expand('~/.vim/undo'), 'p')
 set backup
 set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
