@@ -92,6 +92,13 @@ alias \
   e='"$EDITOR"' \
   v='"$EDITOR"'
 
+# kitty sets TERM=xterm-kitty, which most remote hosts have no terminfo for.
+# kitten ssh copies it over on connect (into the remote's ~/.terminfo, so no
+# root needed). Guarded: outside kitty, or without the kitten, use plain ssh.
+if [ -n "$KITTY_WINDOW_ID" ] && command -v kitten >/dev/null 2>&1; then
+  alias ssh="kitten ssh"
+fi
+
 # Personal wiki: edit / sync / pull / push
 wiki() {
   local wiki_dir="$HOME/Documents/wiki"
