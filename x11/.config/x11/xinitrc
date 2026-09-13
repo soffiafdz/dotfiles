@@ -1,19 +1,30 @@
 #!/bin/sh
 
+log="$HOME/.xsession-errors"
+[ -f "$log" ] && [ "$(stat -c %s "$log" 2>/dev/null || echo 0)" -gt 1048576 ] &&
+	{ tail -c 262144 "$log" >"$log.tmp" && mv -f "$log.tmp" "$log"; }
+exec >>"$log" 2>&1
+
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
 	. "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
 else
 	. "$HOME/.xprofile"
 fi
 
-# Kill orphaned autostart processes from previous sessions
-pkill -x picom 2>/dev/null
+# dwm's autostart restarts its own helpers; xcompmgr is the only one it
+# does not manage.
 pkill -x xcompmgr 2>/dev/null
-pkill -x dunst 2>/dev/null
-pkill -x unclutter 2>/dev/null
-pkill -x redshift 2>/dev/null
-pkill -x dwmbar 2>/dev/null
-pkill -x clipmenud 2>/dev/null
-pkill -x mpd 2>/dev/null
 
-exec dbus-run-session dwm >>"$HOME/.xsession-errors" 2>&1
+# Keep the X session alive across dwm crashes: exit on a clean quit (0) or
+# SIGTERM (143, from "leave"), otherwise restart unless the X server is gone
+# or dwm has died three times in quick succession.
+exec dbus-run-session -- sh -c '
+  n=0
+  while :; do
+    t=$(date +%s); dwm; rc=$?
+    case $rc in 0|143) exit 0 ;; esac
+    xset q >/dev/null 2>&1 || exit "$rc"
+    [ $(( $(date +%s) - t )) -lt 5 ] && n=$((n+1)) || n=0
+    [ "$n" -ge 3 ] && exit "$rc"
+    echo "dwm exited $rc, restarting" >&2; sleep 1
+  done'
