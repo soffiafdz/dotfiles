@@ -20,14 +20,14 @@ janus)
   autorandr --change --default dual
   xset -dpms
   xset s noblank
-  source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
+  setsid -f sh "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire" >/dev/null 2>&1
   deskflow &
   mpd &
   ! pidof -s protonmail-bridge >/dev/null 2>&1 &&
     setsid -f protonmail-bridge --no-window >/dev/null 2>&1
   ;;
 lettera)
-  source ${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire
+  setsid -f sh "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xpipewire" >/dev/null 2>&1
   ;;
 tango)
   ! pidof -s protonmail-bridge >/dev/null 2>&1 &&
