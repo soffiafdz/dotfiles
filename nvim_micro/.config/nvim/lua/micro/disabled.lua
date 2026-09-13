@@ -1,5 +1,5 @@
--- Disable unnecessary LazyVim plugins for writerdeck (Raspberry Pi Zero 2W)
--- Last synced: 2026-02-13
+-- Disable plugins the writerdeck (Raspberry Pi Zero 2W) cannot afford.
+-- Applies on top of the main config's specs; see lua/config/lazy.lua.
 --
 -- Categories:
 -- [HEAVY] CPU/Memory intensive plugins
@@ -67,6 +67,11 @@ return {
   -- persistence.nvim - Session management (minimal overhead)
   -- mini.pairs - Auto-pairs (lightweight)
   -- snacks.nvim - Picker/UI (replaces telescope, used by LazyVim core)
+
+  -- [HEAVY] Data-science and Quarto tooling from the main config
+  { "R-nvim/R.nvim", enabled = false },
+  { "quarto-dev/quarto-nvim", enabled = false },
+  { "jmbuhr/otter.nvim", enabled = false },
 
   -- [HEAVY] Linters - disabled on Pi (too resource intensive)
   { "mfussenegger/nvim-lint", enabled = false },
