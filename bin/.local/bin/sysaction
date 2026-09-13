@@ -23,18 +23,44 @@ cmds="\
  reboot	${reb:-sudo -A reboot}
  shutdown	${shut:-sudo -A shutdown -h now}"
 
-choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu)" || exit 1
+die() {
+  if command -v notify-send >/dev/null; then
+    notify-send -u critical "sysaction" "$1"
+  else
+    echo "sysaction: $1" >&2
+  fi
+  exit 1
+}
+
+# dmenu wrapper: a cancel (Escape) exits quietly, but anything dmenu writes to
+# stderr is a real failure (bad flag, no font, no display) and must be visible
+# instead of silently aborting the action.
+menu() {
+  _err="$(mktemp)" || die "mktemp failed"
+  _out="$(dmenu "$@" 2>"$_err")"
+  _status=$?
+  if [ -s "$_err" ]; then
+    _msg="$(head -n 2 "$_err")"
+    rm -f "$_err"
+    die "dmenu failed: $_msg"
+  fi
+  rm -f "$_err"
+  [ "$_status" -eq 0 ] || exit 1
+  printf '%s\n' "$_out"
+}
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | menu)" || exit 1
 [ -z "$choice" ] && exit 1
 
 cmd="$(echo "$cmds" | grep -F -- "$choice	" | cut -d '	' -f2-)"
-[ -z "$cmd" ] && exit 1
+[ -z "$cmd" ] && die "no command for '$choice'"
 
 case "$choice" in
 *lock)
-  command -v slock >/dev/null || { notify-send "slock is not installed"; exit 1; }
+  command -v slock >/dev/null || die "slock is not installed"
   ;;
 *leave* | *sleep | *reboot | *shutdown)
-  [ "$(printf 'No\nYes' | dmenu -i -p "$choice?")" = "Yes" ] || exit 1
+  [ "$(printf 'No\nYes' | menu -p "$choice?")" = "Yes" ] || exit 1
   ;;
 esac
 
