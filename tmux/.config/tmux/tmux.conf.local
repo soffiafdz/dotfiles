@@ -350,9 +350,9 @@ set -g history-limit 50000
 #set -g status-keys vi
 #set -g mode-keys vi
 
-# keep only C-b as prefix; drop the secondary C-a prefix
-set -gu prefix2
-unbind C-a
+# keep both prefixes: C-b and the GNU-Screen compatible C-a
+# set -gu prefix2
+# unbind C-a
 # unbind C-b
 # set -g prefix C-a
 # bind C-a send-prefix
