@@ -35,7 +35,7 @@ Reference for setting up machines after formatting.
 | **Launcher** | dmenu | `pacman -S dmenu` | + dmenupass, dmenumount |
 | **Clipboard** | clipmenu | AUR | Super+X |
 | **Screenshots** | flameshot | `pacman -S flameshot` | |
-| **Media Server** | Jellyfin | rootless podman container, runit service | Not from pacman; access from Fire TV, other devices |
+| **Media Server** | Jellyfin | rootless podman container, runit service (`jellyfin/README.md`) | Not from pacman; access from Fire TV, other devices |
 | **Music Client** | Feishin | Flatpak or AUR | Jellyfin frontend |
 | **Compositor** | picom | `pacman -S picom` | For transparency |
 | **Notifications** | dunst | `pacman -S dunst` | |
