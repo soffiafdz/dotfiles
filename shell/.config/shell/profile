@@ -14,8 +14,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
 	unset brew_bin
 fi
 
-# Adding local executables to $PATH
-export PATH="$PATH:$HOME/.local/bin"
+# Adding local executables to $PATH (prepended, once)
+case ":$PATH:" in
+*":$HOME/.local/bin:"*) ;;
+*) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+export PATH
 
 # unsetopt PROMPT_SP
 
@@ -38,7 +42,7 @@ export GNUPGHOME="${XDG_CONFIG_HOME:-$HOME/.config}/gnupg"
 export IPYTHONDIR="${XDG_CONFIG_HOME:-$HOME/.config}/jupyter"
 export JUPYTER_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/jupyter"
 export DOCKER_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/docker"
-export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME:-/.config}/java"
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME:-$HOME/.config}/java"
 export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
 export PASSWORD_STORE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/password-store"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
@@ -63,7 +67,8 @@ export LESS=-R
 #export LESS_TERMCAP_se=$"\e[0m"
 #export LESS_TERMCAP_us=$"\e[01;32m"
 #export LESS_TERMCAP_ue=$"\e[0m"
-export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+command -v highlight >/dev/null &&
+	export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
 export AWT_TOOLKIT="MToolkit wmname LG3D"
 export _JAVA_AWT_WM_NONREPARENTING=1
 

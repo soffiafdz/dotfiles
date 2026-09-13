@@ -44,13 +44,13 @@ fi
 alias r="radian"
 
 # eza / exa / ls
-if [ -n "$(which eza)" ]; then
+if command -v eza >/dev/null 2>&1; then
   alias \
     ls='eza --color=auto --icons=auto' \
     ll='eza -lA --color=auto --icons=auto' \
     la='eza -A --color=auto --icons=auto' \
     l='eza -F --color=auto --icons=auto'
-elif [ -n "$(which exa)" ]; then
+elif command -v exa >/dev/null 2>&1; then
   alias \
     ls="exa --group-directories-first" \
     la="exa --group-directories-first -a" \
