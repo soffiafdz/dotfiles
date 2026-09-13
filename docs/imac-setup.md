@@ -64,11 +64,11 @@ on both Apple Silicon and Intel):
 eval "$(/opt/homebrew/bin/brew shellenv)"   # /usr/local/bin/brew on Intel
 ```
 
-**Do not run the `>> ~/.zprofile` snippet the installer prints at the end.** It
-would create a real `~/.zprofile`, and `stow zprofile` then refuses to place the
-repo's copy over it ("existing target is not a symlink"). `shell/profile` already
-runs `brew shellenv` on both prefixes. If you ran it already, `rm ~/.zprofile`
-before stowing.
+**Do not run the `>> ~/.zprofile` snippet the installer prints at the end.**
+zsh reads `$ZDOTDIR/.zprofile`, not `~/.zprofile`, so a file left in `$HOME`
+is silently ignored and the `brew shellenv` lines in it never run.
+`shell/profile` already runs `brew shellenv` on both prefixes. If you ran it
+already, `rm ~/.zprofile`.
 
 ## 3. SSH key, then clone
 
@@ -119,9 +119,9 @@ cd ~/Developer/dotfiles
 
 # -t "$HOME" is required: stow defaults to the parent dir, which here
 # would be ~/Developer, not ~
-stow -nv -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
+stow -nv -t "$HOME" kitty aerospace karabiner zsh shell fzf \
   git ssh tmux nvim yazi sioyek radian mpv atuin bin     # dry run
-stow -v -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
+stow -v -t "$HOME" kitty aerospace karabiner zsh shell fzf \
   git ssh tmux nvim yazi sioyek radian mpv atuin bin
 ```
 
@@ -144,15 +144,17 @@ which is why `local.conf` and `config.local` are gitignored (§6, §8).
 
 ## 6. Shell
 
-The chain is `~/.zprofile` → `shell/profile` (sets `ZDOTDIR`) → `$ZDOTDIR/.zshrc`.
+The chain is `~/.zshenv` (sets `ZDOTDIR`) → `$ZDOTDIR/.zprofile` →
+`shell/profile` → `$ZDOTDIR/.zshrc`.
 
 That only works in a **login shell**. kitty is configured with `shell zsh -l`,
 and Terminal.app and VS Code both use login shells on macOS, so this is fine in
 practice.
 
-**Do not create `~/.zshenv` with `ZDOTDIR` in it.** zsh would then look for
-`$ZDOTDIR/.zprofile`, which does not exist in this repo, and `shell/profile`
-would never be sourced.
+`~/.zshenv` sets `ZDOTDIR`, so `.zprofile` **must** live at
+`zsh/.config/zsh/.zprofile`, not `~/.zprofile` — once `ZDOTDIR` is set zsh
+looks only there, and a stray `~/.zprofile` is never read (`shell/profile`,
+and with it `EDITOR`, would silently go missing).
 
 Per-machine kitty settings (font size on a 24"/27" panel differs from the
 MacBook) go in an untracked local override:

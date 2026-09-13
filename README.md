@@ -25,7 +25,7 @@ tree. Almost all of them target the home directory:
 
 - `<pkg>/.config/<pkg>/...` for XDG configs (`kitty`, `nvim`, `zsh`, ...).
 - `<pkg>/.<dotfile>` for the few programs that want a dotfile in `$HOME`
-  (`vim/.vimrc`, `zprofile/.zprofile`, `zsh/.zshenv`).
+  (`vim/.vimrc`, `zsh/.zshenv`).
 - `bin/.local/bin/` for scripts, `ssh/.ssh/config` for ssh.
 - `jellyfin/etc/...` is the one package that targets `/`, see its README.
 
@@ -64,7 +64,7 @@ Machine-local files live next to the tracked ones and are never committed:
 
     git clone git@github.com:soffiafdz/dotfiles.git ~/Repos/dotfiles
     cd ~/Repos/dotfiles
-    stow -d ~/Repos/dotfiles -t ~ zsh zprofile shell git fzf atuin tmux kitty vim
+    stow -d ~/Repos/dotfiles -t ~ zsh shell git fzf atuin tmux kitty vim
     stow -d ~/Repos/dotfiles -t ~ x11 bin picom dunst redshift mpd mpv ncmpcpp yazi sioyek zathura
     stow -d ~/Repos/dotfiles -t ~ nvim
     stow --no-folding -d ~/Repos/dotfiles -t ~ gnupg
@@ -81,7 +81,7 @@ below. `docs/software-setup.md` lists the packages to install and
 
     git clone git@github.com:soffiafdz/dotfiles.git ~/Developer/dotfiles
     brew bundle --file=~/Developer/dotfiles/Brewfile        # or Brewfile.work
-    stow -d ~/Developer/dotfiles -t ~ zsh zprofile shell git fzf atuin tmux kitty vim nvim
+    stow -d ~/Developer/dotfiles -t ~ zsh shell git fzf atuin tmux kitty vim nvim
     stow -d ~/Developer/dotfiles -t ~ aerospace karabiner
     stow --no-folding -d ~/Developer/dotfiles -t ~ gnupg
     stow -d ~/Developer/dotfiles -t ~ ssh
@@ -125,7 +125,7 @@ Same as Linux minus the desktop packages, with `nvim_micro` in place of `nvim`.
 | `vim` | `~/.vimrc` | all | Fallback editor. Autosaves on focus loss. |
 | `x11` | `~/.config/x11` | Linux | `xinitrc`, `xprofile`, `xpipewire`, Xresources. |
 | `yazi` | `~/.config/yazi` | all | File manager, gruvbox flavor, openers. |
-| `zprofile`, `zsh` | `~/.zprofile`, `~/.zshenv`, `~/.config/zsh` | all | Login and interactive shell, see below. |
+| `zsh` | `~/.zshenv`, `~/.config/zsh` | all | Login and interactive shell, see below. |
 
 `Brewfile` and `Brewfile.work` are not packages; they are the macOS install
 lists. `docs/` is documentation.
@@ -133,7 +133,8 @@ lists. `docs/` is documentation.
 ## Shell startup
 
     ~/.zshenv          exports ZDOTDIR=~/.config/zsh (every zsh, login or not)
-    ~/.zprofile        login shells: sources shell/profile
+    ~/.config/zsh/.zprofile
+                       login shells: sources shell/profile
     shell/profile      environment: XDG dirs, PATH (~/.local/bin first, once),
                        EDITOR/TERMINAL/BROWSER, GNUPGHOME, SUDO_ASKPASS;
                        on Linux tty1 with no X running: exec startx
