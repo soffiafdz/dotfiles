@@ -26,7 +26,6 @@ while [ "$DONE" -eq 0 ] ; do
   fi
   entry=$(printf '%s\n' "${password_files[@]}" | dmenu "$@" -l 15)
 
-  echo "entry: $entry"
   if [ -z "$entry" ] ; then
     DONE=1
     exit
@@ -44,10 +43,18 @@ while [ "$DONE" -eq 0 ] ; do
       # not a directory so it must be a real password entry
 
       if [[ $typeit -eq 0 ]]; then
-        pass show -c "$SELECTION" 2>/dev/null
-        notify-send "Password copied to clipboard; will clear in 45s."
+        # Pause clipmenud so the password never lands in the clip history.
+        clipctl disable 2>/dev/null
+        if pass show -c "$SELECTION" 2>/dev/null; then
+          notify-send "pass" "Password copied to clipboard; will clear in ${PASSWORD_STORE_CLIP_TIME:-45}s."
+        else
+          notify-send "pass" "failed"
+        fi
+        ( sleep "${PASSWORD_STORE_CLIP_TIME:-45}"; clipctl enable ) >/dev/null 2>&1 &
       else
-        xdotool - <<<"type --clearmodifiers -- $(pass show "$SELECTION" | head -n 1)"
+        win=$(xdotool getactivewindow)
+        pass show "$SELECTION" | head -n1 | tr -d '\n' |
+          xdotool type --window "$win" --delay 20 --file -
       fi
       DONE=1
     fi

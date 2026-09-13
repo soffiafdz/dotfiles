@@ -1,11 +1,13 @@
 #!/bin/sh
 
 id=$(xinput list | grep "TrackPoint" | awk '{print $6}')
-stat=$(xinput list-props "${id#id=}" | grep "Device Enabled" | awk '{print $4}')
+id="${id#id=}"
+[ -z "$id" ] && { notify-send "☝ TrackPoint not found"; exit 1; }
+stat=$(xinput list-props "$id" | grep "Device Enabled" | awk '{print $4}')
+[ -z "$stat" ] && { notify-send "☝ Could not read TrackPoint state"; exit 1; }
 
-if [ $stat = 1 ]; then
-    xinput disable "${id#id=}" && notify-send "☝ TrackPoint is DISABLED"
+if [ "$stat" = 1 ]; then
+    xinput disable "$id" && notify-send "☝ TrackPoint is DISABLED"
 else
-    xinput enable "${id#id=}" && notify-send "☝ TrackPoint is ENABLED"
-
+    xinput enable "$id" && notify-send "☝ TrackPoint is ENABLED"
 fi

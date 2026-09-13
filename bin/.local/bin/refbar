@@ -1,6 +1,3 @@
 #!/bin/sh
-# Kill all dwmbar processes to refresh
-pkill -f dwmbar
-
-# Start a new one if dwm is running
-pgrep dwm >/dev/null && dwmbar &
+# Ask the running dwmbar to refresh now; start one if none is running.
+pkill -USR1 -x dwmbar || { pgrep -x dwm >/dev/null && setsid -f dwmbar; }
