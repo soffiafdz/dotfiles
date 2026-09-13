@@ -10,8 +10,9 @@ It is a thin layer, not a fork. `lua/config/lazy.lua` finds the main config
 through this package's real path in the repo, adds it to the runtime path, and
 imports its plugin specs. Options, keymaps, autocmds (including prose
 autosave), the trilingual spell setup and the word list all come from
-`nvim/.config/nvim`. The lockfile is shared too, so both configs pin the same
-plugin commits.
+`nvim/.config/nvim`. The lockfile is deliberately separate: lazy.nvim rewrites
+it with only the plugins a config actually loads, so sharing it would let the
+Pi drop the main config's pins.
 
 Only `lua/micro/` is Pi-specific:
 

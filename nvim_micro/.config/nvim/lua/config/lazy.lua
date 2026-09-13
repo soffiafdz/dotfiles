@@ -43,8 +43,6 @@ require("lazy").setup({
     -- Pi-only overrides, applied last so they win
     { import = "micro" },
   },
-  -- One lockfile for both configs
-  lockfile = main .. "/lazy-lock.json",
   defaults = {
     lazy = false,
     version = false,
