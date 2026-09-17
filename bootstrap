@@ -75,7 +75,9 @@ for pkg in $packages; do
 	esac
 
 	if command -v stow >/dev/null 2>&1; then
-		[ "$DELETE" -eq 1 ] && action="-D" || action="-S"
+		# -R (restow) rather than -S: a pull that adds files to a
+		# --no-folding package leaves them unlinked otherwise.
+		[ "$DELETE" -eq 1 ] && action="-D" || action="-R"
 		# shellcheck disable=SC2086
 		if [ "$RUN" -eq 1 ]; then
 			stow $action $fold -d "$DOT_DIR" -t "$TARGET" "$pkg"
