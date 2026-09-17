@@ -117,7 +117,7 @@ if command -v atuin >/dev/null; then
   bindkey '^X^R' history-incremental-pattern-search-backward
 fi
 
-[[ $HOST == *mcgill* ]] && return
+[[ -n $CC_CLUSTER || $HOST == *mcgill* ]] && return
 
 # GPG
 GPG_TTY=$(tty)
