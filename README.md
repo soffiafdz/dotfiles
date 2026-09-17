@@ -41,9 +41,22 @@ Two stow behaviours matter here:
   whole directory as one symlink into the repo. Anything the program writes
   there afterwards lands inside the checkout. That is fine for `nvim`
   (the lockfile is meant to be tracked) and harmless for most packages, but it
-  is how the gnupg keyring once ended up inside the repo. `gnupg` must be
-  stowed with `--no-folding`; the `.gitignore` allowlist keeps everything but
-  `gpg-agent.conf` out regardless.
+  is how the gnupg keyring once ended up inside the repo, and later how
+  `~/.local` became a symlink to `bin/.local`, pulling 1.4G of nvim plugins,
+  pipx venvs and the plaintext atuin key into the checkout. **`gnupg` and
+  `bin` must both be stowed with `--no-folding`**; the `.gitignore` allowlist
+  and the `bin/.local/{share,state,cache}` entries keep the fallout out
+  regardless. Verify with:
+
+      for p in ~/.local ~/.local/bin ~/.local/share ~/.local/state; do
+        [ -L "$p" ] && echo "FOLDED: $p" || echo "ok: $p"
+      done
+
+  The trade-off: a `--no-folding` package is symlinked file by file, so a pull
+  that adds or removes files there needs `stow -R --no-folding -t ~ <pkg>` to
+  sync. Folded packages pick those up for free. The same applies to any package
+  whose target directory holds an untracked local file, which is why
+  `~/.config/kitty` is unfolded too.
 - **Package READMEs are not stowed.** Stow ignores `README*` at the top of a
   package, so `jellyfin/README.md` and `nvim_micro/README.md` stay in the
   repo only.
