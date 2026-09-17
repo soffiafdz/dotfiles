@@ -56,6 +56,10 @@ cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
 # video from yazi; PDF previews come from poppler, not this.
 brew "mpv"
 
+# Syncthing: hestia is in the mesh, but installed outside Homebrew.
+# Leave commented so `brew bundle` does not add a second copy.
+# brew "syncthing"
+
 # Security
 brew "gnupg"          # GPG encryption
 brew "pinentry-mac"   # GPG PIN entry for macOS
@@ -75,6 +79,11 @@ cask "raycast"        # Launcher (Hyper + D)
 # Browser (Aerospace binds Hyper+W to it)
 cask "zen"
 
+# Mail
+# Bridge exposes Proton as IMAP/SMTP on 127.0.0.1 (1143/1025) so any client
+# can read it. Must be a Login Item or mail stops working after a reboot.
+cask "proton-mail-bridge"
+
 # Academic
 cask "zotero"         # Reference manager (+ Better BibTeX)
 # sioyek: the cask is DISABLED upstream (pinned to the x64-only v2.0.0 from
@@ -88,8 +97,7 @@ cask "font-iosevka-nerd-font"
 
 # --- Deliberately left out; uncomment if you decide otherwise ---
 
-# Personal file sync / backup on an employer-owned machine
-# brew "syncthing"
+# Backup tooling - still undecided for this machine (see docs/imac-setup.md)
 # brew "restic"
 # brew "rclone"
 

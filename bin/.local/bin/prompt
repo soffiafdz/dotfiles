@@ -1,0 +1,6 @@
+#!/bin/sh
+# Usage: prompt "Question?" "command"
+# Shows a dmenu Yes/No and runs the command only on an explicit Yes.
+
+[ "$(printf 'No\nYes' | dmenu -p "$1")" = "Yes" ] && exec sh -c "$2"
+exit 1

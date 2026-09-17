@@ -43,7 +43,7 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_24b_colour=false
+tmux_conf_24b_colour=true
 
 # default theme
 #tmux_conf_theme_colour_1="#080808"    # dark gray
@@ -340,7 +340,7 @@ tmux_conf_copy_to_os_clipboard=false
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 50000
 
 # start with mouse mode enabled
 #set -g mouse on
@@ -350,7 +350,7 @@ tmux_conf_copy_to_os_clipboard=false
 #set -g status-keys vi
 #set -g mode-keys vi
 
-# replace C-b by C-a instead of using both prefixes
+# keep both prefixes: C-b and the GNU-Screen compatible C-a
 # set -gu prefix2
 # unbind C-a
 # unbind C-b
@@ -359,6 +359,16 @@ tmux_conf_copy_to_os_clipboard=false
 
 # move status line to top
 #set -g status-position top
+
+# terminal: proper tmux terminfo, true colour and underline styles passthrough
+set -g default-terminal "tmux-256color"
+# terminal-features is matched against the OUTER terminal's TERM, so every
+# terminal actually used has to be listed. kitty/foot advertise Smulx+Setulc in
+# their terminfo but tmux only infers RGB from it, so undercurl and coloured
+# underlines are dropped unless usstyle is declared here.
+set -as terminal-features ",xterm-256color:RGB:usstyle"
+set -as terminal-features ",xterm-kitty:RGB:usstyle:hyperlinks:sync"
+set -as terminal-features ",foot*:RGB:usstyle"
 
 # -- tpm -----------------------------------------------------------------------
 
@@ -372,12 +382,12 @@ tmux_conf_copy_to_os_clipboard=false
 # by default, launching tmux will update tpm and all plugins
 #   - true (default)
 #   - false
-tmux_conf_update_plugins_on_launch=true
+tmux_conf_update_plugins_on_launch=false
 
 # by default, reloading the configuration will update tpm and all plugins
 #   - true (default)
 #   - false
-tmux_conf_update_plugins_on_reload=true
+tmux_conf_update_plugins_on_reload=false
 
 # /!\ do not add set -g @plugin 'tmux-plugins/tpm'
 # /!\ do not add run '~/.tmux/plugins/tpm/tpm'

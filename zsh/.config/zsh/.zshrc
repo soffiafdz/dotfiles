@@ -1,4 +1,11 @@
 #!/bin/zsh
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Powerlevel10k
 p10k_sources=( \
     /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
@@ -8,15 +15,8 @@ p10k_sources=( \
 
 for p10k_source in ${p10k_sources[@]}
 do
-  [ -f $p10k_source ] && source $p10k_source
+  [ -f $p10k_source ] && source $p10k_source && break
 done
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.p10k.zsh" ]] \
@@ -36,9 +36,11 @@ setopt autocd autopushd pushdignoredups
 autoload -U compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
 
 zmodload zsh/complist
-compinit
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
 _comp_options+=(globdots)
 
 # vi mode
@@ -48,7 +50,8 @@ export KEYTIMEOUT=1
 # Enable searching through history
 SAVEHIST=10000000
 HISTSIZE=10000000
-export HISTFILE="$XDG_CONFIG_HOME/zsh/history"
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "${HISTFILE:h}"
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 
@@ -102,7 +105,7 @@ done
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh"
 
 # Direnv
-eval "$(direnv hook zsh)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # zoxide - `z <fragment>` jumps to a frecent dir, `zi` picks interactively
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
@@ -114,7 +117,7 @@ if command -v atuin >/dev/null; then
   bindkey '^X^R' history-incremental-pattern-search-backward
 fi
 
-[[ $HOSTNAME == *mcgill* ]] && exit 0
+[[ $HOST == *mcgill* ]] && return
 
 # GPG
 GPG_TTY=$(tty)

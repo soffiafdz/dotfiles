@@ -51,6 +51,8 @@ return {
             },
           },
         },
+        -- Leftover ltex-ls-plus must never be auto-enabled by mason (~1 GB per instance)
+        ltex_plus = { enabled = false },
         -- Minimal Python support
         pyright = {},
         -- Minimal Lua support

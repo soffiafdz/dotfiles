@@ -1,4 +1,18 @@
--- Modified lazy.lua for writerdeck (Raspberry Pi Zero 2W)
+-- nvim_micro: a thin layer over the main nvim config in this repo, for the
+-- writerdeck (Raspberry Pi Zero 2W). The main config supplies options,
+-- keymaps, autocmds, plugin specs and spell files; lua/micro/ only disables
+-- what the Pi cannot afford and swaps in the no-Python palimpsest deck.
+
+-- Locate the main config through this file's real path in the repo, so it
+-- works wherever the dotfiles are checked out and however they are stowed.
+local here = vim.fn.fnamemodify(vim.fn.resolve(debug.getinfo(1, "S").source:sub(2)), ":h")
+local main = vim.fn.simplify(vim.fn.fnamemodify(here .. "/../../../../../nvim/.config/nvim", ":p")):gsub("/$", "")
+if vim.fn.isdirectory(main) == 0 then
+  vim.api.nvim_echo({ { "nvim_micro: main config not found at " .. main, "ErrorMsg" } }, true, {})
+end
+
+-- Share the main config's word list so zg/zw edits land in the repo.
+vim.opt.spellfile = main .. "/spell/en.utf-8.add"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -24,8 +38,10 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.coding.mini-comment" },
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
     { import = "lazyvim.plugins.extras.lang.git" },
-    -- Plugins
+    -- The main config's plugin specs, found through the runtime path below
     { import = "plugins" },
+    -- Pi-only overrides, applied last so they win
+    { import = "micro" },
   },
   defaults = {
     lazy = false,
@@ -38,6 +54,9 @@ require("lazy").setup({
   },
   performance = {
     rtp = {
+      -- The main config joins the runtime path: config.options/keymaps/
+      -- autocmds, lua/plugins and spell/ all come from there.
+      paths = { main },
       disabled_plugins = {
         "gzip",
         "tarPlugin",

@@ -31,13 +31,13 @@ Reference for setting up machines after formatting.
 
 | Category | App | Install | Notes |
 |----------|-----|---------|-------|
-| **WM** | dwm | build from source | ~/Developer/dwm |
+| **WM** | dwm | build from source | ~/Repos/dwm |
 | **Launcher** | dmenu | `pacman -S dmenu` | + dmenupass, dmenumount |
 | **Clipboard** | clipmenu | AUR | Super+X |
 | **Screenshots** | flameshot | `pacman -S flameshot` | |
-| **Media Server** | Jellyfin | `pacman -S jellyfin` | Access from Fire TV, other devices |
+| **Media Server** | Jellyfin | rootless podman container, runit service (`jellyfin/README.md`) | Not from pacman; access from Fire TV, other devices |
 | **Music Client** | Feishin | Flatpak or AUR | Jellyfin frontend |
-| **Compositor** | xcompmgr | `pacman -S xcompmgr` | For transparency |
+| **Compositor** | picom | `pacman -S picom` | For transparency |
 | **Notifications** | dunst | `pacman -S dunst` | |
 | **Redshift** | redshift | `pacman -S redshift` | Night mode |
 
@@ -92,8 +92,8 @@ Full bring-up runbook for the office iMac: `docs/imac-setup.md`
 
 | Service | Space | Cost | Notes |
 |---------|-------|------|-------|
-| Google One | 2TB | Already paid (until Nov) | Use via rclone |
-| Backblaze B2 | Pay per use | $5/TB/month | Native Restic support |
+| Google One | 5TB | Cancelled - access ends 2026-11-22 | Use via rclone until then |
+| Backblaze B2 | Pay per use | $6.95/TB/mo (first 10GB free) | Native Restic support; no minimum retention, free egress to 3x stored |
 | Dropbox | 13GB | Free | Too small for backups, file sync only |
 
 ### Local Backup (External HDD)
@@ -135,7 +135,7 @@ restic -r rclone:gdrive:backups/restic-repo backup ~/Documents ~/Projects
 restic -r rclone:gdrive:backups/restic-repo snapshots
 ```
 
-### Backblaze B2 (Alternative after Google One expires)
+### Backblaze B2 (Alternative once Google One ends, 2026-11-22)
 
 ```bash
 # Configure rclone with B2
@@ -151,7 +151,7 @@ restic -r b2:bucket-name:restic-repo init
 ### Future Task: Consolidate Cloud Storage
 
 Files currently scattered across:
-- Google Drive (2TB until Nov)
+- Google Drive (5TB, access ends 2026-11-22)
 - Dropbox (13GB)
 - Local machines
 
@@ -181,13 +181,47 @@ See: `docs/unified-keybinding-design.md`
 
 ## Post-Install Tasks
 
-- [ ] Set up Syncthing between machines
+- [x] Set up Syncthing between machines
 - [ ] Configure Restic backup schedule
 - [ ] Import GPG keys for pass
 - [ ] Set Sioyek as Zotero external PDF reader
 - [ ] Configure Sioyek SyncTeX for Quarto/nvim
 - [ ] Set up Jellyfin media library
-- [ ] Configure Atuin sync (if using)
+- [ ] Configure Atuin sync (see below)
+
+## Atuin Sync
+
+Hosted service (api.atuin.sh). History is encrypted client-side, so the server
+only ever holds ciphertext.
+
+**The encryption key is unrecoverable if lost** - capture it the moment it
+exists, before anything else.
+
+First machine:
+
+```sh
+atuin register -u <username> -e <email>
+atuin key | pass insert -m atuin/key    # do this immediately
+pass git push
+atuin sync
+```
+
+Every other machine:
+
+```sh
+pass show atuin/key                     # have it ready
+atuin login -u <username>               # prompts for password, then the key
+atuin sync
+```
+
+`atuin sync -f` forces a full re-sync if history looks incomplete. Auto-sync is
+on by default, hourly; `sync_frequency = "10m"` in the stowed
+`atuin/config.toml` changes it everywhere at once.
+
+**hestia is deliberately not synced.** Encryption keeps the server from reading
+anything, but sync would still put personal history on employer hardware and
+work commands in a personal account. It runs atuin local-only; `atuin login`
+there later is a reversible decision.
 
 ## Artix-Specific Notes
 

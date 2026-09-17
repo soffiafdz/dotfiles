@@ -3,12 +3,15 @@
 id=$(xinput list \
 	| grep "Synaptics" \
 	| awk '{for (i = 1; i < NF; i++) if ($i ~ /id=/) print $i}')
-stat=$(xinput list-props "${id#id=}" \
+id="${id#id=}"
+[ -z "$id" ] && { notify-send "🖱 Trackpad not found"; exit 1; }
+stat=$(xinput list-props "$id" \
 	| grep "Device Enabled" \
 	| awk '{gsub(/^[ \t]+|[ \t]+$/, "", $NF); if ($NF ~ /^[01]$/) print $NF}')
+[ -z "$stat" ] && { notify-send "🖱 Could not read trackpad state"; exit 1; }
 
-if [ $stat = 1 ]; then
-    xinput disable "${id#id=}" && notify-send "🖱 Trackpad is DISABLED"
+if [ "$stat" = 1 ]; then
+    xinput disable "$id" && notify-send "🖱 Trackpad is DISABLED"
 else
-    xinput enable "${id#id=}" && notify-send "🖱 Trackpad is ENABLED"
+    xinput enable "$id" && notify-send "🖱 Trackpad is ENABLED"
 fi
