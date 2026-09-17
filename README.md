@@ -4,6 +4,10 @@ Configuration for every machine I use, deployed with GNU Stow. One package per
 program, one repo for all hosts, host differences handled inside the configs
 rather than by branches.
 
+Which packages a machine gets is its *type*: a list in `profiles/`, applied by
+`./bootstrap`. Types are `linux-desktop`, `macos`, `writerdeck` and `hpc`;
+every one of them is stowed on top of `profiles/common`.
+
 Hosts:
 
 | Host | What it is | Notes |
@@ -14,6 +18,7 @@ Hosts:
 | hestia | Office iMac, macOS | See `docs/imac-setup.md`; installs from `Brewfile.work`. |
 | writerdeck | Raspberry Pi Zero 2W | Stows `nvim_micro` instead of `nvim`. |
 | mcgill workstations | Shared Linux hosts over ssh | `shell/profile` skips the desktop parts on `*mcgill*`. |
+| rorqual, trillium | Alliance clusters (Slurm) | Type `hpc`: `nvim_hpc` instead of `nvim`, no GUI packages. `$CC_CLUSTER` gates the shell. |
 
 The window manager is a separate repo at `~/Repos/dwm`; its `config.h` is
 where every desktop keybinding lives, and `docs/keybindings.txt` mirrors it.
@@ -73,15 +78,23 @@ Machine-local files live next to the tracked ones and are never committed:
 
 ## Bootstrap
 
+`./bootstrap` reads a profile and stows exactly those packages. It guesses the
+type from `$CC_CLUSTER` and `uname`, dry-runs by default, and falls back to
+plain symlinks where GNU Stow is not installed (clusters).
+
+    ./bootstrap            # show what would be stowed, for the guessed type
+    ./bootstrap -f         # do it
+    ./bootstrap -f macos   # force a type
+    ./bootstrap -D -f hpc  # unstow that type
+
+`gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program writes
+into those directories lands in the repo.
+
 ### Linux (Artix, runit)
 
     git clone git@github.com:soffiafdz/dotfiles.git ~/Repos/dotfiles
     cd ~/Repos/dotfiles
-    stow -d ~/Repos/dotfiles -t ~ zsh shell git fzf atuin tmux kitty vim
-    stow -d ~/Repos/dotfiles -t ~ x11 bin picom dunst redshift mpd mpv ncmpcpp yazi sioyek zathura
-    stow -d ~/Repos/dotfiles -t ~ nvim
-    stow --no-folding -d ~/Repos/dotfiles -t ~ gnupg
-    stow -d ~/Repos/dotfiles -t ~ ssh
+    ./bootstrap -f linux-desktop
     chsh -s "$(command -v zsh)"
 
 Then build the window manager: `git clone git@github.com:soffiafdz/dwm.git
@@ -94,10 +107,8 @@ below. `docs/software-setup.md` lists the packages to install and
 
     git clone git@github.com:soffiafdz/dotfiles.git ~/Developer/dotfiles
     brew bundle --file=~/Developer/dotfiles/Brewfile        # or Brewfile.work
-    stow -d ~/Developer/dotfiles -t ~ zsh shell git fzf atuin tmux kitty vim nvim
-    stow -d ~/Developer/dotfiles -t ~ aerospace karabiner
-    stow --no-folding -d ~/Developer/dotfiles -t ~ gnupg
-    stow -d ~/Developer/dotfiles -t ~ ssh
+    cd ~/Developer/dotfiles
+    ./bootstrap -f macos
 
 `gpg-agent.conf` names a Linux pinentry; on macOS point it at
 `bin/.local/bin/pinentry-auto` or the Homebrew pinentry-mac. Full walkthrough in
@@ -105,7 +116,25 @@ below. `docs/software-setup.md` lists the packages to install and
 
 ### Writerdeck
 
-Same as Linux minus the desktop packages, with `nvim_micro` in place of `nvim`.
+    ./bootstrap -f writerdeck
+
+`nvim_micro` in place of `nvim`, no desktop packages, no `bin`, no `atuin`.
+
+### HPC (Alliance clusters)
+
+Clone into project space, not `$HOME`: `$HOME` is small and has a file-count
+quota that plugin trees eat.
+
+    git clone git@github.com:soffiafdz/dotfiles.git ~/projects/def-<pi>/$USER/dotfiles
+    cd ~/projects/def-<pi>/$USER/dotfiles
+    ./bootstrap -f hpc
+    echo def-<pi> > ~/.config/hpc/account     # Slurm account for every job
+    ~/.local/bin/hpc-setup                    # login node only: nvim, p10k, plugins
+
+Login nodes have internet; compute nodes do not. Everything that downloads —
+`:Lazy sync`, `:TSUpdate`, `pip install` — happens on a login node. `hpc-setup`
+installs the static Neovim build into `~/.local/opt/nvim`, since the clusters
+ship no nvim. See `hpc/README.md` for the aliases and job templates.
 
 ## Packages
 
@@ -121,12 +150,14 @@ Same as Linux minus the desktop packages, with `nvim_micro` in place of `nvim`.
 | `fzf` | `~/.config/fzf` | all | Vendored key bindings and completion, sourced by `.zshrc`. |
 | `git` | `~/.config/git` | all | Identity, aliases, safe defaults. Includes `config.local`. |
 | `gnupg` | `~/.config/gnupg` | all | Only `gpg-agent.conf`. Stow with `--no-folding`. |
+| `hpc` | `~/.config/hpc`, `~/.local/...` | clusters | Slurm aliases, `salloc`/module helpers, sbatch templates, `hpc-setup`. See its README. |
 | `jellyfin` | `/etc/runit/sv/jellyfin` | janus | Podman container as a runit service. See its README. |
 | `karabiner` | `~/.config/karabiner` | macOS | Key remaps. |
 | `kitty` | `~/.config/kitty` | all | Terminal. Asks before closing a window with a running child. |
 | `mpd`, `ncmpcpp` | `~/.config/...` | janus | Music daemon and client. mpd is started by `xprofile`. |
 | `mpv` | `~/.config/mpv` | Linux | Player with NVDEC and gpu-next; also the image viewer for yazi. |
 | `nvim` | `~/.config/nvim` | all but the Pi | LazyVim-based editor config, see Editors. |
+| `nvim_hpc` | `~/.config/nvim` | clusters | Thin layer over `nvim`: no mason, no formatters, no GUI. See its README. |
 | `nvim_micro` | `~/.config/nvim` | writerdeck | Thin layer over `nvim`, see its README. |
 | `picom` | `~/.config/picom` | janus | Compositor. glx backend, sync fence and no damage tracking for NVIDIA. |
 | `radian` | `~/.config/radian` | all | R console. |
@@ -150,7 +181,11 @@ lists. `docs/` is documentation.
                        login shells: sources shell/profile
     shell/profile      environment: XDG dirs, PATH (~/.local/bin first, once),
                        EDITOR/TERMINAL/BROWSER, GNUPGHOME, SUDO_ASKPASS;
-                       on Linux tty1 with no X running: exec startx
+                       on Linux tty1 with no X running: exec startx;
+                       then sources profile.d/$DOTFILES_TYPE.sh
+    shell/profile.d/   type-specific environment: hpc.sh (Slurm account,
+                       ~/.config/hpc/env.sh), and linux.sh / darwin.sh if
+                       they are ever needed
     ~/.config/zsh/.zshrc
                        p10k instant prompt, completion (cache in ~/.cache/zsh),
                        aliasrc, fzf, atuin (owns Ctrl-R), zoxide, direnv

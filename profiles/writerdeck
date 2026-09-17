@@ -1,0 +1,4 @@
+# Raspberry Pi Zero 2W, 512 MB. Stowed on top of `common`.
+# nvim_micro replaces nvim; no atuin, no bin, nothing X11.
+nvim_micro
+tmux

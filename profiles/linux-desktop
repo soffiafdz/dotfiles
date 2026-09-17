@@ -1,0 +1,24 @@
+# Artix/Arch desktops and laptops: janus, lettera, tango.
+# Stowed on top of `common`.
+nvim
+bin
+tmux
+fzf
+yazi
+atuin
+radian
+ssh
+gnupg
+kitty
+foot
+dunst
+picom
+x11
+redshift
+mpd
+mpv
+ncmpcpp
+castero
+bpytop
+zathura
+sioyek

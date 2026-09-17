@@ -1,0 +1,111 @@
+#!/bin/sh
+# Stow the packages for one machine type.
+#
+#     ./bootstrap              # guess the type, dry run
+#     ./bootstrap -f           # guess the type, actually stow
+#     ./bootstrap -f hpc       # force a type
+#     ./bootstrap -D -f macos  # unstow that type's packages
+#
+# Types are the files in profiles/; every type is stowed on top of `common`.
+# GNU Stow is used when present (clusters often lack it); otherwise the same
+# links are made directly, which is enough for the flat packages we ship.
+
+set -eu
+
+DOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+TARGET="$HOME"
+RUN=0        # 0 = dry run
+DELETE=0
+
+usage() {
+	echo "usage: $0 [-f] [-D] [-t target] [type]" >&2
+	echo "types: $(ls "$DOT_DIR/profiles" | grep -v '^common$' | tr '\n' ' ')" >&2
+	exit 2
+}
+
+while getopts "fDt:h" opt; do
+	case "$opt" in
+	f) RUN=1 ;;
+	D) DELETE=1 ;;
+	t) TARGET="$OPTARG" ;;
+	*) usage ;;
+	esac
+done
+shift $((OPTIND - 1))
+
+# Machine type: explicit argument, else $CC_CLUSTER / uname.
+if [ $# -ge 1 ]; then
+	TYPE="$1"
+elif [ -n "${CC_CLUSTER:-}" ]; then
+	TYPE="hpc"
+elif [ "$(uname -s)" = "Darwin" ]; then
+	TYPE="macos"
+else
+	TYPE="linux-desktop"
+fi
+
+[ -f "$DOT_DIR/profiles/$TYPE" ] || usage
+
+# Package list: common first, then the type's own. Comments and blanks out.
+packages="$(cat "$DOT_DIR/profiles/common" "$DOT_DIR/profiles/$TYPE" |
+	sed 's/#.*//' | tr -d '[:blank:]' | grep -v '^$')"
+
+echo "dotfiles: $DOT_DIR"
+echo "target:   $TARGET"
+echo "type:     $TYPE"
+echo "packages: $(echo "$packages" | tr '\n' ' ')"
+[ "$RUN" -eq 1 ] || echo "(dry run; pass -f to apply)"
+
+for pkg in $packages; do
+	if [ ! -d "$DOT_DIR/$pkg" ]; then
+		echo "  !! no such package: $pkg" >&2
+		continue
+	fi
+
+	# gnupg must never fold: a folded ~/.config/gnupg puts the keyring in
+	# the repo. hpc holds a machine-local account file, same reasoning.
+	case "$pkg" in
+	gnupg | hpc) fold="--no-folding" ;;
+	*) fold="" ;;
+	esac
+
+	if command -v stow >/dev/null 2>&1; then
+		[ "$DELETE" -eq 1 ] && action="-D" || action="-S"
+		# shellcheck disable=SC2086
+		if [ "$RUN" -eq 1 ]; then
+			stow $action $fold -d "$DOT_DIR" -t "$TARGET" "$pkg"
+			echo "  stowed  $pkg"
+		else
+			stow -n -v $action $fold -d "$DOT_DIR" -t "$TARGET" "$pkg"
+		fi
+	else
+		# No stow: link every file of the package at its own path.
+		# Tracked files only, so ignored strays (history, caches) and
+		# package READMEs never get linked into $HOME.
+		git -C "$DOT_DIR" ls-files "$pkg" |
+			sed "s|^$pkg/||" | grep -v '^README' |
+			while read -r rel; do
+				src="$DOT_DIR/$pkg/$rel"
+				dst="$TARGET/$rel"
+				if [ "$DELETE" -eq 1 ]; then
+					[ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ] || continue
+					[ "$RUN" -eq 1 ] && rm "$dst"
+					echo "  UNLINK  $dst"
+					continue
+				fi
+				if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+					continue
+				fi
+				if [ -e "$dst" ]; then
+					echo "  !! exists, skipped: $dst" >&2
+					continue
+				fi
+				if [ "$RUN" -eq 1 ]; then
+					mkdir -p "$(dirname "$dst")"
+					ln -s "$src" "$dst"
+				fi
+				echo "  LINK    $dst"
+			done
+		echo "  linked  $pkg (stow not installed)"
+	fi
+done

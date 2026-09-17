@@ -1,0 +1,13 @@
+# Macs: hestia, noctua. Stowed on top of `common`.
+# No `bin`: it is dwm/dmenu/X11 glue.
+nvim
+tmux
+fzf
+yazi
+atuin
+radian
+ssh
+gnupg
+kitty
+aerospace
+karabiner
