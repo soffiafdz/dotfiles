@@ -4,9 +4,11 @@ Configuration for every machine I use, deployed with GNU Stow. One package per
 program, one repo for all hosts, host differences handled inside the configs
 rather than by branches.
 
-Which packages a machine gets is its *type*: a list in `profiles/`, applied by
-`./bootstrap`. Types are `linux-desktop`, `macos`, `writerdeck` and `hpc`;
-every one of them is stowed on top of `profiles/common`.
+Which packages a machine gets is its *profile*: a list in `profiles/`, applied
+by `./bootstrap`. Profiles are `linux`, `workstation`, `macos`, `writerdeck`
+and `hpc`, each stowed on top of `profiles/common`. `$DOTFILES_TYPE` is the
+coarser environment split the shell uses — `linux`, `macos` or `hpc` — and
+picks `shell/profile.d/<type>.sh`.
 
 Hosts:
 
@@ -17,7 +19,7 @@ Hosts:
 | tango | Artix Linux laptop | Same set as lettera, no host files. |
 | hestia | Office iMac, macOS | See `docs/imac-setup.md`; installs from `Brewfile.work`. |
 | writerdeck | Raspberry Pi Zero 2W | Stows `nvim_micro` instead of `nvim`. |
-| mcgill workstations | Shared Linux hosts over ssh | `shell/profile` skips the desktop parts on `*mcgill*`. |
+| mcgill workstations | BIC Linux hosts, used remotely | Profile `workstation`: no X11, no dwm glue. `shell/profile` skips the desktop parts on `*mcgill*`. |
 | rorqual, trillium | Alliance clusters (Slurm) | Type `hpc`: `nvim_hpc` instead of `nvim`, no GUI packages. `$CC_CLUSTER` gates the shell. |
 
 The window manager is a separate repo at `~/Repos/dwm`; its `config.h` is
@@ -94,7 +96,7 @@ into those directories lands in the repo.
 
     git clone git@github.com:soffiafdz/dotfiles.git ~/Repos/dotfiles
     cd ~/Repos/dotfiles
-    ./bootstrap -f linux-desktop
+    ./bootstrap -f linux
     chsh -s "$(command -v zsh)"
 
 Then build the window manager: `git clone git@github.com:soffiafdz/dwm.git
@@ -114,11 +116,20 @@ below. `docs/software-setup.md` lists the packages to install and
 `bin/.local/bin/pinentry-auto` or the Homebrew pinentry-mac. Full walkthrough in
 `docs/imac-setup.md`.
 
-### Writerdeck
+### Writerdeck (calliope)
 
     ./bootstrap -f writerdeck
 
-`nvim_micro` in place of `nvim`, no desktop packages, no `bin`, no `atuin`.
+`nvim_micro` in place of `nvim`, plus ssh, yazi and fzf. No desktop packages,
+no `bin`, no `atuin`.
+
+### BIC workstations
+
+    ./bootstrap -f workstation
+
+Remote-only hosts: editor, shell and file tools, nothing graphical. The old
+local dwm session on phebe is deprecated; unstow `x11` and `bin` where they
+are still linked.
 
 ### HPC (Alliance clusters)
 

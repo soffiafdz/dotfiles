@@ -1,0 +1,12 @@
+# BIC workstations (phebe, portia, banquo, ...), used remotely over ssh.
+# Stowed on top of `common`.
+# No X11, no dwm glue, no GUI: the desktop setup here is deprecated.
+# Environment differences live in the *mcgill* cases in shell/profile,
+# shell/aliasrc and .zshrc.
+nvim
+tmux
+fzf
+yazi
+atuin
+radian
+ssh

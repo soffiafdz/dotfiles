@@ -1,4 +1,4 @@
-# Artix/Arch desktops and laptops: janus, lettera, tango.
+# Artix/Arch desktops and laptops with a local X session: janus, lettera, tango.
 # Stowed on top of `common`.
 nvim
 bin

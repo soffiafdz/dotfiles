@@ -41,7 +41,10 @@ elif [ -n "${CC_CLUSTER:-}" ]; then
 elif [ "$(uname -s)" = "Darwin" ]; then
 	TYPE="macos"
 else
-	TYPE="linux-desktop"
+	case "$(uname -n)" in
+	*mcgill*) TYPE="workstation" ;;   # BIC hosts: remote, no X session
+	*) TYPE="linux" ;;
+	esac
 fi
 
 [ -f "$DOT_DIR/profiles/$TYPE" ] || usage
