@@ -259,6 +259,11 @@ cd yay && makepkg -si
 ```bash
 cd ~/Developer/dotfiles && stow -t ~ <package>
 # Repeat for: zsh, nvim, kitty, git, tmux, etc.
+
+# bin ships files under ~/.local and MUST use --no-folding, or stow turns
+# ~/.local into a symlink into this repo and every program writing to
+# ~/.local/{share,state} writes into your dotfiles. See imac-setup.md §5.
+stow --no-folding -t ~ bin
 ```
 
 ### Compile dwm

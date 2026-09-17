@@ -120,9 +120,13 @@ cd ~/Developer/dotfiles
 # -t "$HOME" is required: stow defaults to the parent dir, which here
 # would be ~/Developer, not ~
 stow -nv -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv atuin bin     # dry run
+  git ssh tmux nvim yazi sioyek radian mpv atuin          # dry run
 stow -v -t "$HOME" kitty aerospace karabiner zsh zprofile shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv atuin bin
+  git ssh tmux nvim yazi sioyek radian mpv atuin
+
+# bin MUST use --no-folding -- see the warning below
+stow -nv --no-folding -t "$HOME" bin                      # dry run
+stow -v --no-folding -t "$HOME" bin
 ```
 
 Deliberately not stowed on macOS:
@@ -141,6 +145,35 @@ the scripts in it are dwm/X11 helpers that will never run here.
 Stow folds whole directories into a single symlink, so `~/.config/kitty` becomes
 a link to the repo. Anything you drop in that directory lands *inside the repo* —
 which is why `local.conf` and `config.local` are gitignored (§6, §8).
+
+### Why `bin` needs `--no-folding`
+
+`bin` is the one package that ships files under `~/.local`. If `~/.local` does
+not exist yet, folding makes `~/.local` itself a symlink to `bin/.local` — and
+then *every* program writing to `~/.local/share` or `~/.local/state` writes into
+this repo. That is not hypothetical: it happened on this machine and grew to
+1.4G of nvim plugins, tool binaries and pipx venvs, including the plaintext
+`atuin/key` and the full shell-history DB, all one `git add -A` from being
+pushed.
+
+`--no-folding` makes stow create real directories and symlink each file
+individually, so `~/.local/{share,state}` stay real directories that stow never
+touches. `.gitignore` carries a backstop for `bin/.local/{share,state,cache}`.
+
+Verify after stowing — all four must be real directories, not symlinks:
+
+```sh
+for p in ~/.local ~/.local/bin ~/.local/share ~/.local/state; do
+  [ -L "$p" ] && echo "FOLDED: $p" || echo "ok: $p"
+done
+```
+
+If it has already folded, unfold it by removing the `~/.local` symlink (the
+symlink only — the data lives in the repo), recreating `~/.local/bin`, moving
+`bin/.local/{share,state}` back to `~/.local/`, then re-stowing with
+`--no-folding`. Afterwards run `pipx reinstall-all`: pipx bakes absolute paths
+into its venv shebangs, so anything installed while folded points at the old
+in-repo path and breaks.
 
 ## 6. Shell
 

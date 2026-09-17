@@ -12,3 +12,15 @@ gnupg/.config/gnupg/pubring.kbx~
 gnupg/.config/gnupg/random_seed
 gnupg/.config/gnupg/trustdb.gpg
 gnupg/.config/gnupg/crls.d
+
+# XDG runtime data must never be tracked. Stow's directory folding once
+# symlinked ~/.local straight into bin/.local, so every program writing to
+# ~/.local/{share,state} wrote into this repo (1.4G, incl. the atuin key).
+# Fixed by stowing bin with --no-folding; these are a backstop if it recurs.
+bin/.local/share/
+bin/.local/state/
+bin/.local/cache/
+
+# App-written runtime state inside stowed config dirs
+karabiner/.config/karabiner/automatic_backups/
+zsh/.config/zsh/.zsh_sessions/
