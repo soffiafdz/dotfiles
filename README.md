@@ -89,8 +89,8 @@ plain symlinks where GNU Stow is not installed (clusters).
     ./bootstrap -f macos   # force a type
     ./bootstrap -D -f hpc  # unstow that type
 
-`gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program writes
-into those directories lands in the repo.
+`bin`, `gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program
+writes into those directories lands in the repo.
 
 ### Linux (Artix, runit)
 

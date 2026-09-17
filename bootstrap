@@ -65,10 +65,12 @@ for pkg in $packages; do
 		continue
 	fi
 
-	# gnupg must never fold: a folded ~/.config/gnupg puts the keyring in
-	# the repo. hpc holds a machine-local account file, same reasoning.
+	# Never fold these: a folded target directory becomes a symlink into
+	# the repo, so everything a program writes there lands in git. It cost
+	# 1.4G and the atuin key through bin/.local once; gnupg would take the
+	# keyring; hpc holds the machine-local account file.
 	case "$pkg" in
-	gnupg | hpc) fold="--no-folding" ;;
+	bin | gnupg | hpc) fold="--no-folding" ;;
 	*) fold="" ;;
 	esac
 
