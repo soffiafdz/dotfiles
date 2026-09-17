@@ -30,6 +30,33 @@ if [ ! -s "$acct" ]; then
 	fi
 fi
 
+# --- Hand bash over to zsh ------------------------------------------------
+# The clusters' login shell is bash and chsh does not work there. The stock
+# ~/.bashrc sources everything in ~/.bashrc.d, so one file there is enough.
+# Interactive shells only: scp, rsync, `ssh host cmd` and job scripts must
+# keep their plain bash.
+mkdir -p "$HOME/.bashrc.d"
+handoff="$HOME/.bashrc.d/10-zsh.sh"
+if [ ! -f "$handoff" ]; then
+	cat > "$handoff" <<'HANDOFF'
+# Start zsh for interactive shells (login shell cannot be changed here).
+case $- in
+*i*)
+	if [ -z "${ZSH_VERSION:-}" ] && [ -t 1 ] && command -v zsh >/dev/null 2>&1; then
+		exec zsh -l
+	fi
+	;;
+esac
+HANDOFF
+	echo "bash handoff: $handoff"
+fi
+
+# ~/.zshenv comes from the zsh package and sets ZDOTDIR; without it zsh runs
+# zsh-newuser-install and none of these dotfiles load.
+if [ ! -e "$HOME/.zshenv" ]; then
+	echo "!! ~/.zshenv missing: run ./bootstrap -f hpc first" >&2
+fi
+
 # --- Neovim (static build, no root needed) --------------------------------
 if [ ! -x "$PREFIX/opt/nvim/bin/nvim" ]; then
 	echo "installing neovim ($NVIM_VERSION)..."

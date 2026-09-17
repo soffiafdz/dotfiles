@@ -9,6 +9,13 @@ account file below is machine-local and must not land in the repo.
     ~/.local/bin/hpc-setup            one-time install on a login node
     ~/.local/share/hpc/templates/     sbatch templates
 
+The clusters' login shell is bash and `chsh` does not work there, so
+`hpc-setup` writes `~/.bashrc.d/10-zsh.sh` (machine-local, not in this repo):
+the stock `~/.bashrc` sources that directory, and it `exec`s zsh for
+interactive shells only, leaving scp, rsync, `ssh host cmd` and job scripts on
+plain bash. zsh then reads `~/.zshenv` from the `zsh` package, which sets
+`ZDOTDIR` and pulls in the rest.
+
 `shell/profile.d/hpc.sh` sources `env.sh` when `$CC_CLUSTER` is set, and exports
 `SBATCH_ACCOUNT` / `SALLOC_ACCOUNT` / `SRUN_ACCOUNT` from the account file, so
 no job script or `salloc` call needs `--account`.

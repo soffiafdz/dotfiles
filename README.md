@@ -142,6 +142,10 @@ quota that plugin trees eat.
     echo def-<pi> > ~/.config/hpc/account     # Slurm account for every job
     ~/.local/bin/hpc-setup                    # login node only: nvim, p10k, plugins
 
+`hpc-setup` also writes `~/.bashrc.d/10-zsh.sh`, which hands interactive bash
+sessions over to zsh: the clusters' login shell is bash and `chsh` does not
+work there.
+
 Login nodes have internet; compute nodes do not. Everything that downloads —
 `:Lazy sync`, `:TSUpdate`, `pip install` — happens on a login node. `hpc-setup`
 installs the static Neovim build into `~/.local/opt/nvim`, since the clusters
