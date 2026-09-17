@@ -1,6 +1,11 @@
 #!/bin/bash
 # Single-GPU job. Rorqual's GPU nodes carry NVIDIA H100s; check the wiki for
 # the current --gpus-per-node syntax and whether a whole node is required.
+#
+#     mkdir -p logs && sbatch gpu.sbatch
+#
+# Slurm does not create the --output directory: without logs/ the job starts
+# and dies immediately with "Unable to open file", leaving nothing to read.
 #SBATCH --job-name=gpu
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=8

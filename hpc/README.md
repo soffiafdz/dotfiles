@@ -38,6 +38,8 @@ no job script or `salloc` call needs `--account`.
 - Resources: ask for what a task really needs. Jobs of 3 hours or less are
   eligible for more nodes and start sooner; `seff <jobid>` after the fact
   shows what was actually used.
+- Where things live: the repo and your config in `$HOME` (private, backed up);
+  data in `~/projects` (group-shared) or `~/scratch` (purged, not backed up).
 - I/O: work in `$SLURM_TMPDIR` (node-local, wiped at the end) and rsync results
   back to `~/scratch` or `~/projects`. The shared filesystems are slow with
   many small files, and the file-count quota is the one that bites.

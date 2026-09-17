@@ -33,5 +33,5 @@ return {
   { "vimwiki/vimwiki", enabled = false },
 
   -- Python venv picker: on the cluster, venvs come from `loadpy`.
-  { "linux-cultists/venv-selector.nvim", enabled = false },
+  { "linux-cultist/venv-selector.nvim", enabled = false },
 }

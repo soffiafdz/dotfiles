@@ -133,11 +133,12 @@ are still linked.
 
 ### HPC (Alliance clusters)
 
-Clone into project space, not `$HOME`: `$HOME` is small and has a file-count
-quota that plugin trees eat.
+Clone into `$HOME`: it is private, backed up and on every node, while
+`~/projects` is shared with the whole group. Only data belongs in
+`~/projects` or `~/scratch`.
 
-    git clone git@github.com:soffiafdz/dotfiles.git ~/projects/def-<pi>/$USER/dotfiles
-    cd ~/projects/def-<pi>/$USER/dotfiles
+    git clone git@github.com:soffiafdz/dotfiles.git ~/Repos/dotfiles
+    cd ~/Repos/dotfiles
     ./bootstrap -f hpc
     echo def-<pi> > ~/.config/hpc/account     # Slurm account for every job
     ~/.local/bin/hpc-setup                    # login node only: nvim, p10k, plugins
@@ -196,10 +197,11 @@ lists. `docs/` is documentation.
                        login shells: sources shell/profile
     shell/profile      environment: XDG dirs, PATH (~/.local/bin first, once),
                        EDITOR/TERMINAL/BROWSER, GNUPGHOME, SUDO_ASKPASS;
-                       on Linux tty1 with no X running: exec startx;
-                       then sources profile.d/$DOTFILES_TYPE.sh
+                       sets $DOTFILES_TYPE and sources
+                       profile.d/$DOTFILES_TYPE.sh, then on Linux tty1 with
+                       no X running: exec startx
     shell/profile.d/   type-specific environment: hpc.sh (Slurm account,
-                       ~/.config/hpc/env.sh), and linux.sh / darwin.sh if
+                       ~/.config/hpc/env.sh), and linux.sh / macos.sh if
                        they are ever needed
     ~/.config/zsh/.zshrc
                        p10k instant prompt, completion (cache in ~/.cache/zsh),

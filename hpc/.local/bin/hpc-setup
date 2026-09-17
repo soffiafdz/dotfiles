@@ -20,8 +20,9 @@ mkdir -p "$PREFIX/bin" "$PREFIX/opt" "$ZSH_SHARE" "${XDG_CONFIG_HOME:-$HOME/.con
 # --- Slurm account --------------------------------------------------------
 acct="${XDG_CONFIG_HOME:-$HOME/.config}/hpc/account"
 if [ ! -s "$acct" ]; then
-	# def-<pi> shows up as a group; take the first one if it is obvious.
-	guess="$(id -Gn | tr ' ' '\n' | grep -m1 '^def-' || true)"
+	# def-<pi> shows up as a group, alongside def-<pi>_cpu and _gpu in
+	# no guaranteed order. Only the unsuffixed one is a valid account.
+	guess="$(id -Gn | tr ' ' '\n' | grep -m1 '^def-[^_]*$' || true)"
 	if [ -n "$guess" ]; then
 		echo "$guess" > "$acct"
 		echo "account: $guess (edit $acct to change)"
@@ -102,6 +103,6 @@ cat <<'MSG'
 
 done. Reminders:
   - log out and back in (or exec zsh -l) to pick up the hpc profile
-  - keep the repo and big data in ~/projects or ~/scratch, not $HOME
+  - the repo belongs in $HOME; only data goes in ~/projects or ~/scratch
   - plugin installs and pip installs only work on login nodes
 MSG

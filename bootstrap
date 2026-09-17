@@ -103,7 +103,9 @@ for pkg in $packages; do
 				if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
 					continue
 				fi
-				if [ -e "$dst" ]; then
+				# -e is false for a dangling link, and ln would then
+				# fail hard under set -e; -L catches those too.
+				if [ -e "$dst" ] || [ -L "$dst" ]; then
 					echo "  !! exists, skipped: $dst" >&2
 					continue
 				fi

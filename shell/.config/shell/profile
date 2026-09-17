@@ -79,6 +79,24 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # 	|| ! pidof -s Xorg >/dev/null 2>&1 \
 # 	|| exec startx "$XINITRC"
 
+# Machine type: one of linux, macos, hpc. $CC_CLUSTER is set on every Digital
+# Research Alliance of Canada cluster. Type-specific environment lives in
+# profile.d/<type>.sh; host-specific bits stay in the case below.
+# Must come before that case: its last branch execs startx on tty1, which
+# replaces the shell and would skip everything after it.
+if [ -n "${CC_CLUSTER:-}" ]; then
+	DOTFILES_TYPE="hpc"
+elif [ "$(uname -s)" = "Darwin" ]; then
+	DOTFILES_TYPE="macos"
+else
+	DOTFILES_TYPE="linux"
+fi
+export DOTFILES_TYPE
+
+_profile_d="${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile.d/${DOTFILES_TYPE}.sh"
+[ -r "$_profile_d" ] && . "$_profile_d"
+unset _profile_d
+
 case "$(uname -n)" in
 *mcgill*)
   export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
@@ -102,19 +120,3 @@ noctua*)
     exec startx "$XINITRC"
   ;;
 esac
-
-# Machine type: one of linux, darwin, hpc. $CC_CLUSTER is set on every
-# Digital Research Alliance of Canada cluster. Type-specific environment
-# lives in profile.d/<type>.sh; host-specific bits stay in the case above.
-if [ -n "$CC_CLUSTER" ]; then
-	DOTFILES_TYPE="hpc"
-elif [ "$(uname -s)" = "Darwin" ]; then
-	DOTFILES_TYPE="darwin"
-else
-	DOTFILES_TYPE="linux"
-fi
-export DOTFILES_TYPE
-
-_profile_d="${XDG_CONFIG_HOME:-$HOME/.config}/shell/profile.d/${DOTFILES_TYPE}.sh"
-[ -r "$_profile_d" ] && . "$_profile_d"
-unset _profile_d

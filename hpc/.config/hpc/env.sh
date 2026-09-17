@@ -9,8 +9,10 @@
 alias sq='squeue -u "$USER" -o "%.10i %.9P %.24j %.2t %.10M %.10L %.4C %.8m %R"'
 alias sqs='squeue -u "$USER" --start'          # estimated start times
 alias sqa='squeue -u "$USER" --array'          # one line per array task
-alias scq='scancel -u "$USER"'                 # cancel everything (asks first)
-alias sj='sacct -X -o JobID,JobName%24,State,Elapsed,ReqMem,MaxRSS,CPUTime'
+alias scq='scancel -i -u "$USER"'              # cancel everything, -i asks per job
+# No -X and no MaxRSS here: MaxRSS is recorded per step, so it is always blank
+# on allocation lines. Use `seff <jobid>` for what a job actually used.
+alias sj='sacct -X -o JobID,JobName%24,State,Elapsed,ReqMem,CPUTime'
 alias sme='sshare -U -u "$USER"'               # fair-share / priority
 
 # Disk and file-count quotas: the file count bites before the space does.
@@ -38,7 +40,9 @@ loadr() { module load StdEnv/2023 "r/${1:-4.4.0}"; }
 loadpy() {
 	module load StdEnv/2023 "python/${PYVER:-3.11}"
 	if [ -z "${1:-}" ]; then
-		_venv="${SLURM_TMPDIR:-/tmp}/venv"
+		# Per-user path: /tmp is shared on login nodes, and activating
+		# someone else's stale venv is worse than building a new one.
+		_venv="${SLURM_TMPDIR:-/tmp}/venv-$USER"
 	else
 		_venv="$HOME/venvs/$1"
 	fi
@@ -62,5 +66,16 @@ newjob() {
 	unset _tpl_dir
 }
 
-# jobout <jobid> - follow a running job's output.
-jobout() { tail -f "$(ls -t ./*"$1"*.out 2>/dev/null | head -1)"; }
+# jobout <jobid> - follow a running job's output. Looks in ./logs too, since
+# that is where the templates write.
+jobout() {
+	_log="$(ls -t ./*"$1"*.out ./logs/*"$1"*.out 2>/dev/null | head -1)"
+	if [ -z "$_log" ]; then
+		echo "no .out file matching '$1' here or in ./logs" >&2
+		unset _log
+		return 1
+	fi
+	echo "$_log"
+	tail -f "$_log"
+	unset _log
+}
