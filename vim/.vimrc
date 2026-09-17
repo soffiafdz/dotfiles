@@ -1,58 +1,18 @@
 " init.vim – Vim 9.0 configuration
+"
+" One config everywhere. Plugins and their settings live in
+" ~/.vim/rc/plugins.vim, loaded only when vim-plug is installed and this is
+" not an Alliance cluster ($CC_CLUSTER): compute nodes have no network and
+" $HOME has a file-count quota. Everything in this file is plain vim.
 
-" ===============================
-" Plugin management (vim-plug)
-" ===============================
-call plug#begin('~/.vim/plugged')
-
-" Color schemes
-Plug 'rafi/awesome-vim-colorschemes'
-
-" Linting & formatting
- Plug 'dense-analysis/ale'
-
-" Python & R support
-Plug 'jalvesaq/Nvim-R'
-Plug 'Vimjas/vim-python-pep8-indent'
-
-" Comments, Git, CSV
-Plug 'scrooloose/nerdcommenter'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-Plug 'mechatroner/rainbow_csv'
-
-" Statusline/tabline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" FZF fuzzy finder + Vim wrapper
- Plug 'junegunn/fzf', { 'do': { -> fzf#install()  }  }
- Plug 'junegunn/fzf.vim'
-
-" Distraction-free writing
-Plug 'junegunn/goyo.vim'
-
-" Markdown support
-Plug 'godlygeek/tabular'
-Plug 'preservim/vim-markdown', { 'for': ['markdown'] }
-Plug 'iamcco/markdown-preview.nvim', {
-  \ 'do': 'mkdp#util#install()',
-  \ 'for': ['markdown']
-  \ }
-
-" LaTeX
-Plug 'lervag/vimtex', { 'for': 'tex' }
-
-" Helpers & enhancements
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'jiangmiao/auto-pairs'
-Plug 'Yggdroot/indentLine'
-
-" Vimwiki
-Plug 'vimwiki/vimwiki'
-
-call plug#end()
+let s:hpc = !empty($CC_CLUSTER)
+let s:plugged = 0
+let s:has_plug = filereadable(expand('~/.vim/autoload/plug.vim'))
+let s:has_cfg = filereadable(expand('~/.vim/rc/plugins.vim'))
+if !s:hpc && s:has_plug && s:has_cfg
+  let s:plugged = 1
+  source ~/.vim/rc/plugins.vim
+endif
 
 " ===============================
 " Core settings
@@ -65,7 +25,11 @@ let mapleader = " "
 set t_Co=256
 set termguicolors
 set background=dark
-colorscheme gruvbox
+" gruvbox is a plugin; fall back to a built-in scheme without it.
+for s:scheme in ['gruvbox', 'habamax', 'desert']
+  silent! execute 'colorscheme' s:scheme
+  if exists('g:colors_name') | break | endif
+endfor
 "
 " Transparent backgrounds
 hi! Normal       ctermbg=NONE guibg=NONE
@@ -159,152 +123,45 @@ augroup FiletypeSettings
   autocmd FileType vim        setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
 augroup END
 
-" ===============================
-" Plugin-specific settings
-" ===============================
-
-" Airline configuration
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'distinguished'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_left_sep          = ''
-let g:airline_left_alt_sep      = '|'
-let g:airline_right_sep         = ''
-let g:airline_right_alt_sep     = '|'
-
-" nvm-R
-let R_app = "radian"
-let R_cmd = "R"
-let R_hl_term = 0
-let R_bracketed_paste = 1"
-
-" Markdown-preview settings
-let g:mkdp_auto_start = 0
-let g:mkdp_open_to_the_world = 0
-
-" VimTeX settings
-let g:vimtex_view_method = 'zathura'
-let g:vimtex_compiler_method = 'latexmk'
-
-"" ===============================
-" FZF mappings
-" ===============================
-nnoremap <silent> <leader>ff :Files<CR>
-nnoremap <silent> <leader>fg :GFiles?<CR>
-nnoremap <silent> <leader>fb :Buffers<CR>
-nnoremap <silent> <leader>fh :Helptags<CR>
 
 " ===============================
-" Vimwiki configuration
+" Without plugins: statusline and finder
 " ===============================
-let g:vimwiki_list = [{
-    \ 'path': '~/Documents/palimpsest/wiki',
-    \ 'syntax': 'markdown',
-    \ 'ext': '.md',
-    \ 'name': 'Palimpsest',
-    \}]
-let g:vimwiki_ext2syntax = {'.md': 'markdown'}
+if !s:plugged
+  " airline's job, in one line of built-in vim
+  set statusline=%<%f\ %h%m%r%=%{&filetype}\ \ %-14.(%l,%c%V%)\ %P
+  " fzf.vim's job: :find over a recursive path, wildmenu does the rest
+  set path+=**
+  nnoremap <leader>ff :find<space>
+  nnoremap <leader>fb :buffers<CR>:buffer<space>
+  nnoremap <leader>fg :grep! -rn --exclude-dir=.git<space>
+endif
 
 " ===============================
-" ALE settings
+" Send code to a tmux pane (stands in for Nvim-R)
 " ===============================
-let g:ale_linters_explicit = 1
-let g:ale_fix_on_save     = 1
-let g:ale_linters = {
-    \  'python'     : ['flake8','mypy','pylint'],
-    \  'javascript' : ['eslint'],
-    \  'html'       : ['tidy','htmlhint'],
-    \  'css'        : ['stylelint'],
-    \  'sh'         : ['shellcheck'],
-    \  'markdown'   : ['markdownlint','mdl'],
-    \  'r'          : ['lintr'],
-    \}
-let g:ale_fixers = {
-    \  '*'          : ['remove_trailing_lines','trim_whitespace'],
-    \  'python'     : ['black','isort'],
-    \  'javascript' : ['prettier'],
-    \  'css'        : ['prettier'],
-    \  'markdown'   : ['prettier'],
-    \  'r'          : ['styler'],
-    \}
+" Open R in a second tmux pane, then send lines to it. g:tmux_target follows
+" tmux's target syntax; '.+' is the next pane in the current window.
+let g:tmux_target = get(g:, 'tmux_target', '.+')
 
-" ===============================
-" Goyo implementation
-" ===============================
-
-nnoremap <Leader>zz :Goyo<CR>
-let g:goyo_width  = 80
-let g:goyo_height = '85%'
-let g:goyo_linenr = 0
-
-augroup GoyoIntegration
-  autocmd!
-  autocmd User GoyoEnter nested call s:GoyoEnterSetup()
-  autocmd User GoyoLeave nested call s:GoyoLeaveSetup()
-augroup END
-
-function! s:GoyoEnterSetup()
-  " 1) Hide TMUX, Airline status AND tabline
-  if executable('tmux') && strlen($TMUX)
-    silent !tmux set status off
-    silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+function! s:TmuxSend(text) abort
+  if empty($TMUX)
+    echohl WarningMsg | echo 'tmux-send: not inside tmux' | echohl None
+    return
   endif
-  silent! AirlineDisable
-  let g:airline#extensions#tabline#enabled = 0
-  set showtabline=0
-
-  " 2) Disable linting, indent guides, and colorizer
-  let b:ale_enabled        = 0
-  let b:indentLine_enabled = 0
-  silent! IndentLinesDisable
-  exec 'ColorizerDetachFromBuffer'
-
-  " 3) Hide all columns and signs
-  setlocal signcolumn=no
-  setlocal colorcolumn=
-
-  " 4) Re-apply transparency in all Goyo panes
-  hi! Normal       ctermbg=NONE guibg=NONE
-  hi! LineNr       ctermbg=NONE guibg=NONE
-  hi! CursorLineNr ctermbg=NONE guibg=NONE
-  hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE
-
-  " 5) Simplify buffer options
-  setlocal nowrap textwidth=0 nolist nospell listchars=
-  setlocal nocursorline
-  setlocal conceallevel=0 concealcursor=
-  setlocal foldmethod=manual nofoldenable
+  let l:t = shellescape(g:tmux_target)
+  call system('tmux send-keys -t ' . l:t . ' -l ' . shellescape(a:text))
+  call system('tmux send-keys -t ' . l:t . ' Enter')
 endfunction
 
-function! s:GoyoLeaveSetup()
-  " 1) Restore TMUX, Airline and tabline
-  if executable('tmux') && strlen($TMUX)
-    silent !tmux set status on
-    silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
-  endif
-  silent! AirlineEnable
-  let g:airline#extensions#tabline#enabled = 1
-  set showtabline=2
-
-  " 2) Re-enable linting, indent guides, and colorizer
-  let b:ale_enabled        = 1
-  silent! IndentLinesEnable
-  let b:indentLine_enabled = 1
-  exec 'ColorizerAttachToBuffer'
-
-  " 3) Restore signs and guide
-  setlocal signcolumn=yes
-  setlocal colorcolumn=80
-
-  " 4) Keep transparency
-  hi! Normal       ctermbg=NONE guibg=NONE
-  hi! LineNr       ctermbg=NONE guibg=NONE
-  hi! CursorLineNr ctermbg=NONE guibg=NONE
-  hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE
-
-  " 5) Restore prose editing UI
-  setlocal wrap textwidth=80 formatoptions=tcqrn1
-  setlocal list listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
-  setlocal spell cursorline
-  setlocal foldmethod=indent foldenable
+function! s:TmuxSendRange() abort
+  call s:TmuxSend(join(getline(line("'<"), line("'>")), "\n"))
 endfunction
+
+" <leader>rr opens a pane running R; rl sends the line, r the visual
+" selection, rf sources the file, rq quits R.
+nnoremap <silent> <leader>rr :call system('tmux split-window -h -d "module load StdEnv/2023 r/4.4.0 2>/dev/null; exec R --no-save"')<CR>
+nnoremap <silent> <leader>rl :call <SID>TmuxSend(getline('.'))<CR>j
+vnoremap <silent> <leader>r  :<C-u>call <SID>TmuxSendRange()<CR>
+nnoremap <silent> <leader>rf :call <SID>TmuxSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
+nnoremap <silent> <leader>rq :call <SID>TmuxSend('q()')<CR>

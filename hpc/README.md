@@ -7,6 +7,7 @@ account file below is machine-local and must not land in the repo.
     ~/.config/hpc/env.sh              Slurm aliases and functions
     ~/.config/hpc/account             your allocation, e.g. def-pi (untracked)
     ~/.local/bin/hpc-setup            one-time install on a login node
+                                      (zsh prompt, bash handoff, account)
     ~/.local/share/hpc/templates/     sbatch templates
 
 The clusters' login shell is bash and `chsh` does not work there, so
@@ -48,7 +49,19 @@ no job script or `salloc` call needs `--account`.
 - `--cpus-per-task` is threads, `--ntasks` is MPI ranks. Mixing them up is the
   classic SGE-to-Slurm mistake.
 
+## Editing
+
+vim, not nvim. `~/.vimrc` detects `$CC_CLUSTER` and loads no plugins: built-in
+statusline, `:find` with `path+=**` for `<leader>ff`, and `<leader>r` mappings
+that send code to R running in another tmux pane (`<leader>rr` opens one,
+`rl` line, `r` visual selection, `rf` sources the file). Set `g:tmux_target`
+if the pane is not the next one in the window.
+
 ## Not here
+
+No nvim: a plugin tree of tens of thousands of files is a poor trade against
+the `$HOME` file quota for an editor used to fix job scripts and read logs.
+Write code on your workstation, run it here.
 
 No conda or micromamba: `.zshrc` returns early when `$CC_CLUSTER` is set, so
 the mamba block never runs. Use modules plus a virtualenv, or put a conda

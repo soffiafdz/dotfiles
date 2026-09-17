@@ -68,9 +68,10 @@ for pkg in $packages; do
 	# Never fold these: a folded target directory becomes a symlink into
 	# the repo, so everything a program writes there lands in git. It cost
 	# 1.4G and the atuin key through bin/.local once; gnupg would take the
-	# keyring; hpc holds the machine-local account file.
+	# keyring; hpc holds the machine-local account file; vim would put
+	# ~/.vim/plugged and the swap/undo dirs in the repo.
 	case "$pkg" in
-	bin | gnupg | hpc) fold="--no-folding" ;;
+	bin | gnupg | hpc | vim) fold="--no-folding" ;;
 	*) fold="" ;;
 	esac
 

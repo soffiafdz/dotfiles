@@ -1,8 +1,8 @@
 # Digital Research Alliance of Canada clusters: rorqual, trillium.
 # Stowed on top of `common`.
 # No atuin (history would sync off the cluster), no bin (X11 glue),
-# no gnupg, nothing GUI. nvim_hpc replaces nvim.
-nvim_hpc
+# no gnupg, nothing GUI, and no nvim: vim is installed on the clusters and
+# ~/.vimrc runs plugin-free when $CC_CLUSTER is set. `vim` comes from common.
 hpc
 tmux
 fzf

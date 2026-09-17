@@ -5,11 +5,11 @@
 #     ./bootstrap -f hpc && ~/.local/bin/hpc-setup
 #
 # Login nodes have internet; compute nodes do not. Everything that downloads
-# has to happen here.
+# has to happen here. No editor is installed: the clusters ship vim, and
+# ~/.vimrc runs plugin-free when $CC_CLUSTER is set.
 
 set -eu
 
-NVIM_VERSION="${NVIM_VERSION:-stable}"
 PREFIX="$HOME/.local"
 ZSH_SHARE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh"
 
@@ -58,20 +58,6 @@ if [ ! -e "$HOME/.zshenv" ]; then
 	echo "!! ~/.zshenv missing: run ./bootstrap -f hpc first" >&2
 fi
 
-# --- Neovim (static build, no root needed) --------------------------------
-if [ ! -x "$PREFIX/opt/nvim/bin/nvim" ]; then
-	echo "installing neovim ($NVIM_VERSION)..."
-	tmp="$(mktemp -d)"
-	url="https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/nvim-linux-x86_64.tar.gz"
-	curl -fsSL "$url" -o "$tmp/nvim.tar.gz"
-	tar xzf "$tmp/nvim.tar.gz" -C "$tmp"
-	rm -rf "$PREFIX/opt/nvim"
-	mv "$tmp/nvim-linux-x86_64" "$PREFIX/opt/nvim"
-	rm -rf "$tmp"
-	ln -sf "$PREFIX/opt/nvim/bin/nvim" "$PREFIX/bin/nvim"
-	echo "neovim: $("$PREFIX/bin/nvim" --version | head -1)"
-fi
-
 # --- zsh prompt and highlighting ------------------------------------------
 clone() {
 	if [ -d "$2/.git" ]; then
@@ -91,18 +77,11 @@ if command -v module >/dev/null 2>&1; then
 	echo "R library root: ~/R (set R_LIBS_USER per version, or let R prompt)"
 fi
 
-# --- Neovim plugins -------------------------------------------------------
-# Must run here, with network. Headless so it exits on its own.
-if command -v "$PREFIX/bin/nvim" >/dev/null 2>&1; then
-	echo "syncing neovim plugins..."
-	"$PREFIX/bin/nvim" --headless "+Lazy! sync" +qa || \
-		echo "!! plugin sync failed; run :Lazy sync by hand on a login node" >&2
-fi
-
 cat <<'MSG'
 
 done. Reminders:
   - log out and back in (or exec zsh -l) to pick up the hpc profile
   - the repo belongs in $HOME; only data goes in ~/projects or ~/scratch
-  - plugin installs and pip installs only work on login nodes
+  - pip installs only work on login nodes
+  - vim runs plugin-free here; <leader>rr opens R in a tmux pane
 MSG

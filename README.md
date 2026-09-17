@@ -20,7 +20,7 @@ Hosts:
 | hestia | Office iMac, macOS | See `docs/imac-setup.md`; installs from `Brewfile.work`. |
 | writerdeck | Raspberry Pi Zero 2W | Stows `nvim_micro` instead of `nvim`. |
 | mcgill workstations | BIC Linux hosts, used remotely | Profile `workstation`: no X11, no dwm glue. `shell/profile` skips the desktop parts on `*mcgill*`. |
-| rorqual, trillium | Alliance clusters (Slurm) | Type `hpc`: `nvim_hpc` instead of `nvim`, no GUI packages. `$CC_CLUSTER` gates the shell. |
+| rorqual, trillium | Alliance clusters (Slurm) | Profile `hpc`: vim rather than nvim, no GUI packages. `$CC_CLUSTER` gates the shell and `~/.vimrc`. |
 
 The window manager is a separate repo at `~/Repos/dwm`; its `config.h` is
 where every desktop keybinding lives, and `docs/keybindings.txt` mirrors it.
@@ -89,8 +89,8 @@ plain symlinks where GNU Stow is not installed (clusters).
     ./bootstrap -f macos   # force a type
     ./bootstrap -D -f hpc  # unstow that type
 
-`bin`, `gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program
-writes into those directories lands in the repo.
+`bin`, `gnupg`, `hpc` and `vim` are always stowed `--no-folding`, so nothing a
+program writes into those directories lands in the repo.
 
 ### Linux (Artix, runit)
 
@@ -147,10 +147,16 @@ Clone into `$HOME`: it is private, backed up and on every node, while
 sessions over to zsh: the clusters' login shell is bash and `chsh` does not
 work there.
 
-Login nodes have internet; compute nodes do not. Everything that downloads —
-`:Lazy sync`, `:TSUpdate`, `pip install` — happens on a login node. `hpc-setup`
-installs the static Neovim build into `~/.local/opt/nvim`, since the clusters
-ship no nvim. See `hpc/README.md` for the aliases and job templates.
+The editor there is **vim, not nvim**. The clusters ship vim, and `~/.vimrc`
+skips vim-plug and every plugin when `$CC_CLUSTER` is set, falling back to a
+built-in statusline, `:find` over `path+=**`, and `<leader>r` mappings that
+send lines to R in a tmux pane. Installing nvim would mean a static tarball
+plus a plugin tree of tens of thousands of files against the `$HOME` quota,
+for an editor used mainly to fix job scripts and read logs.
+
+Login nodes have internet; compute nodes do not, so `pip install` and anything
+else that downloads happens on a login node. See `hpc/README.md` for the
+aliases and job templates.
 
 ## Packages
 
@@ -173,7 +179,6 @@ ship no nvim. See `hpc/README.md` for the aliases and job templates.
 | `mpd`, `ncmpcpp` | `~/.config/...` | janus | Music daemon and client. mpd is started by `xprofile`. |
 | `mpv` | `~/.config/mpv` | Linux | Player with NVDEC and gpu-next; also the image viewer for yazi. |
 | `nvim` | `~/.config/nvim` | all but the Pi | LazyVim-based editor config, see Editors. |
-| `nvim_hpc` | `~/.config/nvim` | clusters | Thin layer over `nvim`: no mason, no formatters, no GUI. See its README. |
 | `nvim_micro` | `~/.config/nvim` | writerdeck | Thin layer over `nvim`, see its README. |
 | `picom` | `~/.config/picom` | janus | Compositor. glx backend, sync fence and no damage tracking for NVIDIA. |
 | `radian` | `~/.config/radian` | all | R console. |
@@ -182,7 +187,7 @@ ship no nvim. See `hpc/README.md` for the aliases and job templates.
 | `sioyek`, `zathura` | `~/.config/...` | all / Linux | PDF readers. Sioyek has the Zotero and SyncTeX setup, see docs. |
 | `ssh` | `~/.ssh/config` | all | Workstation hosts and jump config. Home hosts are in `config.local`. |
 | `tmux` | `~/.config/tmux` | all | gpakosz's tmux.conf plus `tmux.conf.local` with the actual settings. |
-| `vim` | `~/.vimrc` | all | Fallback editor. Autosaves on focus loss. |
+| `vim` | `~/.vimrc`, `~/.vim/rc` | all | Fallback editor, and the only editor on clusters. Plugins live in `~/.vim/rc/plugins.vim`, skipped when `$CC_CLUSTER` is set. Stow `--no-folding`. |
 | `x11` | `~/.config/x11` | Linux | `xinitrc`, `xprofile`, `xpipewire`, Xresources. |
 | `yazi` | `~/.config/yazi` | all | File manager, gruvbox flavor, openers. |
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | all | Login and interactive shell, see below. |
