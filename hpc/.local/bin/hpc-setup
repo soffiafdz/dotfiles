@@ -1,0 +1,80 @@
+#!/bin/sh
+# One-time setup on an Alliance login node. Run it after cloning the repo and
+# stowing the hpc profile:
+#
+#     ./bootstrap -f hpc && ~/.local/bin/hpc-setup
+#
+# Login nodes have internet; compute nodes do not. Everything that downloads
+# has to happen here.
+
+set -eu
+
+NVIM_VERSION="${NVIM_VERSION:-stable}"
+PREFIX="$HOME/.local"
+ZSH_SHARE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh"
+
+[ -n "${CC_CLUSTER:-}" ] || echo "warning: \$CC_CLUSTER is unset; is this a cluster?" >&2
+
+mkdir -p "$PREFIX/bin" "$PREFIX/opt" "$ZSH_SHARE" "${XDG_CONFIG_HOME:-$HOME/.config}/hpc"
+
+# --- Slurm account --------------------------------------------------------
+acct="${XDG_CONFIG_HOME:-$HOME/.config}/hpc/account"
+if [ ! -s "$acct" ]; then
+	# def-<pi> shows up as a group; take the first one if it is obvious.
+	guess="$(id -Gn | tr ' ' '\n' | grep -m1 '^def-' || true)"
+	if [ -n "$guess" ]; then
+		echo "$guess" > "$acct"
+		echo "account: $guess (edit $acct to change)"
+	else
+		echo "!! write your allocation into $acct, e.g. echo def-pi > $acct" >&2
+	fi
+fi
+
+# --- Neovim (static build, no root needed) --------------------------------
+if [ ! -x "$PREFIX/opt/nvim/bin/nvim" ]; then
+	echo "installing neovim ($NVIM_VERSION)..."
+	tmp="$(mktemp -d)"
+	url="https://github.com/neovim/neovim/releases/download/$NVIM_VERSION/nvim-linux-x86_64.tar.gz"
+	curl -fsSL "$url" -o "$tmp/nvim.tar.gz"
+	tar xzf "$tmp/nvim.tar.gz" -C "$tmp"
+	rm -rf "$PREFIX/opt/nvim"
+	mv "$tmp/nvim-linux-x86_64" "$PREFIX/opt/nvim"
+	rm -rf "$tmp"
+	ln -sf "$PREFIX/opt/nvim/bin/nvim" "$PREFIX/bin/nvim"
+	echo "neovim: $("$PREFIX/bin/nvim" --version | head -1)"
+fi
+
+# --- zsh prompt and highlighting ------------------------------------------
+clone() {
+	if [ -d "$2/.git" ]; then
+		git -C "$2" pull --quiet --ff-only || true
+	else
+		git clone --depth 1 "$1" "$2"
+	fi
+}
+clone https://github.com/romkatv/powerlevel10k.git "$ZSH_SHARE/powerlevel10k"
+clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
+	"$ZSH_SHARE/fast-syntax-highlighting"
+
+# --- R personal library ---------------------------------------------------
+# Version-specific, so a module upgrade does not mix compiled packages.
+if command -v module >/dev/null 2>&1; then
+	mkdir -p "$HOME/R"
+	echo "R library root: ~/R (set R_LIBS_USER per version, or let R prompt)"
+fi
+
+# --- Neovim plugins -------------------------------------------------------
+# Must run here, with network. Headless so it exits on its own.
+if command -v "$PREFIX/bin/nvim" >/dev/null 2>&1; then
+	echo "syncing neovim plugins..."
+	"$PREFIX/bin/nvim" --headless "+Lazy! sync" +qa || \
+		echo "!! plugin sync failed; run :Lazy sync by hand on a login node" >&2
+fi
+
+cat <<'MSG'
+
+done. Reminders:
+  - log out and back in (or exec zsh -l) to pick up the hpc profile
+  - keep the repo and big data in ~/projects or ~/scratch, not $HOME
+  - plugin installs and pip installs only work on login nodes
+MSG

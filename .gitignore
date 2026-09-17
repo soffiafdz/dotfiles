@@ -20,3 +20,6 @@ bin/.local/cache/
 # App-written runtime state inside stowed config dirs
 karabiner/.config/karabiner/automatic_backups/
 zsh/.config/zsh/.zsh_sessions/
+
+# Machine-local Slurm account
+hpc/.config/hpc/account
