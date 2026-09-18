@@ -43,6 +43,9 @@ brew "r"              # R language
 brew "just"           # Modern make alternative
 brew "tokei"          # Count lines of code by language
 brew "hyperfine"      # Benchmarking tool
+brew "shellcheck"     # Shell script linter
+brew "stylua"         # Lua formatter
+brew "ruff"           # Python linter/formatter
 
 # Documents and writing
 brew "pandoc"         # Document converter

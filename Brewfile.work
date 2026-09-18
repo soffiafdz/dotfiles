@@ -47,6 +47,9 @@ brew "micromamba"     # Conda environment manager
 brew "just"           # Modern make alternative
 brew "hyperfine"      # Benchmarking tool
 brew "tokei"          # Count lines of code by language
+brew "shellcheck"     # Shell script linter
+brew "stylua"         # Lua formatter
+brew "ruff"           # Python linter/formatter
 
 # Documents and writing
 brew "pandoc"         # Document converter
