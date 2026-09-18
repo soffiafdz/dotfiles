@@ -3,9 +3,6 @@
 #
 #     init_tmux            session named after the cluster ($CC_CLUSTER)
 #     init_tmux work       named session
-#     init_tmux -m work    a second, grouped view of an existing session:
-#                          same windows, independent current window, so you
-#                          can watch one window while working in another
 #
 # The cluster-specific part: a tmux server is per host, and rorqual.alliancecan.ca
 # round-robins across login nodes. A session started on rorqual3 is invisible
@@ -14,17 +11,15 @@
 
 set -eu
 
-MONITOR=0
 NAME=""
 
 usage() {
-	echo "usage: ${0##*/} [-m] [session]" >&2
+	echo "usage: ${0##*/} [session]" >&2
 	exit 2
 }
 
 while [ $# -gt 0 ]; do
 	case "$1" in
-	-m | --monitor) MONITOR=1 ;;
 	-h | --help) usage ;;
 	-*) echo "unknown option: $1" >&2; usage ;;
 	*)
@@ -54,16 +49,8 @@ HOST="$(uname -n)"
 STATE="${XDG_STATE_HOME:-$HOME/.local/state}/hpc"
 NODE_FILE="$STATE/tmux-$NAME.node"
 
-# Already here: attach, or open a grouped view.
 if tmux has-session -t "$NAME" 2>/dev/null; then
 	mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
-	if [ "$MONITOR" -eq 1 ]; then
-		# Grouped session: same windows, its own current window. Created
-		# detached, then entered, so this works from inside tmux too.
-		tmux has-session -t "$NAME-monitor" 2>/dev/null ||
-			tmux new-session -d -t "$NAME" -s "$NAME-monitor"
-		enter "$NAME-monitor"
-	fi
 	enter "$NAME"
 fi
 
@@ -80,11 +67,6 @@ if [ -r "$NODE_FILE" ]; then
 		*) exit 1 ;;
 		esac
 	fi
-fi
-
-if [ "$MONITOR" -eq 1 ]; then
-	echo "${0##*/}: no session '$NAME' to monitor; start it first" >&2
-	exit 1
 fi
 
 mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
