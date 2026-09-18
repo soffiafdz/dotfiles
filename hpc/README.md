@@ -34,6 +34,7 @@ no job script or `salloc` call needs `--account`.
 | `loadr [module]` | `$STDENV` + `$R_MODULE` |
 | `loadpy [name]` | `$PY_MODULE` + a virtualenv (node-local, or `~/venvs/<name>`) |
 | `newjob [template]` | copy an sbatch template here; no argument lists them |
+| `mkenv [name]` | this project's Python env: venv + `requirements.txt` here, micromamba + `environment.yml` on a workstation |
 | `init_tmux` (`_tmux`) | start or attach a session named after the cluster |
 | `jobout <jobid>` | follow a running job's output |
 
@@ -115,6 +116,15 @@ come from PyPI rather than the Alliance wheelhouse).
 
 Plugin stand-ins: built-in statusline, `:find` over `path+=**` (`<leader>ff`),
 `gcc`/`gc` comment toggle from `commentstring`, `<leader>u*` toggles.
+
+## Python environments across machines
+
+`mkenv` (in `shell/aliasrc`, so it exists everywhere) makes the command the
+same on every machine while the mechanism differs: module + virtualenv from
+`requirements.txt` here, micromamba from `environment.yml` on a workstation.
+Keep both files in the project; never copy an environment between machines,
+since libc, BLAS and CUDA all differ. `avail_wheels <pkg>` says what the
+Alliance wheelhouse has before you pin anything.
 
 ## Not here
 

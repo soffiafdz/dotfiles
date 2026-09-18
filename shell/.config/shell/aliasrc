@@ -146,3 +146,42 @@ wiki() {
     *)    echo "usage: wiki [sync|pull|push|<msg>]" ;;
   esac
 }
+
+# mkenv [name] - this project's Python environment, however this machine does
+# environments. Same command everywhere:
+#   cluster ($CC_CLUSTER): module + virtualenv in ~/venvs/<name>, populated
+#                          from requirements.txt with the Alliance wheels
+#   elsewhere:             micromamba env from environment.yml
+# The name defaults to the git repository's (or directory's) name. Never share
+# an environment between the two: different libc, BLAS and CUDA.
+mkenv() {
+  _env_name="${1:-$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")}"
+
+  if [ -n "${CC_CLUSTER:-}" ]; then
+    loadpy "$_env_name" || { unset _env_name; return 1; }
+    if [ -f requirements.txt ]; then
+      echo "mkenv: pip install --no-index -r requirements.txt"
+      pip install --no-index -q -r requirements.txt ||
+        echo "mkenv: some wheels are missing here; try avail_wheels <pkg>" >&2
+    fi
+  else
+    if ! command -v micromamba >/dev/null 2>&1; then
+      echo "mkenv: micromamba not installed on this machine" >&2
+      unset _env_name
+      return 1
+    fi
+    if micromamba env list | awk '{print $1}' | grep -qx "$_env_name"; then
+      micromamba activate "$_env_name"
+    elif [ -f environment.yml ]; then
+      micromamba create -y -n "$_env_name" -f environment.yml &&
+        micromamba activate "$_env_name"
+    else
+      echo "mkenv: no environment.yml here; creating a bare env" >&2
+      micromamba create -y -n "$_env_name" python &&
+        micromamba activate "$_env_name"
+    fi
+  fi
+
+  echo "mkenv: $_env_name -> $(command -v python3 2>/dev/null || echo 'no python3')"
+  unset _env_name
+}
