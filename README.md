@@ -148,7 +148,7 @@ cluster just to clone a public repo.
     cd ~/dotfiles
     ./bootstrap -f hpc
     echo def-<pi> > ~/.config/hpc/account     # Slurm account for every job
-    ~/.local/bin/hpc-setup                    # login node only: nvim, p10k, plugins
+    ~/.local/bin/hpc-setup                    # login node only: prompt, bash handoff
 
 `hpc-setup` also writes `~/.bashrc.d/10-zsh.sh`, which hands interactive bash
 sessions over to zsh: the clusters' login shell is bash and `chsh` does not
