@@ -219,7 +219,10 @@ augroup END
 " R.nvim runs radian in `tmux split-window -hf`; same here, with the same
 " localleader mappings, so the muscle memory carries over. On a cluster, load
 " the R module first (`loadr`) or let the split do it.
-let g:r_app = executable('radian') ? 'radian' : 'R --no-save'
+" Which R to run is decided inside the new pane, not here: a tmux pane starts
+" from the tmux server's environment, so a module loaded in this shell is not
+" there, and radian may live in a venv that is not active yet.
+let g:r_module = get(g:, 'r_module', 'StdEnv/2023 r/4.4.0')
 let g:r_tmux_target = get(g:, 'r_tmux_target', '.+')
 
 function! s:RSend(text) abort
@@ -232,12 +235,25 @@ function! s:RSend(text) abort
   call system('tmux send-keys -t ' . l:t . ' Enter')
 endfunction
 
+" The command the R pane runs: load the module on a cluster, then prefer
+" radian over plain R, whichever is on $PATH by then.
+function! s:RCommand() abort
+  let l:run = 'if command -v radian >/dev/null 2>&1; then exec radian; '
+        \ . 'else exec R --no-save; fi'
+  if !empty($CC_CLUSTER)
+    let l:run = 'module load ' . g:r_module . ' >/dev/null 2>&1; ' . l:run
+  endif
+  let l:sh = empty($SHELL) ? '/bin/sh' : $SHELL
+  return shellescape(l:sh) . ' -lc ' . shellescape(l:run)
+endfunction
+command! Rcmd echo s:RCommand()
+
 function! s:RStart() abort
   if empty($TMUX)
     echohl WarningMsg | echo 'R: not inside tmux' | echohl None
     return
   endif
-  call system('tmux split-window -hf -d ' . shellescape(g:r_app))
+  call system('tmux split-window -hf -d ' . shellescape(s:RCommand()))
 endfunction
 
 function! s:RSendRange() abort
@@ -250,3 +266,13 @@ nnoremap <silent> <localleader>l  :call <SID>RSend(getline('.'))<CR>j
 vnoremap <silent> <localleader>ss :<C-u>call <SID>RSendRange()<CR>
 nnoremap <silent> <localleader>aa :call <SID>RSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
 nnoremap <silent> <localleader>ro :call <SID>RSend('ls.str()')<CR>
+
+" ===============================
+" Machine-local overrides
+" ===============================
+" Never tracked, same idea as git's config.local and kitty's local.conf.
+" Useful for g:r_module (the cluster's R version), g:r_tmux_target, or a
+" colorscheme this machine happens to have.
+if filereadable(expand('~/.vimrc.local'))
+  source ~/.vimrc.local
+endif

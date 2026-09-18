@@ -56,10 +56,21 @@ from the nvim config. Space is the leader and `\` the localleader, as in
 LazyVim.
 
 R works through tmux, mirroring R.nvim's mappings so the muscle memory
-carries: `<localleader>rf` opens radian in a `tmux split-window -hf`,
+carries: `<localleader>rf` opens R in a `tmux split-window -hf`,
 `<localleader>l` sends the line, `<localleader>ss` the visual selection,
-`<localleader>aa` sources the file, `<localleader>rq` quits. Load the R module
-first (`loadr`). Set `g:r_tmux_target` if the pane is not the next one.
+`<localleader>aa` sources the file, `<localleader>rq` quits.
+
+The pane loads the R module itself — a tmux pane starts from the tmux server's
+environment, so modules loaded in the current shell are not there. It then runs
+`radian` if it is on `$PATH`, otherwise plain `R`. `:Rcmd` shows the exact
+command. Override the module with `g:r_module` in `~/.vimrc.local` (untracked)
+when the cluster's R version differs from the default, and `g:r_tmux_target`
+if the pane is not the next one.
+
+radian is not installed on the clusters. Plain R works out of the box; to get
+radian, build it on a **login node** into a virtualenv that is on your `$PATH`
+(`avail_wheels radian rchitect` first — `rchitect` embeds R and may have to
+come from PyPI rather than the Alliance wheelhouse).
 
 Plugin stand-ins: built-in statusline, `:find` over `path+=**` (`<leader>ff`),
 `gcc`/`gc` comment toggle from `commentstring`, `<leader>u*` toggles.
