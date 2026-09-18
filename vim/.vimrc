@@ -272,6 +272,53 @@ vnoremap <localleader>ss :<C-u>call <SID>RSendRange()<CR>
 nnoremap <localleader>aa :call <SID>RSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
 nnoremap <localleader>ro :call <SID>RSend('ls.str()')<CR>
 
+" Send the paragraph (blank-line delimited block) around the cursor, and the
+" fenced chunk around it in Rmd/qmd.
+function! s:RSendParagraph() abort
+  let l:start = search('^\s*$', 'bnW') + 1
+  let l:end = search('^\s*$', 'nW')
+  let l:end = l:end == 0 ? line('$') : l:end - 1
+  call s:RSend(join(getline(l:start, l:end), "\n"))
+endfunction
+
+function! s:RSendChunk() abort
+  let l:start = search('^\s*```\s*{', 'bnW')
+  if l:start == 0
+    echohl WarningMsg | echomsg 'R: not inside a chunk' | echohl None
+    return
+  endif
+  let l:end = search('^\s*```\s*$', 'nW')
+  if l:end == 0 || l:end <= l:start
+    echohl WarningMsg | echomsg 'R: chunk is not closed' | echohl None
+    return
+  endif
+  call s:RSend(join(getline(l:start + 1, l:end - 1), "\n"))
+endfunction
+
+" Inspect whatever is under the cursor.
+function! s:RInspect(fmt) abort
+  let l:word = expand('<cword>')
+  if empty(l:word)
+    return
+  endif
+  call s:RSend(printf(a:fmt, l:word))
+endfunction
+
+nnoremap <localleader>pp :call <SID>RSendParagraph()<CR>
+nnoremap <localleader>cc :call <SID>RSendChunk()<CR>
+
+nnoremap <localleader>rt :call <SID>RInspect('str(%s)')<CR>
+nnoremap <localleader>rs :call <SID>RInspect('summary(%s)')<CR>
+nnoremap <localleader>rn :call <SID>RInspect('names(%s)')<CR>
+nnoremap <localleader>rd :call <SID>RInspect('dim(%s)')<CR>
+nnoremap <localleader>rv :call <SID>RInspect('head(%s, 20)')<CR>
+nnoremap <localleader>rh :call <SID>RInspect('help(%s)')<CR>
+nnoremap <localleader>rp :call <SID>RInspect('print(%s)')<CR>
+
+" Interrupt a running command, and point R at this file's directory.
+nnoremap <localleader>ri :call system('tmux send-keys -t ' . shellescape(g:r_tmux_target) . ' C-c')<CR>
+nnoremap <localleader>rw :call <SID>RSend('setwd("' . expand('%:p:h') . '")')<CR>
+
 " ===============================
 " Machine-local overrides
 " ===============================

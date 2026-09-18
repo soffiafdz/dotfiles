@@ -88,10 +88,18 @@ vim, not nvim, and the same `~/.vimrc` as everywhere else: plugin-free, ported
 from the nvim config. Space is the leader and `\` the localleader, as in
 LazyVim.
 
-R works through tmux, mirroring R.nvim's mappings so the muscle memory
-carries: `<localleader>rf` opens R in a `tmux split-window -hf`,
-`<localleader>l` sends the line, `<localleader>ss` the visual selection,
-`<localleader>aa` sources the file, `<localleader>rq` quits.
+R works through tmux, on R.nvim's mappings (localleader is `\`):
+
+| | |
+|---|---|
+| `rf` / `rq` | open R in a `tmux split-window -hf` / quit it |
+| `l` / `ss` | send the line / the visual selection |
+| `pp` / `cc` | send the paragraph / the fenced chunk (Rmd, qmd) |
+| `aa` | source the whole file |
+| `rt` `rs` `rn` `rd` `rv` `rp` `rh` | on the word under the cursor: `str`, `summary`, `names`, `dim`, `head`, `print`, `help` |
+| `ro` | `ls.str()` |
+| `ri` | interrupt (sends C-c to the pane) |
+| `rw` | `setwd()` to this file's directory |
 
 The pane loads the R module itself — a tmux pane starts from the tmux server's
 environment, so modules loaded in the current shell are not there. It then runs
