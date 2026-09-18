@@ -1,167 +1,252 @@
-" init.vim – Vim 9.0 configuration
+" ~/.vimrc — the editor on Alliance clusters, the fallback everywhere else.
 "
-" One config everywhere. Plugins and their settings live in
-" ~/.vim/rc/plugins.vim, loaded only when vim-plug is installed and this is
-" not an Alliance cluster ($CC_CLUSTER): compute nodes have no network and
-" $HOME has a file-count quota. Everything in this file is plain vim.
+" Derived from the nvim config in this repo (nvim/.config/nvim): same leader,
+" same trilingual spell setup, same prose autosave, same R-in-tmux workflow.
+" Deliberately plugin-free — cluster compute nodes have no network and $HOME
+" has a file-count quota — so anything LazyVim gets from a plugin is either
+" rebuilt here in plain vim or left out.
 
-let s:hpc = !empty($CC_CLUSTER)
-let s:plugged = 0
-let s:has_plug = filereadable(expand('~/.vim/autoload/plug.vim'))
-let s:has_cfg = filereadable(expand('~/.vim/rc/plugins.vim'))
-if !s:hpc && s:has_plug && s:has_cfg
-  let s:plugged = 1
-  source ~/.vim/rc/plugins.vim
-endif
-
-" ===============================
-" Core settings
-" ===============================
-syntax on
+set nocompatible
 filetype plugin indent on
-let mapleader = " "
+syntax enable
 
-" Appearance
-set t_Co=256
-set termguicolors
+" LazyVim's leaders
+let mapleader = " "
+let maplocalleader = "\\"
+
+" ===============================
+" Options (LazyVim defaults, ported)
+" ===============================
+set number relativenumber
+set expandtab shiftwidth=2 tabstop=2 softtabstop=2 shiftround smarttab
+set autoindent smartindent
+set ignorecase smartcase incsearch hlsearch
+set splitbelow splitright
+set scrolloff=4 sidescrolloff=8
+set signcolumn=yes
+set nowrap linebreak breakindent
+set cursorline
+set confirm hidden autoread
+set updatetime=200 timeoutlen=300 ttimeoutlen=10
+set completeopt=menu,menuone,noselect
+set shortmess+=c
+set wildmenu wildmode=longest:full,full
+set wildignore+=*.o,*.pyc,*.so,.git/*,node_modules/*
+set list listchars=tab:▸\ ,trail:·,nbsp:␣,extends:›,precedes:‹
+set laststatus=2 showcmd noshowmode ruler
+set encoding=utf-8
+set fileformats=unix,dos
+set history=1000
+set nojoinspaces
+set virtualedit=block
+set formatoptions=jcroqlnt
+set textwidth=80
+set synmaxcol=300 lazyredraw
+set mouse=a
+
+" Trilingual prose: a word valid in any of these is accepted, which is what
+" makes spell checking usable across en/es/fr. Matches nvim's spelllang.
+set spelllang=en,es,fr
+
+if has('termguicolors') && $TERM !=# 'linux'
+  set termguicolors
+endif
 set background=dark
-" gruvbox is a plugin; fall back to a built-in scheme without it.
+
+" gruvbox is a plugin here; fall back to whatever this vim ships.
 for s:scheme in ['gruvbox', 'habamax', 'desert']
   silent! execute 'colorscheme' s:scheme
   if exists('g:colors_name') | break | endif
 endfor
-"
-" Transparent backgrounds
-hi! Normal       ctermbg=NONE guibg=NONE
-hi! LineNr       ctermbg=NONE guibg=NONE
-hi! CursorLineNr ctermbg=NONE guibg=NONE
-hi! NonText      ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
 
-" Invisible chars
-set list
-set listchars=tab:▸\ ,trail:·,nbsp:␣,eol:¬
+if has('clipboard')
+  set clipboard^=unnamed,unnamedplus
+endif
 
-" Splits: below/right
-set splitbelow splitright
+" ===============================
+" Backup, swap, undo
+" ===============================
+for s:dir in ['backup', 'swap', 'undo']
+  silent! call mkdir(expand('~/.vim/' . s:dir), 'p', 0700)
+endfor
+set backup backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undofile undodir=~/.vim/undo//
 
-" Window nav
-nnoremap <leader>w <C-w>v<C-w>l
+" ===============================
+" Statusline (lualine's job, in one line)
+" ===============================
+set statusline=%<%f\ %h%m%r%=%{&spelllang}\ \ %{&filetype}\ \ %-12.(%l:%c%V%)\ %P
+
+" ===============================
+" Keymaps (LazyVim parity)
+" ===============================
+" Windows
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <leader>- <C-w>s
+nnoremap <leader><bar> <C-w>v
 
-" Performance & usability
-set lazyredraw
-set synmaxcol=200
-set updatetime=300
-set timeoutlen=500
-set hidden
-set scrolloff=5 sidescrolloff=5
-set signcolumn=yes
+" Buffers
+nnoremap <S-h> :bprevious<CR>
+nnoremap <S-l> :bnext<CR>
+nnoremap <leader>bd :bdelete<CR>
+nnoremap <leader>bb :buffer #<CR>
 
-" Display
-set number relativenumber
-set noshowmode
-set showcmd
-set ruler
-set laststatus=2
+" Save and quit
+nnoremap <C-s> :update<CR>
+inoremap <C-s> <Esc>:update<CR>
+nnoremap <leader>qq :qall<CR>
 
-" Clipboard & mouse
-set clipboard+=unnamedplus
-set mouse=a
-"
-" Backup, swap & undo
-silent! call mkdir(expand('~/.vim/backup'), 'p')
-silent! call mkdir(expand('~/.vim/swap'), 'p')
-silent! call mkdir(expand('~/.vim/undo'), 'p')
-set backup
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swap//
-set undofile
-set undodir=~/.vim/undo//
-autocmd FocusLost * :wa
+" Clear search with <esc>, keep matches centred
+nnoremap <silent> <Esc> :nohlsearch<CR>
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
-" Trim trailing whitespace
-autocmd BufWritePre * %s/\s\+$//e
+" Move lines, as LazyVim's <A-j>/<A-k>
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
-" Wrapping & textwidth
-set nowrap
-set textwidth=80
-"
-"" Completion
-set wildmenu
-set wildmode=list:longest
-set completeopt=menuone,noinsert,noselect
-set shortmess+=c
+" Keep the selection when indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Toggles, LazyVim's <leader>u prefix
+nnoremap <leader>us :setlocal spell!<CR>:setlocal spell?<CR>
+nnoremap <leader>uw :setlocal wrap!<CR>:setlocal wrap?<CR>
+nnoremap <leader>ul :setlocal list!<CR>:setlocal list?<CR>
+nnoremap <leader>un :setlocal relativenumber!<CR>
+
+" Finding things (fzf-lua's job): :find walks path+=**, wildmenu completes
+set path+=**
+nnoremap <leader>ff :find<space>
+nnoremap <leader>fb :buffers<CR>:buffer<space>
+nnoremap <leader>fg :grep! -rn --exclude-dir=.git<space>
+nnoremap <leader>fr :browse oldfiles<CR>
+
+" Comment toggle (mini.comment's job) using each filetype's commentstring
+function! s:ToggleComment(line1, line2) abort
+  if empty(&commentstring) || &commentstring !~# '%s'
+    echohl WarningMsg | echo 'no commentstring for ' . &filetype | echohl None
+    return
+  endif
+  " Split "# %s" or "<!--%s-->" into a leader and (for paired syntaxes) a
+  " tail, each without surrounding whitespace of its own.
+  let l:lead = substitute(matchstr(&commentstring, '^.\{-}\ze%s'), '\s*$', '', '')
+  let l:tail = substitute(matchstr(&commentstring, '%s\zs.*$'), '^\s*', '', '')
+  " \1 keeps the line's indent, which must survive uncommenting.
+  let l:lpat = '^\(\s*\)' . escape(l:lead, '\/*.$^~[]') . '\s\?'
+  let l:tpat = empty(l:tail) ? '' : '\s\?' . escape(l:tail, '\/*.$^~[]') . '\s*$'
+
+  " Commented only if every non-blank line in the range is.
+  let l:commented = 1
+  for l:n in range(a:line1, a:line2)
+    let l:t = getline(l:n)
+    if l:t =~# '\S' && l:t !~# l:lpat
+      let l:commented = 0
+      break
+    endif
+  endfor
+
+  for l:n in range(a:line1, a:line2)
+    let l:t = getline(l:n)
+    if l:t !~# '\S' | continue | endif
+    if l:commented
+      let l:t = substitute(l:t, l:lpat, '\1', '')
+      if !empty(l:tpat) | let l:t = substitute(l:t, l:tpat, '', '') | endif
+    else
+      let l:indent = matchstr(l:t, '^\s*')
+      let l:t = l:indent . l:lead . ' ' . strpart(l:t, len(l:indent))
+            \ . (empty(l:tail) ? '' : ' ' . l:tail)
+    endif
+    call setline(l:n, l:t)
+  endfor
+endfunction
+command! -range Comment call s:ToggleComment(<line1>, <line2>)
+nnoremap <silent> gcc :Comment<CR>
+vnoremap <silent> gc :Comment<CR>
 
 " ===============================
-" Filetype-specific overrides
+" Filetypes
 " ===============================
 augroup FiletypeSettings
   autocmd!
-  " Bash/sh: 2-space soft tabs, converted to spaces
-  autocmd FileType sh,bash    setl ts=2 sw=2 sts=2 et
-  " Python: PEP8 indent
-  autocmd FileType python     setl ts=4 sw=4 sts=4 et ci cc=+1,+2,+3
-  " C/C++: indent
-  autocmd FileType c,cpp      setl ts=4 sw=4 sts=4 et ci cc=+1,+2,+3
-  " R, RMarkdown: 2-space
-  autocmd FileType r          setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
-  autocmd FileType rmd        setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
-  " Text:
-  autocmd FileType markdown   setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
-  autocmd FileType tex        setl ts=2 sw=2 sts=2 et wrap fo=tcqrn1
-  autocmd FileType text,txt   setl noai nosi fo=tcqrn1
-  " Makefiles
-  autocmd FileType make       setl ts=4 sw=4 sts=4 noet cc=+1,+2,+3
-  " Web: HTML, JS, YAML
-  autocmd FileType html       setl ts=2 sw=2 sts=2 et tw=0 fo-=t
-  autocmd FileType yaml       setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
-  autocmd FileType javascript setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
-  " Vim
-  autocmd FileType vim        setl ts=2 sw=2 sts=2 et cc=+1,+2,+3
+  autocmd FileType sh,bash,zsh    setl ts=2 sw=2 sts=2 et
+  autocmd FileType python         setl ts=4 sw=4 sts=4 et cc=+1
+  autocmd FileType c,cpp          setl ts=4 sw=4 sts=4 et cc=+1
+  autocmd FileType r,rmd,quarto   setl ts=2 sw=2 sts=2 et cc=+1
+  autocmd FileType make           setl ts=4 sw=4 sts=4 noet
+  autocmd FileType yaml,json,toml setl ts=2 sw=2 sts=2 et
+  autocmd FileType vim,lua        setl ts=2 sw=2 sts=2 et
+  " Prose: wrap, spell, no column ruler
+  autocmd FileType markdown,tex,text,mail setl wrap spell cc= fo=tcqrn1 tw=0
+  " Slurm scripts are shell
+  autocmd BufRead,BufNewFile *.sbatch,*.slurm setf sh
+  " Quarto/Rmd
+  autocmd BufRead,BufNewFile *.qmd setf markdown
 augroup END
 
+" Jump back to the last position, and trim trailing whitespace on write
+augroup Editing
+  autocmd!
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+        \ | execute "normal! g`\"" | endif
+  autocmd BufWritePre * let b:winview = winsaveview() |
+        \ keeppatterns %s/\s\+$//e |
+        \ call winrestview(b:winview)
+augroup END
 
 " ===============================
-" Without plugins: statusline and finder
+" Prose autosave (from nvim's autocmds.lua)
 " ===============================
-if !s:plugged
-  " airline's job, in one line of built-in vim
-  set statusline=%<%f\ %h%m%r%=%{&filetype}\ \ %-14.(%l,%c%V%)\ %P
-  " fzf.vim's job: :find over a recursive path, wildmenu does the rest
-  set path+=**
-  nnoremap <leader>ff :find<space>
-  nnoremap <leader>fb :buffers<CR>:buffer<space>
-  nnoremap <leader>fg :grep! -rn --exclude-dir=.git<space>
-endif
+" Long writing sessions should never lose work. Real, writable files only.
+augroup ProseAutosave
+  autocmd!
+  autocmd FocusLost,BufLeave,InsertLeave,CursorHold *
+        \ if &modified && &buftype ==# '' && !&readonly
+        \     && filereadable(expand('%:p'))
+        \     && index(['markdown', 'text', 'tex', 'quarto', 'vimwiki'], &filetype) >= 0
+        \ | silent! noautocmd update | endif
+augroup END
 
 " ===============================
-" Send code to a tmux pane (stands in for Nvim-R)
+" R in a tmux pane (R.nvim's job)
 " ===============================
-" Open R in a second tmux pane, then send lines to it. g:tmux_target follows
-" tmux's target syntax; '.+' is the next pane in the current window.
-let g:tmux_target = get(g:, 'tmux_target', '.+')
+" R.nvim runs radian in `tmux split-window -hf`; same here, with the same
+" localleader mappings, so the muscle memory carries over. On a cluster, load
+" the R module first (`loadr`) or let the split do it.
+let g:r_app = executable('radian') ? 'radian' : 'R --no-save'
+let g:r_tmux_target = get(g:, 'r_tmux_target', '.+')
 
-function! s:TmuxSend(text) abort
+function! s:RSend(text) abort
   if empty($TMUX)
-    echohl WarningMsg | echo 'tmux-send: not inside tmux' | echohl None
+    echohl WarningMsg | echo 'R: not inside tmux' | echohl None
     return
   endif
-  let l:t = shellescape(g:tmux_target)
+  let l:t = shellescape(g:r_tmux_target)
   call system('tmux send-keys -t ' . l:t . ' -l ' . shellescape(a:text))
   call system('tmux send-keys -t ' . l:t . ' Enter')
 endfunction
 
-function! s:TmuxSendRange() abort
-  call s:TmuxSend(join(getline(line("'<"), line("'>")), "\n"))
+function! s:RStart() abort
+  if empty($TMUX)
+    echohl WarningMsg | echo 'R: not inside tmux' | echohl None
+    return
+  endif
+  call system('tmux split-window -hf -d ' . shellescape(g:r_app))
 endfunction
 
-" <leader>rr opens a pane running R; rl sends the line, r the visual
-" selection, rf sources the file, rq quits R.
-nnoremap <silent> <leader>rr :call system('tmux split-window -h -d "module load StdEnv/2023 r/4.4.0 2>/dev/null; exec R --no-save"')<CR>
-nnoremap <silent> <leader>rl :call <SID>TmuxSend(getline('.'))<CR>j
-vnoremap <silent> <leader>r  :<C-u>call <SID>TmuxSendRange()<CR>
-nnoremap <silent> <leader>rf :call <SID>TmuxSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
-nnoremap <silent> <leader>rq :call <SID>TmuxSend('q()')<CR>
+function! s:RSendRange() abort
+  call s:RSend(join(getline(line("'<"), line("'>")), "\n"))
+endfunction
+
+nnoremap <silent> <localleader>rf :call <SID>RStart()<CR>
+nnoremap <silent> <localleader>rq :call <SID>RSend('quit(save = "no")')<CR>
+nnoremap <silent> <localleader>l  :call <SID>RSend(getline('.'))<CR>j
+vnoremap <silent> <localleader>ss :<C-u>call <SID>RSendRange()<CR>
+nnoremap <silent> <localleader>aa :call <SID>RSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
+nnoremap <silent> <localleader>ro :call <SID>RSend('ls.str()')<CR>

@@ -51,17 +51,24 @@ no job script or `salloc` call needs `--account`.
 
 ## Editing
 
-vim, not nvim. `~/.vimrc` detects `$CC_CLUSTER` and loads no plugins: built-in
-statusline, `:find` with `path+=**` for `<leader>ff`, and `<leader>r` mappings
-that send code to R running in another tmux pane (`<leader>rr` opens one,
-`rl` line, `r` visual selection, `rf` sources the file). Set `g:tmux_target`
-if the pane is not the next one in the window.
+vim, not nvim, and the same `~/.vimrc` as everywhere else: plugin-free, ported
+from the nvim config. Space is the leader and `\` the localleader, as in
+LazyVim.
+
+R works through tmux, mirroring R.nvim's mappings so the muscle memory
+carries: `<localleader>rf` opens radian in a `tmux split-window -hf`,
+`<localleader>l` sends the line, `<localleader>ss` the visual selection,
+`<localleader>aa` sources the file, `<localleader>rq` quits. Load the R module
+first (`loadr`). Set `g:r_tmux_target` if the pane is not the next one.
+
+Plugin stand-ins: built-in statusline, `:find` over `path+=**` (`<leader>ff`),
+`gcc`/`gc` comment toggle from `commentstring`, `<leader>u*` toggles.
 
 ## Not here
 
-No nvim: a plugin tree of tens of thousands of files is a poor trade against
-the `$HOME` file quota for an editor used to fix job scripts and read logs.
-Write code on your workstation, run it here.
+No nvim, and no vim plugins: a plugin tree of tens of thousands of files is a
+poor trade against the `$HOME` file quota for an editor used to fix job
+scripts and read logs. Write code on your workstation, run it here.
 
 No conda or micromamba: `.zshrc` returns early when `$CC_CLUSTER` is set, so
 the mamba block never runs. Use modules plus a virtualenv, or put a conda

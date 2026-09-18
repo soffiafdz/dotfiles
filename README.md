@@ -89,8 +89,8 @@ plain symlinks where GNU Stow is not installed (clusters).
     ./bootstrap -f macos   # force a type
     ./bootstrap -D -f hpc  # unstow that type
 
-`bin`, `gnupg`, `hpc` and `vim` are always stowed `--no-folding`, so nothing a
-program writes into those directories lands in the repo.
+`bin`, `gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program
+writes into those directories lands in the repo.
 
 ### Linux (Artix, runit)
 
@@ -147,12 +147,14 @@ Clone into `$HOME`: it is private, backed up and on every node, while
 sessions over to zsh: the clusters' login shell is bash and `chsh` does not
 work there.
 
-The editor there is **vim, not nvim**. The clusters ship vim, and `~/.vimrc`
-skips vim-plug and every plugin when `$CC_CLUSTER` is set, falling back to a
-built-in statusline, `:find` over `path+=**`, and `<leader>r` mappings that
-send lines to R in a tmux pane. Installing nvim would mean a static tarball
-plus a plugin tree of tens of thousands of files against the `$HOME` quota,
-for an editor used mainly to fix job scripts and read logs.
+The editor there is **vim, not nvim** — and the same plugin-free `~/.vimrc`
+runs everywhere, ported from the nvim config rather than grown separately:
+LazyVim's leaders, options and keymaps, the trilingual spell setup, the prose
+autosave, plus plain-vim stand-ins for the plugins (built-in statusline for
+lualine, `:find` over `path+=**` for fzf-lua, a `commentstring` toggle for
+mini.comment, tmux sends for R.nvim). Installing nvim on a cluster would mean
+a static tarball plus tens of thousands of plugin files against the `$HOME`
+file quota, for an editor used mainly to fix job scripts and read logs.
 
 Login nodes have internet; compute nodes do not, so `pip install` and anything
 else that downloads happens on a login node. See `hpc/README.md` for the
@@ -187,7 +189,7 @@ aliases and job templates.
 | `sioyek`, `zathura` | `~/.config/...` | all / Linux | PDF readers. Sioyek has the Zotero and SyncTeX setup, see docs. |
 | `ssh` | `~/.ssh/config` | all | Workstation hosts and jump config. Home hosts are in `config.local`. |
 | `tmux` | `~/.config/tmux` | all | gpakosz's tmux.conf plus `tmux.conf.local` with the actual settings. |
-| `vim` | `~/.vimrc`, `~/.vim/rc` | all | Fallback editor, and the only editor on clusters. Plugins live in `~/.vim/rc/plugins.vim`, skipped when `$CC_CLUSTER` is set. Stow `--no-folding`. |
+| `vim` | `~/.vimrc` | all | Fallback editor, and the only editor on clusters. Plugin-free, ported from the nvim config: same leaders, spell setup, prose autosave and R-in-tmux mappings. |
 | `x11` | `~/.config/x11` | Linux | `xinitrc`, `xprofile`, `xpipewire`, Xresources. |
 | `yazi` | `~/.config/yazi` | all | File manager, gruvbox flavor, openers. |
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | all | Login and interactive shell, see below. |
