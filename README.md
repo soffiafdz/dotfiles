@@ -36,6 +36,12 @@ tree. Almost all of them target the home directory:
 - `bin/.local/bin/` for scripts, `ssh/.ssh/config` for ssh.
 - `jellyfin/etc/...` is the one package that targets `/`, see its README.
 
+The checkout path is not fixed: `bootstrap` resolves its own location and
+every script works off `$HOME`. `~/Repos/dotfiles` on machines with several
+repositories, plain `~/dotfiles` where it is the only one (the BIC hosts and
+the clusters), `~/Developer/dotfiles` on macOS. Moving a checkout means
+re-running `./bootstrap -f <profile>`, since the symlinks point into it.
+
 Always give stow both the package directory and the target, whatever the
 current directory is:
 
@@ -135,10 +141,11 @@ are still linked.
 
 Clone into `$HOME`: it is private, backed up and on every node, while
 `~/projects` is shared with the whole group. Only data belongs in
-`~/projects` or `~/scratch`.
+`~/projects` or `~/scratch`. Over HTTPS, so no ssh key has to exist on the
+cluster just to clone a public repo.
 
-    git clone git@github.com:soffiafdz/dotfiles.git ~/Repos/dotfiles
-    cd ~/Repos/dotfiles
+    git clone https://github.com/soffiafdz/dotfiles.git ~/dotfiles
+    cd ~/dotfiles
     ./bootstrap -f hpc
     echo def-<pi> > ~/.config/hpc/account     # Slurm account for every job
     ~/.local/bin/hpc-setup                    # login node only: nvim, p10k, plugins
