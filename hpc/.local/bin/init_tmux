@@ -40,6 +40,15 @@ command -v tmux >/dev/null 2>&1 || {
 	exit 1
 }
 
+# Inside tmux, `attach` and `new-session -t` refuse to nest ("sessions should
+# be nested with care"). Switching the current client does what is meant.
+enter() {
+	if [ -n "${TMUX:-}" ]; then
+		exec tmux switch-client -t "$1"
+	fi
+	exec tmux attach -t "$1"
+}
+
 NAME="${NAME:-${CC_CLUSTER:-main}}"
 HOST="$(uname -n)"
 STATE="${XDG_STATE_HOME:-$HOME/.local/state}/hpc"
@@ -49,12 +58,13 @@ NODE_FILE="$STATE/tmux-$NAME.node"
 if tmux has-session -t "$NAME" 2>/dev/null; then
 	mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
 	if [ "$MONITOR" -eq 1 ]; then
-		if tmux has-session -t "$NAME-monitor" 2>/dev/null; then
-			exec tmux attach -t "$NAME-monitor"
-		fi
-		exec tmux new-session -t "$NAME" -s "$NAME-monitor"
+		# Grouped session: same windows, its own current window. Created
+		# detached, then entered, so this works from inside tmux too.
+		tmux has-session -t "$NAME-monitor" 2>/dev/null ||
+			tmux new-session -d -t "$NAME" -s "$NAME-monitor"
+		enter "$NAME-monitor"
 	fi
-	exec tmux attach -t "$NAME"
+	enter "$NAME"
 fi
 
 # Not on this node. It may be running on the one we last used.
@@ -78,4 +88,8 @@ if [ "$MONITOR" -eq 1 ]; then
 fi
 
 mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
+if [ -n "${TMUX:-}" ]; then
+	tmux new-session -d -s "$NAME"
+	enter "$NAME"
+fi
 exec tmux new -As "$NAME"

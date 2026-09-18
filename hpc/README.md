@@ -61,6 +61,13 @@ name. `init_tmux` records the node in
 `~/.local/state/hpc/tmux-<session>.node` and, when you land elsewhere, prints
 the `ssh <node> -t init_tmux <session>` line rather than starting a duplicate.
 
+`-m` works from inside tmux, which is where you would actually reach for it:
+`tmux attach` and `new-session -t` refuse to nest, so the session is created
+detached and entered with `switch-client`. Running it a second time enters the
+existing monitor session rather than failing on a duplicate name. Close it with
+`tmux kill-session -t <session>-monitor`; the windows belong to the group, so
+the main session is untouched.
+
 Unlike the BIC helper of the same name, there is no conda to load: tmux is
 installed on the clusters.
 

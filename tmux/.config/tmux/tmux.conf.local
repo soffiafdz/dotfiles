@@ -342,6 +342,11 @@ tmux_conf_copy_to_os_clipboard=false
 # increase history size
 set -g history-limit 50000
 
+# Grouped sessions (init_tmux -m on the clusters) attach a second client to
+# the same windows. Without this, every window shrinks to the smallest
+# attached client even when that client is looking elsewhere.
+setw -g aggressive-resize on
+
 # start with mouse mode enabled
 #set -g mouse on
 
