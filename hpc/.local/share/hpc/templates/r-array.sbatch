@@ -18,7 +18,9 @@
 
 set -euo pipefail
 
-module load StdEnv/2023 r/4.4.0
+# Jobs pin their versions explicitly: reproducibility beats following the
+# cluster default. Keep this in step with ~/.config/hpc/modules.
+module load StdEnv/2023 r/4.6.1
 
 SUBJECT=$(sed -n "${SLURM_ARRAY_TASK_ID}p" subjects.txt)
 [ -n "$SUBJECT" ] || { echo "no subject on line ${SLURM_ARRAY_TASK_ID}" >&2; exit 1; }

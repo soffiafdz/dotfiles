@@ -31,14 +31,16 @@ sgpu() {
 }
 
 # --- Modules and environments ---------------------------------------------
-# R with the standard environment; pass a version to override.
-loadr() { module load StdEnv/2023 "r/${1:-4.4.0}"; }
+# R with the standard environment. $R_MODULE comes from ~/.config/hpc/modules
+# (e.g. R_MODULE=r/4.6.1); bare `r` loads the cluster's default. Pass a module
+# spec to override once: `loadr r/4.4.0`.
+loadr() { module load "$STDENV" "${1:-$R_MODULE}"; }
 
 # Python + a virtualenv. With no argument, builds a throwaway env in
 # $SLURM_TMPDIR (node-local, gone when the job ends); with a name, uses
 # ~/venvs/<name> and creates it on first use.
 loadpy() {
-	module load StdEnv/2023 "python/${PYVER:-3.11}"
+	module load "$STDENV" "$PY_MODULE"
 	if [ -z "${1:-}" ]; then
 		# Per-user path: /tmp is shared on login nodes, and activating
 		# someone else's stale venv is worse than building a new one.

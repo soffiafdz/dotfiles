@@ -222,7 +222,12 @@ augroup END
 " Which R to run is decided inside the new pane, not here: a tmux pane starts
 " from the tmux server's environment, so a module loaded in this shell is not
 " there, and radian may live in a venv that is not active yet.
-let g:r_module = get(g:, 'r_module', 'StdEnv/2023 r/4.4.0')
+" $STDENV/$R_MODULE come from ~/.config/hpc/modules via the shell; the
+" fallback loads the cluster's default R. Override with g:r_module in
+" ~/.vimrc.local if needed.
+let g:r_module = get(g:, 'r_module',
+      \ (empty($STDENV) ? 'StdEnv/2023' : $STDENV) . ' '
+      \ . (empty($R_MODULE) ? 'r' : $R_MODULE))
 let g:r_tmux_target = get(g:, 'r_tmux_target', '.+')
 
 function! s:RSend(text) abort

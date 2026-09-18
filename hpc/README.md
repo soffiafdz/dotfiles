@@ -6,6 +6,7 @@ account file below is machine-local and must not land in the repo.
 
     ~/.config/hpc/env.sh              Slurm aliases and functions
     ~/.config/hpc/account             your allocation, e.g. def-pi (untracked)
+    ~/.config/hpc/modules             module versions for this cluster (untracked)
     ~/.local/bin/hpc-setup            one-time install on a login node
                                       (zsh prompt, bash handoff, account)
     ~/.local/share/hpc/templates/     sbatch templates
@@ -29,8 +30,8 @@ no job script or `salloc` call needs `--account`.
 | `sj`, `sme`, `quota` | accounting, fair-share, disk and file-count usage |
 | `si [h] [cpus] [mem]` | interactive shell on a compute node (default 1h/4/16G) |
 | `sgpu [h] [cpus] [mem]` | same with one GPU |
-| `loadr [version]` | `StdEnv/2023` + the R module |
-| `loadpy [name]` | python module + a virtualenv (node-local, or `~/venvs/<name>`) |
+| `loadr [module]` | `$STDENV` + `$R_MODULE` |
+| `loadpy [name]` | `$PY_MODULE` + a virtualenv (node-local, or `~/venvs/<name>`) |
 | `newjob [template]` | copy an sbatch template here; no argument lists them |
 | `jobout <jobid>` | follow a running job's output |
 
@@ -48,6 +49,21 @@ no job script or `salloc` call needs `--account`.
   Alliance's own wheels; anything else must be fetched on a login node.
 - `--cpus-per-task` is threads, `--ntasks` is MPI ranks. Mixing them up is the
   classic SGE-to-Slurm mistake.
+
+## Module versions
+
+Clusters differ and versions move, so they are machine-local, like the
+account. Write `~/.config/hpc/modules`:
+
+    R_MODULE=r/4.6.1
+    PY_MODULE=python/3.13
+    STDENV=StdEnv/2023
+
+`shell/profile.d/hpc.sh` exports these; `loadr`, `loadpy` and vim's R pane all
+read them. Unset, they fall back to `r`, `python` and `StdEnv/2023`, which load
+each module's default. `module spider r` lists what a cluster has, and says
+which `StdEnv` a given version needs. Job scripts pin their versions inline
+instead: a job should not change behaviour because a default moved.
 
 ## Editing
 
