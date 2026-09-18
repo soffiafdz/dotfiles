@@ -9,6 +9,7 @@ account file below is machine-local and must not land in the repo.
     ~/.config/hpc/modules             module versions for this cluster (untracked)
     ~/.local/bin/hpc-setup            one-time install on a login node
                                       (zsh prompt, bash handoff, account)
+    ~/.local/bin/init_tmux            start or attach the cluster's session
     ~/.local/share/hpc/templates/     sbatch templates
 
 The clusters' login shell is bash and `chsh` does not work there, so
@@ -33,6 +34,7 @@ no job script or `salloc` call needs `--account`.
 | `loadr [module]` | `$STDENV` + `$R_MODULE` |
 | `loadpy [name]` | `$PY_MODULE` + a virtualenv (node-local, or `~/venvs/<name>`) |
 | `newjob [template]` | copy an sbatch template here; no argument lists them |
+| `init_tmux` (`_tmux`) | start or attach a session named after the cluster; `-m` opens a grouped view |
 | `jobout <jobid>` | follow a running job's output |
 
 ## Rules the templates follow
@@ -49,6 +51,18 @@ no job script or `salloc` call needs `--account`.
   Alliance's own wheels; anything else must be fetched on a login node.
 - `--cpus-per-task` is threads, `--ntasks` is MPI ranks. Mixing them up is the
   classic SGE-to-Slurm mistake.
+
+## tmux and login nodes
+
+A tmux server is per host, and `rorqual.alliancecan.ca` round-robins across
+login nodes: a session started on rorqual3 is invisible from rorqual2, where a
+plain `tmux new -As` would quietly start a second, empty one with the same
+name. `init_tmux` records the node in
+`~/.local/state/hpc/tmux-<session>.node` and, when you land elsewhere, prints
+the `ssh <node> -t init_tmux <session>` line rather than starting a duplicate.
+
+Unlike the BIC helper of the same name, there is no conda to load: tmux is
+installed on the clusters.
 
 ## Module versions
 

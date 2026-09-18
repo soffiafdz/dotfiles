@@ -1,0 +1,81 @@
+#!/bin/sh
+# Start or attach a tmux session on a cluster login node.
+#
+#     init_tmux            session named after the cluster ($CC_CLUSTER)
+#     init_tmux work       named session
+#     init_tmux -m work    a second, grouped view of an existing session:
+#                          same windows, independent current window, so you
+#                          can watch one window while working in another
+#
+# The cluster-specific part: a tmux server is per host, and rorqual.alliancecan.ca
+# round-robins across login nodes. A session started on rorqual3 is invisible
+# from rorqual2, where a plain `tmux new -As` would quietly start a second one.
+# This records the node and tells you where to go instead.
+
+set -eu
+
+MONITOR=0
+NAME=""
+
+usage() {
+	echo "usage: ${0##*/} [-m] [session]" >&2
+	exit 2
+}
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+	-m | --monitor) MONITOR=1 ;;
+	-h | --help) usage ;;
+	-*) echo "unknown option: $1" >&2; usage ;;
+	*)
+		[ -z "$NAME" ] || usage
+		NAME="$1"
+		;;
+	esac
+	shift
+done
+
+command -v tmux >/dev/null 2>&1 || {
+	echo "${0##*/}: tmux not found" >&2
+	exit 1
+}
+
+NAME="${NAME:-${CC_CLUSTER:-main}}"
+HOST="$(uname -n)"
+STATE="${XDG_STATE_HOME:-$HOME/.local/state}/hpc"
+NODE_FILE="$STATE/tmux-$NAME.node"
+
+# Already here: attach, or open a grouped view.
+if tmux has-session -t "$NAME" 2>/dev/null; then
+	mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
+	if [ "$MONITOR" -eq 1 ]; then
+		if tmux has-session -t "$NAME-monitor" 2>/dev/null; then
+			exec tmux attach -t "$NAME-monitor"
+		fi
+		exec tmux new-session -t "$NAME" -s "$NAME-monitor"
+	fi
+	exec tmux attach -t "$NAME"
+fi
+
+# Not on this node. It may be running on the one we last used.
+if [ -r "$NODE_FILE" ]; then
+	LAST="$(cat "$NODE_FILE")"
+	if [ "$LAST" != "$HOST" ]; then
+		echo "session '$NAME' was last started on ${LAST%%.*}; this is ${HOST%%.*}" >&2
+		echo "  ssh ${LAST%%.*} -t ${0##*/} $NAME" >&2
+		printf 'start a new session here instead? [y/N] ' >&2
+		read -r answer
+		case "$answer" in
+		y | Y | yes) ;;
+		*) exit 1 ;;
+		esac
+	fi
+fi
+
+if [ "$MONITOR" -eq 1 ]; then
+	echo "${0##*/}: no session '$NAME' to monitor; start it first" >&2
+	exit 1
+fi
+
+mkdir -p "$STATE" && printf '%s\n' "$HOST" > "$NODE_FILE"
+exec tmux new -As "$NAME"

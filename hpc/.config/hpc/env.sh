@@ -18,6 +18,9 @@ alias sme='sshare -U -u "$USER"'               # fair-share / priority
 # Disk and file-count quotas: the file count bites before the space does.
 alias quota='diskusage_report'
 
+# Same name as the BIC helper, so the muscle memory carries over.
+alias _tmux='init_tmux'
+
 # --- Interactive jobs -----------------------------------------------------
 # si [hours] [cpus] [mem] - interactive shell on a compute node.
 si() {
