@@ -3,6 +3,7 @@
 
 # Taps
 tap "nikitabobko/tap"  # aerospace
+tap "deskflow/tap"     # deskflow
 
 # Core CLI tools
 brew "stow"           # Dotfiles management
@@ -87,6 +88,7 @@ cask "ferdium"        # Multi-messenger (WhatsApp, Telegram, etc.)
 
 # Remote access
 cask "rustdesk"       # Open-source remote desktop
+cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
 
 # Nerd Fonts (from your xresources)
 cask "font-caskaydia-cove-nerd-font"

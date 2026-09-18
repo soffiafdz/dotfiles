@@ -7,6 +7,7 @@
 
 # Taps
 tap "nikitabobko/tap"  # aerospace
+tap "deskflow/tap"     # deskflow
 
 # Core CLI tools
 brew "stow"           # Dotfiles management - install this first
@@ -75,6 +76,7 @@ cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "karabiner-elements"  # Right Cmd -> Hyper, Caps -> Esc/Ctrl
 cask "raycast"        # Launcher (Hyper + D)
+cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
 
 # Browser (Aerospace binds Hyper+W to it)
 cask "zen"
