@@ -27,7 +27,7 @@ set signcolumn=yes
 set nowrap linebreak breakindent
 set cursorline
 set confirm hidden autoread
-set updatetime=200 timeoutlen=300 ttimeoutlen=10
+set updatetime=200 timeoutlen=1000 ttimeoutlen=10
 set completeopt=menu,menuone,noselect
 set shortmess+=c
 set wildmenu wildmode=longest:full,full
@@ -232,7 +232,7 @@ let g:r_tmux_target = get(g:, 'r_tmux_target', '.+')
 
 function! s:RSend(text) abort
   if empty($TMUX)
-    echohl WarningMsg | echo 'R: not inside tmux' | echohl None
+    echohl WarningMsg | echomsg 'R: not inside tmux' | echohl None
     return
   endif
   let l:t = shellescape(g:r_tmux_target)
@@ -255,7 +255,7 @@ command! Rcmd echo s:RCommand()
 
 function! s:RStart() abort
   if empty($TMUX)
-    echohl WarningMsg | echo 'R: not inside tmux' | echohl None
+    echohl WarningMsg | echomsg 'R: not inside tmux' | echohl None
     return
   endif
   call system('tmux split-window -hf -d ' . shellescape(s:RCommand()))
@@ -265,12 +265,12 @@ function! s:RSendRange() abort
   call s:RSend(join(getline(line("'<"), line("'>")), "\n"))
 endfunction
 
-nnoremap <silent> <localleader>rf :call <SID>RStart()<CR>
-nnoremap <silent> <localleader>rq :call <SID>RSend('quit(save = "no")')<CR>
-nnoremap <silent> <localleader>l  :call <SID>RSend(getline('.'))<CR>j
-vnoremap <silent> <localleader>ss :<C-u>call <SID>RSendRange()<CR>
-nnoremap <silent> <localleader>aa :call <SID>RSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
-nnoremap <silent> <localleader>ro :call <SID>RSend('ls.str()')<CR>
+nnoremap <localleader>rf :call <SID>RStart()<CR>
+nnoremap <localleader>rq :call <SID>RSend('quit(save = "no")')<CR>
+nnoremap <localleader>l  :call <SID>RSend(getline('.'))<CR>j
+vnoremap <localleader>ss :<C-u>call <SID>RSendRange()<CR>
+nnoremap <localleader>aa :call <SID>RSend('source("' . expand('%:p') . '", echo = TRUE)')<CR>
+nnoremap <localleader>ro :call <SID>RSend('ls.str()')<CR>
 
 " ===============================
 " Machine-local overrides
