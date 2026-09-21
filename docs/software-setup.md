@@ -36,6 +36,7 @@ Reference for setting up machines after formatting.
 | **Clipboard** | clipmenu | AUR | Super+X |
 | **Screenshots** | flameshot | `pacman -S flameshot` | |
 | **Media Server** | Jellyfin | rootless podman container, runit service (`jellyfin/README.md`) | Not from pacman; access from Fire TV, other devices |
+| **Containers** | podman, nvidia-container-toolkit | `pacman -S podman-docker buildah nvidia-container-toolkit` | Build host for cluster images; GPU via CDI. See `docs/containers.md` |
 | **Music Client** | Feishin | Flatpak or AUR | Jellyfin frontend |
 | **Compositor** | picom | `pacman -S picom` | For transparency |
 | **Notifications** | dunst | `pacman -S dunst` | |
