@@ -104,7 +104,9 @@ done
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh" ] &&
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh"
 
-# Direnv
+# Direnv. Its "loading .envrc" line breaks p10k's instant prompt when a shell
+# starts inside a project; the prompt segment shows the state instead.
+export DIRENV_LOG_FORMAT=
 command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # zoxide - `z <fragment>` jumps to a frecent dir, `zi` picks interactively
