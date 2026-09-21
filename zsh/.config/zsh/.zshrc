@@ -105,9 +105,17 @@ done
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/completion.zsh"
 
 # Direnv. Its "loading .envrc" line breaks p10k's instant prompt when a shell
-# starts inside a project; the prompt segment shows the state instead.
-export DIRENV_LOG_FORMAT=
-command -v direnv >/dev/null && eval "$(direnv hook zsh)"
+# starts inside a project, and direnv >= 2.37 ignores an empty
+# DIRENV_LOG_FORMAT, so the hook is redefined with stderr dropped. The prompt
+# segment shows the state instead.
+if command -v direnv >/dev/null; then
+  eval "$(direnv hook zsh)"
+  _direnv_hook() {
+    trap -- '' SIGINT
+    eval "$(direnv export zsh 2>/dev/null)"
+    trap - SIGINT
+  }
+fi
 
 # zoxide - `z <fragment>` jumps to a frecent dir, `zi` picks interactively
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
