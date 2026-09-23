@@ -95,7 +95,7 @@ Mute              Super + =
 RAYCAST HOTKEYS (macOS)
 ==========================================
 Screenshot        Hyper + S
-Full screenshot   Hyper + Shift + S
+Full screenshot   Cmd + Shift + 3  (macOS, not Raycast)
 Clipboard         Hyper + X
 
 TMUX (Ctrl-A prefix)

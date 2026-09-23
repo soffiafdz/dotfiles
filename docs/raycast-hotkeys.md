@@ -15,10 +15,10 @@ Hotkeys to configure in Raycast to match dwm keybindings.
 | Hotkey | Extension | Command | dwm Equivalent | Status |
 |--------|-----------|---------|----------------|--------|
 | `Hyper + S` | Screenshot | Capture Area | `Super + S` (flameshot gui) | ✅ Configured |
-| `Hyper + Shift + S` | Screenshot | Capture Fullscreen | `Super + Shift + S` | ✅ Configured |
+| `Cmd + Shift + 3` | (macOS built-in) | Capture Fullscreen | `Super + Shift + S` | Stock macOS, nothing to set |
 | `Hyper + X` | Clipboard History | Clipboard History | `Super + X` (clipmenu) | ✅ Configured |
 | `Hyper + Backspace` | System | System Commands | `Super + Backspace` (sysaction) | ❌ Cannot use (conflict) |
-| `Hyper + Shift + D` | 1Password | Search Passwords | `Super + Shift + D` (dmenupass) | ❌ Cannot use (conflict) |
+| `Hyper + Shift + D` | 1Password | Search Passwords | `Super + Shift + D` (dmenupass) | ❌ Impossible, see below |
 
 ## Extensions to Install (if not present)
 
@@ -29,6 +29,13 @@ Hotkeys to configure in Raycast to match dwm keybindings.
 
 ## Notes
 
+- **Hyper already includes Shift** (Karabiner maps Right Command to
+  Cmd+Ctrl+Alt+Shift), so `Hyper + Shift + <key>` is the same chord as
+  `Hyper + <key>` and cannot be bound separately. `Hyper + Shift + D` is just
+  `Hyper + D`, which Aerospace already uses to open Raycast.
+- **These hotkeys are per-machine.** Raycast keeps them in an encrypted local
+  database that nothing in this repo can stow, so each Mac has to be configured
+  by hand from this table. The statuses below refer to noctua.
 - Hyper key = Right Command via Karabiner
 - These match the corresponding dwm keybindings for muscle memory
 - D (Raycast launcher) is already set as `Hyper + D` in Aerospace config

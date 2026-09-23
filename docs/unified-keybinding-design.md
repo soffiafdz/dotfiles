@@ -169,10 +169,13 @@ Configured in Raycast Settings → Extensions:
 | Hotkey | Command | dwm Equivalent |
 |--------|---------|----------------|
 | Hyper + S | Screenshot (area) | Super + S |
-| Hyper + Shift + S | Screenshot (full) | Super + Shift + S |
+| Cmd + Shift + 3 | Screenshot (full), macOS built-in | Super + Shift + S |
 | Hyper + X | Clipboard History | Super + X |
 
-**Note**: Hyper + Backspace and Hyper + Shift + D cannot be used with Raycast due to conflicts.
+**Note**: Hyper already includes Shift (Right Command → Cmd+Ctrl+Alt+Shift), so
+`Hyper + Shift + <key>` is indistinguishable from `Hyper + <key>` and cannot be
+bound separately — `Hyper + Shift + D` is simply `Hyper + D`, the Raycast
+launcher. Hyper + Backspace is also unavailable.
 
 ---
 
