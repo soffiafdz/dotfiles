@@ -56,11 +56,23 @@ Otherwise tango builds on janus over ssh like hestia does.
 ## hestia (macOS, Apple Silicon)
 
     brew install podman           # in the Brewfiles
-    podman machine init --cpus 4 --memory 8192 --disk-size 60 --now
+    stow -t "$HOME" containers    # containers.conf: 6 CPUs, 8 GiB, 150 GiB, Rosetta
+    podman machine init --now     # sizing comes from containers.conf
 
-That is a local Linux VM for running containers; amd64 images run and build
-emulated, which is fine for a quick look and wrong for a real build. No Docker
-Desktop, no Colima.
+That is a local Linux VM for running containers. No Docker Desktop, no Colima.
+
+The `containers` package must be stowed *before* `machine init`: `[machine]`
+settings are read when the machine is created, not while it runs, so changing
+them later means `podman machine rm -f podman-machine-default` and a fresh
+init. `podman machine set` can resize cpus/memory/disk, but cannot turn
+Rosetta on.
+
+`rosetta = true` makes linux/amd64 images run through Rosetta instead of QEMU,
+which is the difference between usable and painful. Still the wrong place for
+a real cluster build - that happens on janus, native.
+
+The VM does not start at login: after a reboot, `podman machine start`.
+`podman machine stop` gives the RAM back.
 
 Anything destined for the cluster is built on janus over ssh:
 

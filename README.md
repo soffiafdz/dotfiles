@@ -176,6 +176,7 @@ aliases and job templates.
 | `bin` | `~/.local/bin` | all | Scripts, see below. |
 | `bpytop` | `~/.config/bpytop` | Linux | Process monitor theme and config. |
 | `castero` | `~/.config/castero` | Linux | Podcast client config and an OPML export of feeds. |
+| `containers` | `~/.config/containers` | Macs | Podman machine defaults: size and Rosetta. Read at `machine init`. |
 | `dunst` | `~/.config/dunst` | Linux | Notifications. Keys are bound in dwm via `dunstctl`, not in dunstrc. |
 | `foot` | `~/.config/foot` | Wayland hosts | Terminal, unused on janus. |
 | `fzf` | `~/.config/fzf` | all | Vendored key bindings and completion, sourced by `.zshrc`. |
