@@ -27,6 +27,9 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[url "git@github.com:"]
+	# Push to GitHub over SSH even when the remote was cloned over HTTPS
+	pushInsteadOf = https://github.com/
 [include]
 	# Machine-local overrides (work email, etc). Ignored if absent.
 	path = config.local
