@@ -46,7 +46,17 @@ set mouse=a
 
 " Trilingual prose: a word valid in any of these is accepted, which is what
 " makes spell checking usable across en/es/fr. Matches nvim's spelllang.
-set spelllang=en,es,fr
+" The es/fr .spl files ship in vim/.vim/spell/; en is built into vim. Ask only
+" for the ones actually present, otherwise vim warns once per prose buffer -
+" which is what happens on the clusters when only ~/.vimrc has been copied.
+let s:langs = ['en']
+for s:lang in ['es', 'fr']
+  if !empty(globpath(&runtimepath, 'spell/' . s:lang . '.utf-8.spl'))
+    call add(s:langs, s:lang)
+  endif
+endfor
+let &spelllang = join(s:langs, ',')
+unlet s:langs s:lang
 
 if has('termguicolors') && $TERM !=# 'linux'
   set termguicolors

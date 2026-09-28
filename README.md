@@ -197,7 +197,7 @@ aliases and job templates.
 | `sioyek`, `zathura` | `~/.config/...` | all / Linux | PDF readers. Sioyek has the Zotero and SyncTeX setup, see docs. |
 | `ssh` | `~/.ssh/config` | all | Workstation hosts and jump config. Home hosts are in `config.local`. |
 | `tmux` | `~/.config/tmux` | all | gpakosz's tmux.conf plus `tmux.conf.local` with the actual settings. |
-| `vim` | `~/.vimrc` | all | Fallback editor, and the only editor on clusters. Plugin-free, ported from the nvim config: same leaders, spell setup, prose autosave and R-in-tmux mappings. |
+| `vim` | `~/.vimrc`, `~/.vim/spell` | all | Fallback editor, and the only editor on clusters. Plugin-free, ported from the nvim config: same leaders, spell setup, prose autosave and R-in-tmux mappings. Carries the es/fr spell files, since the clusters do not stow `nvim`. |
 | `x11` | `~/.config/x11` | Linux | `xinitrc`, `xprofile`, `xpipewire`, Xresources. |
 | `yazi` | `~/.config/yazi` | all | File manager, gruvbox flavor, openers. |
 | `zsh` | `~/.zshenv`, `~/.config/zsh` | all | Login and interactive shell, see below. |
