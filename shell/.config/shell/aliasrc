@@ -95,7 +95,15 @@ alias \
 # kitty sets TERM=xterm-kitty, which most remote hosts have no terminfo for.
 # kitten ssh copies it over on connect (into the remote's ~/.terminfo, so no
 # root needed). Guarded: outside kitty, or without the kitten, use plain ssh.
-if [ -n "$KITTY_WINDOW_ID" ] && command -v kitten >/dev/null 2>&1; then
+#
+# Not inside tmux: KITTY_WINDOW_ID survives into the multiplexer, but the
+# kitten needs the terminal to itself. Inside tmux it either refuses outright
+# ("must be run in a kitty terminal") or swallows interactive prompts, which
+# is how the MFA selector on the Alliance hosts vanished. No loss: tmux sets
+# TERM=tmux-256color, which remote hosts already know, so there is nothing to
+# copy. `\ssh` still bypasses the alias anywhere.
+if [ -n "$KITTY_WINDOW_ID" ] && [ -z "$TMUX" ] && [ "$TERM" = "xterm-kitty" ] &&
+  command -v kitten >/dev/null 2>&1; then
   alias ssh="kitten ssh"
 fi
 
