@@ -366,9 +366,17 @@ set -g default-terminal "tmux-256color"
 # terminal actually used has to be listed. kitty/foot advertise Smulx+Setulc in
 # their terminfo but tmux only infers RGB from it, so undercurl and coloured
 # underlines are dropped unless usstyle is declared here.
-set -as terminal-features ",xterm-256color:RGB:usstyle"
-set -as terminal-features ",xterm-kitty:RGB:usstyle:hyperlinks:sync"
-set -as terminal-features ",foot*:RGB:usstyle"
+# cstyle: the outer terminal understands DECSCUSR, so tmux passes through the
+# cursor-shape changes vim makes per mode. Without it the cursor is stuck as a
+# block inside tmux, because tmux-256color's terminfo has no Ss/Se.
+set -as terminal-features ",xterm-256color:RGB:usstyle:cstyle"
+set -as terminal-features ",xterm-kitty:RGB:usstyle:hyperlinks:sync:cstyle"
+set -as terminal-features ",foot*:RGB:usstyle:cstyle"
+# Nested tmux (local tmux -> ssh -> tmux on the workstation): the inner server
+# sees TERM=tmux-256color, which matches none of the patterns above, so it has
+# to be told as well or the cursor shape stops at the outer session.
+set -as terminal-features ",tmux-256color:RGB:usstyle:cstyle"
+set -as terminal-features ",screen-256color:cstyle"
 
 # -- tpm -----------------------------------------------------------------------
 

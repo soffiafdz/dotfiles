@@ -58,6 +58,19 @@ endfor
 let &spelllang = join(s:langs, ',')
 unlet s:langs s:lang
 
+" Cursor shape per mode: bar in insert, underline in replace, block otherwise.
+" Vim only does this on its own for terminals whose terminfo carries Ss/Se, and
+" tmux-256color does not, so inside tmux the cursor stays a block. Send the
+" DECSCUSR codes by hand; tmux forwards them once the outer terminal declares
+" the cstyle feature (see tmux.conf.local). The linux console has no DECSCUSR.
+if $TERM !=# 'linux'
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+  " Leave a block behind on exit rather than whatever mode vim quit from.
+  let &t_te = &t_te . "\<Esc>[2 q"
+endif
+
 if has('termguicolors') && $TERM !=# 'linux'
   set termguicolors
 endif
