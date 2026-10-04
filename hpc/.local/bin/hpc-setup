@@ -106,6 +106,6 @@ done. Reminders:
   - log out and back in (or exec zsh -l) to pick up the hpc profile
   - the repo belongs in $HOME; only data goes in ~/projects or ~/scratch
   - pip installs only work on login nodes
-  - vim runs plugin-free here; <leader>rr opens R in a tmux pane
+  - vim runs plugin-free here; <localleader>rf opens R in a tmux pane
   - csvlens <file> to browse large CSV/TSV output
 MSG
