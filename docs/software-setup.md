@@ -224,6 +224,37 @@ anything, but sync would still put personal history on employer hardware and
 work commands in a personal account. It runs atuin local-only; `atuin login`
 there later is a reversible decision.
 
+## Password Store Notes
+
+### Do not delete the Proton Bridge entry
+
+`pass` contains an entry that looks like junk and is not:
+
+```
+docker-credential-helpers/cHJvdG9ubWFpbC9icmlkZ2UtdjMvdXNlcnMvYnJpZGdlLXZhdWx0LWtleQ==
+```
+
+Base64-decodes to `protonmail/bridge-v3/users/bridge-vault-key`. Proton Bridge
+uses the store as its keychain (`Helper: pass-app` in
+`~/.config/protonmail/bridge-v3/keychain.json`) and looks the key up by that
+exact path - it is computed by the docker-credential-helpers protocol, not
+chosen, so it cannot be renamed. Delete or move it and Bridge loses the key to
+its local vault, forcing a Proton re-authentication.
+
+macOS machines are unaffected: Bridge uses the system Keychain there, not pass.
+
+### Why the store has a .gitignore
+
+Bridge writes a throwaway probe entry (`bridge/check`) on every start and
+deletes it again. Each write and delete was a `pass` git commit - 90 of the
+store's first 421 commits were this churn, and it is a git-conflict generator
+when two machines sync. The store's `.gitignore` covers
+`docker-credential-helpers/`, which makes `pass`'s `git_add_file()` bail before
+committing. Already-tracked files are unaffected, so the vault key still syncs.
+
+`DisableTest: true` in Bridge's `keychain.json` does **not** stop the probe -
+tested, it still ran.
+
 ## Artix-Specific Notes
 
 - **No systemd** - use runit/OpenRC/s6
