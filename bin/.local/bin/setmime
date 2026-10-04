@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# Apply the preferred default applications below with xdg-mime.
+#
+# ~/.config/mimeapps.list itself is not tracked: apps rewrite it in place
+# (which would replace a stow symlink) and some of its entries only make sense
+# on one machine. This sets just the listed types and skips any app that is
+# not installed on this host. Run it after installing an app or editing the
+# list; it is safe to run repeatedly.
+
+list() {
+  cat <<'EOF'
+# Office documents
+onlyoffice-desktopeditors.desktop application/msword application/msword-template application/vnd.ms-word.document.macroenabled.12
+onlyoffice-desktopeditors.desktop application/vnd.ms-excel application/vnd.ms-excel.sheet.macroEnabled.12 application/vnd.ms-excel.sheet.binary.macroEnabled.12 application/vnd.ms-excel.template.macroEnabled.12
+onlyoffice-desktopeditors.desktop application/vnd.ms-powerpoint application/vnd.ms-powerpoint.presentation.macroEnabled.12 application/vnd.ms-powerpoint.slideshow.macroEnabled.12 application/vnd.ms-powerpoint.template.macroEnabled.12
+onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.wordprocessingml.document application/vnd.openxmlformats-officedocument.wordprocessingml.template
+onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/vnd.openxmlformats-officedocument.spreadsheetml.template
+onlyoffice-desktopeditors.desktop application/vnd.openxmlformats-officedocument.presentationml.presentation application/vnd.openxmlformats-officedocument.presentationml.slideshow application/vnd.openxmlformats-officedocument.presentationml.template
+onlyoffice-desktopeditors.desktop application/vnd.oasis.opendocument.text application/vnd.oasis.opendocument.text-flat-xml application/vnd.oasis.opendocument.text-template
+onlyoffice-desktopeditors.desktop application/vnd.oasis.opendocument.spreadsheet application/vnd.oasis.opendocument.spreadsheet-flat-xml application/vnd.oasis.opendocument.spreadsheet-template
+onlyoffice-desktopeditors.desktop application/vnd.oasis.opendocument.presentation application/vnd.oasis.opendocument.presentation-flat-xml application/vnd.oasis.opendocument.presentation-template
+
+# DjVu and comics
+okularApplication_djvu.desktop image/vnd.djvu
+okularApplication_comicbook.desktop application/x-cbz application/x-cbr application/x-cb7
+
+# Ebooks open in the calibre reader, not its editor
+calibre-ebook-viewer.desktop application/epub+zip application/x-mobi8-ebook application/x-mobipocket-ebook application/x-mobipocket-subscription
+calibre-ebook-viewer.desktop application/ereader application/oebps-package+xml application/vnd.ctc-posml application/x-cbc application/x-sony-bbeb
+
+# Web pages
+firefox.desktop text/html application/xhtml+xml
+EOF
+}
+
+die() {
+  echo "setmime: $1" >&2
+  exit 1
+}
+
+# True if a .desktop file with this name exists in any XDG data dir.
+installed() {
+  for _dir in "${XDG_DATA_HOME:-$HOME/.local/share}" \
+    $(echo "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" | tr ':' ' '); do
+    [ -f "$_dir/applications/$1" ] && return 0
+  done
+  return 1
+}
+
+command -v xdg-mime >/dev/null || die "xdg-mime is not installed"
+
+list | while read -r app types; do
+  case "$app" in '' | '#'*) continue ;; esac
+  if ! installed "$app"; then
+    echo "skip  $app (not installed)"
+    continue
+  fi
+  _n=0
+  for type in $types; do
+    xdg-mime default "$app" "$type" || die "xdg-mime failed for $type"
+    _n=$((_n + 1))
+  done
+  echo "set   $app ($_n)"
+done

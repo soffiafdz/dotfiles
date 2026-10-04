@@ -264,6 +264,7 @@ All in `bin/.local/bin`, POSIX sh unless noted. The dmenu ones are bound in dwm.
 | `pinentry-auto` | Chooses the first available pinentry (macOS GUI, Qt/GTK, curses). |
 | `dwmbar`, `refbar` | Status bar loop and its refresh signal (`SIGUSR1`). |
 | `setwp` | Wallpaper picker and setter. |
+| `setmime` | Default apps per file type (OnlyOffice, Okular, calibre reader, Firefox) via `xdg-mime`; skips apps not installed. Run once per machine; `mimeapps.list` itself stays untracked. |
 | `init_tmux` | Attach to the unattached `LOCAL` session or create the next one. Bound to Super+Shift+Return. |
 | `displayoff`, `janus-monitors` | DPMS off; toggle the second monitor on janus. |
 | `tpadToggle`, `tpointToggle`, `killKbd`, `tpadfix` | ThinkPad input toggles and the i2c_hid blacklist fix. Laptop-only. |
