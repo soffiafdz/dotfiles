@@ -16,12 +16,12 @@ case "$(readlink -f /sbin/init)" in
 esac
 
 cmds="\
-  display off	displayoff
- lock	slock
+  display off	displayoff
+ lock	slock
 󰠚 leave DWM	kill -TERM $(pgrep -u "$USER" -x dwm)
 ⏾ sleep	${hib:-systemctl suspend-then-hibernate -i}
- reboot	${reb:-sudo -A reboot}
- shutdown	${shut:-sudo -A shutdown -h now}"
+ reboot	${reb:-sudo -A reboot}
+ shutdown	${shut:-sudo -A shutdown -h now}"
 
 die() {
   if command -v notify-send >/dev/null; then
