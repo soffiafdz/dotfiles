@@ -70,6 +70,29 @@ clone https://github.com/romkatv/powerlevel10k.git "$ZSH_SHARE/powerlevel10k"
 clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
 	"$ZSH_SHARE/fast-syntax-highlighting"
 
+# --- csvlens --------------------------------------------------------------
+# Viewer for large CSV/TSV output: streams the file where vim would crawl.
+# One static binary, so one file against the quota. Re-running updates it.
+install_csvlens() {
+	case "$(uname -m)" in
+	x86_64) target=x86_64-unknown-linux-musl ;;
+	*) echo "!! csvlens: no static build for $(uname -m), skipped" >&2; return 0 ;;
+	esac
+	url="https://github.com/YS-L/csvlens/releases/latest/download/csvlens-$target.tar.xz"
+	tmp="$(mktemp -d)"
+	if (cd "$tmp" &&
+		curl -fsSLO "$url" && curl -fsSLO "$url.sha256" &&
+		sha256sum -c --quiet "csvlens-$target.tar.xz.sha256" &&
+		tar -xJf "csvlens-$target.tar.xz"); then
+		install -m 755 "$tmp/csvlens-$target/csvlens" "$PREFIX/bin/csvlens"
+		echo "csvlens: $("$PREFIX/bin/csvlens" --version)"
+	else
+		echo "!! csvlens: download failed, skipped" >&2
+	fi
+	rm -rf "$tmp"
+}
+install_csvlens
+
 # --- R personal library ---------------------------------------------------
 # Version-specific, so a module upgrade does not mix compiled packages.
 if command -v module >/dev/null 2>&1; then
@@ -84,4 +107,5 @@ done. Reminders:
   - the repo belongs in $HOME; only data goes in ~/projects or ~/scratch
   - pip installs only work on login nodes
   - vim runs plugin-free here; <leader>rr opens R in a tmux pane
+  - csvlens <file> to browse large CSV/TSV output
 MSG

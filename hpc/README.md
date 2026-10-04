@@ -8,7 +8,8 @@ account file below is machine-local and must not land in the repo.
     ~/.config/hpc/account             your allocation, e.g. def-pi (untracked)
     ~/.config/hpc/modules             module versions for this cluster (untracked)
     ~/.local/bin/hpc-setup            one-time install on a login node
-                                      (zsh prompt, bash handoff, account)
+                                      (zsh prompt, bash handoff, account,
+                                      csvlens)
     ~/.local/bin/init_tmux            start or attach the cluster's session
     ~/.local/share/hpc/templates/     sbatch templates
 
@@ -115,7 +116,22 @@ radian, build it on a **login node** into a virtualenv that is on your `$PATH`
 come from PyPI rather than the Alliance wheelhouse).
 
 Plugin stand-ins: built-in statusline, `:find` over `path+=**` (`<leader>ff`),
-`gcc`/`gc` comment toggle from `commentstring`, `<leader>u*` toggles.
+`gcc`/`gc` comment toggle from `commentstring`, `<leader>u*` toggles, and one
+colour per column in CSV/TSV (Vim 9.1 does this itself; older vims get the same
+syntax from `.vimrc`).
+
+## Data files
+
+vim is for editing small CSVs: sample sheets, config tables, ID lists. For
+large output, `hpc-setup` installs `csvlens` into `~/.local/bin`: one static
+binary that streams the file, with a frozen header, search (`/`), and row and
+column filters (`&`, `*`). `-t` for TSV; `--auto-reload` to follow a file a
+running job is still writing.
+
+For more than looking (sorting, frequency tables, summary stats), VisiData is
+the same `vd` R.nvim uses on the workstation. It is not installed here: `pip
+install visidata` into a virtualenv on a login node if you need it
+(`avail_wheels visidata` first), at a few hundred files against the quota.
 
 ## Python environments across machines
 
