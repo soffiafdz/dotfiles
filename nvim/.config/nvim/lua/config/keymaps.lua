@@ -21,14 +21,9 @@ wk.add({
     {
       "<leader>lg",
       function()
-        local clients = vim.lsp.get_clients({ name = "harper_ls" })
-        if #clients > 0 then
-          vim.cmd("LspStop harper_ls")
-          vim.notify("Harper stopped", vim.log.levels.INFO)
-        else
-          vim.cmd("LspStart harper_ls")
-          vim.notify("Harper started", vim.log.levels.INFO)
-        end
+        local on = not vim.lsp.is_enabled("harper_ls")
+        vim.lsp.enable("harper_ls", on)
+        vim.notify(on and "Harper started" or "Harper stopped", vim.log.levels.INFO)
       end,
       desc = "Toggle Harper grammar",
       icon = "󰓆",

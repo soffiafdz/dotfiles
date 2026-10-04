@@ -6,6 +6,9 @@
 -- rest. It is experimental upstream — if it misbehaves on mixed-language
 -- passages, toggle Harper off with <leader>lg or set isolateEnglish = false.
 --
+-- Harper is opt-in: it is configured but never auto-started. Turn it on
+-- (for every matching buffer, for the rest of the session) with <leader>lg.
+--
 -- Harper reuses the native spellfile as its user dictionary, so any word
 -- added with `zg` is also accepted by Harper.
 
@@ -65,6 +68,13 @@ return {
             },
           },
         },
+      },
+      setup = {
+        -- Register the config without enabling it; <leader>lg toggles it
+        harper_ls = function(server, sopts)
+          vim.lsp.config(server, sopts)
+          return true
+        end,
       },
     },
   },
