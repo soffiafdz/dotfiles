@@ -211,6 +211,42 @@ augroup FiletypeSettings
   autocmd BufRead,BufNewFile *.sbatch,*.slurm setf sh
   " Quarto/Rmd
   autocmd BufRead,BufNewFile *.qmd setf markdown
+  " Delimited data; recent vims detect these already
+  autocmd BufRead,BufNewFile *.csv setf csv
+  autocmd BufRead,BufNewFile *.tsv setf tsv
+augroup END
+
+" ===============================
+" CSV/TSV columns (rainbow_csv's job)
+" ===============================
+" Vim 9.1 colours each column itself (syntax/csv.vim). The clusters' vims may
+" predate that, so when no runtime syntax claimed the buffer, rebuild it here
+" in legacy script: nine groups chained by nextgroup, one per column, cycling;
+" the esc* regions keep a quoted field with delimiters inside as one column.
+function! s:CsvSyntax(delimiter) abort
+  let l:d = get(b:, 'csv_delimiter', a:delimiter)
+  for l:col in range(8, 0, -1)
+    let l:next = l:col == 8 ? 0 : l:col + 1
+    let l:nextgroup = ' nextgroup=escCsvCol' . l:next . ',csvCol' . l:next
+    execute 'syntax match csvCol' . l:col . ' /.\{-}\(' . l:d . '\|$\)/' . l:nextgroup
+    execute 'syntax region escCsvCol' . l:col
+          \ . ' start=/ *"\([^"]*""\)*[^"]*/ end=/" *\(' . l:d . '\|$\)/' . l:nextgroup
+  endfor
+  let l:links = ['Statement', 'Constant', 'Type', 'PreProc', 'Identifier',
+        \ 'Special', 'String', 'Comment']
+  for l:i in range(1, 8)
+    execute 'highlight default link csvCol' . l:i . ' ' . l:links[l:i - 1]
+    execute 'highlight default link escCsvCol' . l:i . ' csvCol' . l:i
+  endfor
+  let b:current_syntax = &syntax
+endfunction
+
+augroup CsvColumns
+  autocmd!
+  " Runs after the runtime's own Syntax handler, which sets b:current_syntax
+  " when it had something for this filetype.
+  autocmd Syntax csv if !exists('b:current_syntax') | call s:CsvSyntax(',') | endif
+  autocmd Syntax tsv if !exists('b:current_syntax') | call s:CsvSyntax('\t') | endif
 augroup END
 
 " Jump back to the last position, and trim trailing whitespace on write
