@@ -5,27 +5,27 @@ image_quality = 50
 
 [opener]
 # Edit text files
-edit = [{ run = 'nvim "$@"', block = true }]
+edit = [{ run = 'nvim %s', block = true }]
 
 # Open images (mpv on Linux, Preview on macOS)
 image = [
-  { run = 'mpv --image-display-duration=inf "$@"', orphan = true, desc = "Open image", for = "linux" },
-  { run = 'open "$@"', orphan = true, for = "macos" },
+  { run = 'mpv --image-display-duration=inf %s', orphan = true, desc = "Open image", for = "linux" },
+  { run = 'open %s', orphan = true, for = "macos" },
 ]
 
 # Open PDFs (zathura on Linux, Preview on macOS)
 pdf = [
-  { run = 'zathura "$@"', for = "linux" },
-  { run = 'open "$@"', for = "macos" },
+  { run = 'zathura %s', for = "linux" },
+  { run = 'open %s', for = "macos" },
 ]
 
 # Open videos
-video = [{ run = 'mpv "$@"' }]
+video = [{ run = 'mpv %s' }]
 
 # Open office documents
 office = [
-  { run = 'libreoffice "$@"', orphan = true, for = "linux" },
-  { run = 'open "$@"', orphan = true, for = "macos" },
+  { run = 'onlyoffice-desktopeditors %s', orphan = true, for = "linux" },
+  { run = 'open %s', orphan = true, for = "macos" },
 ]
 
 [open]
