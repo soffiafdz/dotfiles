@@ -19,6 +19,7 @@ brew "rclone"         # Mount remote filesystems (sshfs alternative)
 brew "rsync"          # Fast file sync (newer than macOS built-in)
 brew "tealdeer"       # Simplified man pages (tldr)
 brew "ouch"           # Universal compression tool
+brew "duti"           # Default apps per file type (duti package)
 
 # Shell
 brew "zsh-syntax-highlighting"
@@ -73,7 +74,6 @@ cask "karabiner-elements"  # Keyboard customization
 cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "quarto"         # Scientific publishing
-cask "calibre"        # E-book management (includes EPUB reader)
 cask "zotero"         # Reference manager
 cask "sioyek"         # Academic PDF reader
 cask "digikam"        # Photo management

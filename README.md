@@ -178,6 +178,7 @@ aliases and job templates.
 | `castero` | `~/.config/castero` | Linux | Podcast client config and an OPML export of feeds. |
 | `containers` | `~/.config/containers` | Macs | Podman machine defaults: size and Rosetta. Read at `machine init`. |
 | `dunst` | `~/.config/dunst` | Linux | Notifications. Keys are bound in dwm via `dunstctl`, not in dunstrc. |
+| `duti` | `~/.config/duti` | macOS | Default apps per file type, the macOS side of `setmime`. Apply with `duti ~/.config/duti/defaults.duti` after installing an app. |
 | `foot` | `~/.config/foot` | Wayland hosts | Terminal, unused on janus. |
 | `fzf` | `~/.config/fzf` | all | Vendored key bindings and completion, sourced by `.zshrc`. |
 | `git` | `~/.config/git` | all | Identity, aliases, safe defaults. Includes `config.local`. |

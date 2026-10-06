@@ -1,0 +1,65 @@
+# Default apps on macOS, applied with: duti ~/.config/duti/defaults.duti
+# Format: bundle_id  UTI  role. duti's settings file does not accept
+# extensions, so types with no system UTI use the dynamic UTI macOS derives
+# from the extension (UTType(filenameExtension:)), named in a comment above.
+
+# Text and code: kitty opens text files in $EDITOR (nvim)
+net.kovidgoyal.kitty  net.daringfireball.markdown     all
+# .qmd
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81c5pe  all
+# .rmd
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81e5pe  all
+# .rst
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81e65y  all
+# .org
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge8086xh  all
+net.kovidgoyal.kitty  com.unknown.adoc                all
+net.kovidgoyal.kitty  public.plain-text               all
+net.kovidgoyal.kitty  public.yaml                     all
+net.kovidgoyal.kitty  public.json                     all
+net.kovidgoyal.kitty  public.xml                      all
+net.kovidgoyal.kitty  public.rss                      all
+# .toml
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81k55rru  all
+# .ini
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge80w5xm  all
+# .conf
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge80g55sq2  all
+# .cfg
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge80g3xh  all
+net.kovidgoyal.kitty  public.python-script            all
+net.kovidgoyal.kitty  com.apple.rez-source            all
+net.kovidgoyal.kitty  org.tug.lua                     all
+net.kovidgoyal.kitty  com.netscape.javascript-source  all
+net.kovidgoyal.kitty  public.c-source                 all
+net.kovidgoyal.kitty  public.c-header                 all
+net.kovidgoyal.kitty  public.c-plus-plus-source       all
+# .rs
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81e62  all
+# .go
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge80s52  all
+# .jl
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge80y5a  all
+# .sql
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81g6pq  all
+# .vim
+net.kovidgoyal.kitty  dyn.ah62d4rv4ge81q4pr  all
+net.kovidgoyal.kitty  public.patch-file               all
+net.kovidgoyal.kitty  org.tug.tex                     all
+net.kovidgoyal.kitty  org.tug.tex.bibtex              all
+net.kovidgoyal.kitty  org.tug.cls                     all
+net.kovidgoyal.kitty  org.tug.sty                     all
+net.kovidgoyal.kitty  public.tab-separated-values-text  all
+
+# Images that GIMP claimed
+com.apple.Preview  public.heic  all
+com.apple.Preview  public.avif  all
+
+# Web and media that Brave claimed
+org.mozilla.firefox  public.xhtml           all
+org.mozilla.firefox  org.webmproject.webm   all
+org.mozilla.firefox  org.xiph.ogg-audio     all
+org.mozilla.firefox  org.xiph.ogv           all
+
+# Ebooks in Books; calibre and the library live on the Linux desktop
+com.apple.iBooksX  org.idpf.epub-container  all
