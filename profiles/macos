@@ -2,6 +2,7 @@
 # No `bin`: it is dwm/dmenu/X11 glue.
 nvim
 tmux
+init_tmux
 fzf
 yazi
 atuin

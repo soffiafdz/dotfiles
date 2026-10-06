@@ -124,9 +124,9 @@ stow -nv -t "$HOME" kitty aerospace karabiner zsh shell fzf \
 stow -v -t "$HOME" kitty aerospace karabiner zsh shell fzf \
   git ssh tmux nvim yazi sioyek radian mpv atuin
 
-# bin MUST use --no-folding -- see the warning below
-stow -nv --no-folding -t "$HOME" bin                      # dry run
-stow -v --no-folding -t "$HOME" bin
+# bin and init_tmux MUST use --no-folding -- see the warning below
+stow -nv --no-folding -t "$HOME" bin init_tmux            # dry run
+stow -v --no-folding -t "$HOME" bin init_tmux
 ```
 
 Deliberately not stowed on macOS:
@@ -139,8 +139,8 @@ Deliberately not stowed on macOS:
 | `gnupg` | See §9 — only tracked file is a Linux-specific `gpg-agent.conf` |
 | `bpytop`, `zathura` | Harmless, but the tools aren't in `Brewfile.work` |
 
-`bin` is worth stowing for `init_tmux` and `pinentry-auto`, even though most of
-the scripts in it are dwm/X11 helpers that will never run here.
+`bin` is only worth stowing for `pinentry-auto`; the rest of it is dwm/X11
+helpers that will never run here. `init_tmux` is its own package.
 
 Stow folds whole directories into a single symlink, so `~/.config/kitty` becomes
 a link to the repo. Anything you drop in that directory lands *inside the repo* —

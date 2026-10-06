@@ -2,6 +2,7 @@
 # nvim_micro replaces nvim; no atuin, no bin, nothing X11.
 nvim_micro
 tmux
+init_tmux
 ssh
 yazi
 fzf

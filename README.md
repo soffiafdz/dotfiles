@@ -95,8 +95,8 @@ plain symlinks where GNU Stow is not installed (clusters).
     ./bootstrap -f macos   # force a type
     ./bootstrap -D -f hpc  # unstow that type
 
-`bin`, `gnupg` and `hpc` are always stowed `--no-folding`, so nothing a program
-writes into those directories lands in the repo.
+`bin`, `gnupg`, `hpc` and `init_tmux` are always stowed `--no-folding`, so
+nothing a program writes into those directories lands in the repo.
 
 ### Linux (Artix, runit)
 
@@ -183,6 +183,7 @@ aliases and job templates.
 | `git` | `~/.config/git` | all | Identity, aliases, safe defaults. Includes `config.local`. |
 | `gnupg` | `~/.config/gnupg` | all | Only `gpg-agent.conf`. Stow with `--no-folding`. |
 | `hpc` | `~/.config/hpc`, `~/.local/...` | clusters | Slurm aliases, `salloc`/module helpers, sbatch templates, `hpc-setup`. See its README. |
+| `init_tmux` | `~/.local/bin/init_tmux` | all but clusters | Attach to the unattached `LOCAL` tmux session or create the next one. Bound to Super+Shift+Return in dwm. Clusters use the one in `hpc`. Stow with `--no-folding`. |
 | `jellyfin` | `/etc/runit/sv/jellyfin` | janus | Podman container as a runit service. See its README. |
 | `karabiner` | `~/.config/karabiner` | macOS | Key remaps. |
 | `kitty` | `~/.config/kitty` | all | Terminal. Asks before closing a window with a running child. |
@@ -265,7 +266,6 @@ All in `bin/.local/bin`, POSIX sh unless noted. The dmenu ones are bound in dwm.
 | `dwmbar`, `refbar` | Status bar loop and its refresh signal (`SIGUSR1`). |
 | `setwp` | Wallpaper picker and setter. |
 | `setmime` | Default apps per file type (OnlyOffice, Okular, calibre reader, Firefox) via `xdg-mime`; skips apps not installed. Run once per machine; `mimeapps.list` itself stays untracked. |
-| `init_tmux` | Attach to the unattached `LOCAL` session or create the next one. Bound to Super+Shift+Return. |
 | `displayoff`, `janus-monitors` | DPMS off; toggle the second monitor on janus. |
 | `tpadToggle`, `tpointToggle`, `killKbd`, `tpadfix` | ThinkPad input toggles and the i2c_hid blacklist fix. Laptop-only. |
 | `chp`, `chbicws` | Bluetooth headphone toggle; check which BIC workstations are reachable. |

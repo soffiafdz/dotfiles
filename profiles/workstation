@@ -5,6 +5,7 @@
 # shell/aliasrc and .zshrc.
 nvim
 tmux
+init_tmux
 fzf
 yazi
 atuin
