@@ -5,7 +5,7 @@ return {
     -- Override config
     config = function()
       vim.g.vimtex_view_method = "sioyek"
-      vim.g.vimtex_compiler_method = "latexmk"
+      vim.g.vimtex_compiler_method = "tectonic"
       -- disable `K` as it conflicts with LSP hover
       vim.g.vimtex_mappings_disable = { ["n"] = { "K" } }
       vim.g.vimtex_quickfix_method = vim.fn.executable("pplatex") == 1 and "pplatex" or "latexlog"

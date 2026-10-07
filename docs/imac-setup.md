@@ -246,9 +246,10 @@ nvim +checkhealth
 ```sh
 pipx install radian                 # aliasrc has r="radian"; R.nvim uses it
 mkdir -p ~/.local/share/radian      # radian's history file lives here
-quarto install tinytex              # provides latexmk for vimtex
+quarto install tinytex              # Quarto's PDF output
 ```
 
+vimtex compiles with tectonic (from `Brewfile.work`), not TinyTeX.
 `quarto install tinytex` is the small option. Use `brew install --cask
 mactex-no-gui` instead only if you need a full TeX Live.
 

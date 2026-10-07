@@ -54,6 +54,7 @@ brew "podman"         # Containers; local VM, builds go to janus (docs/container
 
 # Documents and writing
 brew "pandoc"         # Document converter
+brew "tectonic"       # LaTeX engine (vimtex compiler)
 brew "visidata"       # Tabular data viewer - R.nvim opens data.frames with `vd`
 cask "quarto"         # Scientific publishing (run `quarto install tinytex`)
 

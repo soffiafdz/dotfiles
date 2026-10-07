@@ -132,6 +132,7 @@ no `bin`, no `atuin`.
 ### BIC workstations
 
     ./bootstrap -f workstation
+    cd ~/.local/bin && curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh   # tectonic, for vimtex
 
 Remote-only hosts: editor, shell and file tools, nothing graphical. The old
 local dwm session on phebe is deprecated; unstow `x11` and `bin` where they

@@ -51,6 +51,7 @@ brew "podman"         # Containers; local VM, builds go to janus (docs/container
 
 # Documents and writing
 brew "pandoc"         # Document converter
+brew "tectonic"       # LaTeX engine (vimtex compiler)
 
 # Media
 brew "mpv"            # Video player (for yazi)
