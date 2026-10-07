@@ -1,10 +1,10 @@
 local css = vim.fn.stdpath("config") .. "/markdown-preview.css"
 
--- Serve the preview on the Tailscale interface so it can be opened from
--- another machine on the tailnet; without Tailscale, keep the plugin's
--- default local-browser behaviour.
+-- Over SSH, serve the preview on the Tailscale interface so it can be opened
+-- from the machine on the other end; locally (or without Tailscale), keep the
+-- plugin's default local-browser behaviour.
 local function tailscale_ip()
-  if vim.fn.executable("tailscale") == 0 then
+  if not vim.env.SSH_CONNECTION or vim.fn.executable("tailscale") == 0 then
     return nil
   end
   local ip = vim.trim(vim.fn.system({ "tailscale", "ip", "-4" }))
