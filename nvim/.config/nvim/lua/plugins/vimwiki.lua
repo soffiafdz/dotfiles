@@ -6,6 +6,10 @@ return {
     lazy = false,
     init = function()
       vim.g.vimwiki_map_prefix = "<leader>v"
+      -- Must be set before vimwiki loads; otherwise every .md file becomes a
+      -- temporary wiki and loses markdown-only plugins and keymaps.
+      vim.g.vimwiki_global_ext = 0
+      vim.g.vimwiki_markdown_link_ext = 1
       vim.g.vimwiki_list = {
         {
           name = "Notes",
@@ -72,9 +76,6 @@ return {
           vim.keymap.set("n", "<S-CR>", "<Plug>VimwikiVSplitLink", { buffer = true })
         end,
       })
-      vim.g.vimwiki_global_ext = 0
-      vim.g.ext2syntax = {}
-      vim.g.vimwiki_markdown_link_ext = 1
 
       -- Set default icons for vimwiki group (palimpsest will override when active)
       local has_wk, wk = pcall(require, "which-key")
