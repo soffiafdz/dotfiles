@@ -1,5 +1,6 @@
 # Macs: hestia, noctua. Stowed on top of `common`.
 # No `bin`: it is dwm/dmenu/X11 glue.
+# No `gnupg`: gpg-agent.conf is written locally (docs/imac-setup.md).
 nvim
 tmux
 init_tmux
@@ -8,7 +9,6 @@ yazi
 atuin
 radian
 ssh
-gnupg
 kitty
 aerospace
 karabiner

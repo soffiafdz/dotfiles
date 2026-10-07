@@ -118,8 +118,8 @@ below. `docs/software-setup.md` lists the packages to install and
     cd ~/Developer/dotfiles
     ./bootstrap -f macos
 
-`gpg-agent.conf` names a Linux pinentry; on macOS point it at
-`bin/.local/bin/pinentry-auto` or the Homebrew pinentry-mac. Full walkthrough in
+`gnupg` is not stowed on Macs: its `gpg-agent.conf` names a Linux pinentry, so
+write a local one pointing at the Homebrew pinentry-mac. Full walkthrough in
 `docs/imac-setup.md`.
 
 ### Writerdeck (calliope)
@@ -182,7 +182,7 @@ aliases and job templates.
 | `foot` | `~/.config/foot` | Wayland hosts | Terminal, unused on janus. |
 | `fzf` | `~/.config/fzf` | all | Vendored key bindings and completion, sourced by `.zshrc`. |
 | `git` | `~/.config/git` | all | Identity, aliases, safe defaults. Includes `config.local`. |
-| `gnupg` | `~/.config/gnupg` | all | Only `gpg-agent.conf`. Stow with `--no-folding`. |
+| `gnupg` | `~/.config/gnupg` | Linux | Only `gpg-agent.conf`. Stow with `--no-folding`. |
 | `hpc` | `~/.config/hpc`, `~/.local/...` | clusters | Slurm aliases, `salloc`/module helpers, sbatch templates, `hpc-setup`. See its README. |
 | `init_tmux` | `~/.local/bin/init_tmux` | all but clusters | Attach to the unattached `LOCAL` tmux session or create the next one. Bound to Super+Shift+Return in dwm. Clusters use the one in `hpc`. Stow with `--no-folding`. |
 | `jellyfin` | `/etc/runit/sv/jellyfin` | janus | Podman container as a runit service. See its README. |
