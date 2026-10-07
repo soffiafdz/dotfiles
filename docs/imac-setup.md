@@ -348,19 +348,12 @@ steps.
 
 Two caveats on the alpha: its bookmark/highlight database format is incompatible
 with sioyek 2.x, so don't copy a database over from janus; and confirm the
-installed app's name and case, because `docs/sioyek-synctex-setup.md` assumes
-`/Applications/Sioyek.app/Contents/MacOS/sioyek` for
-`vimtex_view_sioyek_exe`. Fix that path if the alpha unpacks lowercase.
+installed app's name and case, because `nvim/.config/nvim/lua/plugins/vimtex.lua`
+sets `vimtex_view_sioyek_exe` to `/Applications/sioyek.app/Contents/MacOS/sioyek`.
 
 If the alpha misbehaves, building current master natively is the fallback.
 
-Then follow `docs/sioyek-synctex-setup.md`. If inverse search does nothing, it's
-because `prefs_user.config` calls `kitty` by bare name and GUI apps don't inherit
-your shell `$PATH` — use the absolute path:
-
-```
-inverse_search_command /Applications/kitty.app/Contents/MacOS/kitty nvim --headless -c "VimtexInverseSearch %2 '%1'"
-```
+Then follow `docs/sioyek-synctex-setup.md`.
 
 ## 8. macOS system settings
 

@@ -6,10 +6,8 @@ Config files in `sioyek/.config/sioyek/`:
 - `prefs_user.config` - Main preferences
 - `keys_user.config` - Custom keybindings
 
-Use stow to activate:
-```bash
-stow -d ~/Repos/dotfiles -t ~ sioyek
-```
+`./bootstrap` stows them on the `linux` and `macos` profiles. Sioyek reads
+`~/.config/sioyek` on macOS too.
 
 ---
 
@@ -20,7 +18,7 @@ stow -d ~/Repos/dotfiles -t ~ sioyek
 1. Open Zotero
 2. Preferences/Settings → General
 3. "Open PDFs using" → Choose custom
-4. Navigate to `/Applications/Sioyek.app`
+4. Navigate to `/Applications/sioyek.app`
 
 Now double-clicking PDFs in Zotero opens them in Sioyek.
 
@@ -49,8 +47,11 @@ From nvim with VimTeX:
 **Already configured** in `prefs_user.config` (VimTeX-aware, so the jump
 lands in the already-running nvim instead of spawning a new one):
 ```
-inverse_search_command kitty nvim --headless -c "VimtexInverseSearch %2 '%1'"
+inverse_search_command /usr/bin/env PATH=/opt/homebrew/bin:/usr/bin:/bin nvim --headless -c "VimtexInverseSearch %2 '%1'"
 ```
+`env` sets `$PATH` because macOS GUI apps don't inherit the shell's. This
+only applies when Sioyek is opened outside nvim (Finder, Zotero); `:VimtexView`
+passes its own `--inverse-search` with nvim's absolute path.
 
 **How to use:**
 1. In Sioyek, right-click or use designated key
@@ -101,7 +102,7 @@ Add to your nvim config for Quarto support:
 ```lua
 -- In your nvim config
 vim.g.vimtex_view_method = 'sioyek'
-vim.g.vimtex_view_sioyek_exe = '/Applications/Sioyek.app/Contents/MacOS/sioyek'
+vim.g.vimtex_view_sioyek_exe = '/Applications/sioyek.app/Contents/MacOS/sioyek'
 
 -- For Quarto files, enable VimTeX
 vim.api.nvim_create_autocmd("FileType", {
