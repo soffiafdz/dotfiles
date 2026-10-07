@@ -18,7 +18,7 @@ Reference for setting up machines after formatting.
 | **E-books** | Calibre | `pacman -S calibre` | `brew install --cask calibre` | E-book mgmt + reader |
 | **EPUB Reader** | Foliate | `pacman -S foliate` | Books.app (built-in) | Linux: dedicated reader; macOS: use Books or Calibre |
 | **LaTeX** | Tectonic | `pacman -S tectonic` (Arch [extra]) | `brew install tectonic` | vimtex compiler. BIC workstations: see README |
-| **PDF Reader** | Sioyek | AUR | `brew install --cask sioyek` | Academic PDFs, SyncTeX |
+| **PDF Reader** | Sioyek | AUR | by hand, cask disabled (`docs/imac-setup.md`) | Academic PDFs, SyncTeX |
 | **PDF Simple** | Zathura | `pacman -S zathura` | `brew install zathura` | Vim-like, fast |
 | **Photo Mgmt** | DigiKam | `pacman -S digikam` | `brew install --cask digikam` | |
 | **Photo Edit** | ART | AUR (rawtherapee fork) | build from source | |

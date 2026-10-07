@@ -76,7 +76,8 @@ cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "quarto"         # Scientific publishing
 cask "zotero"         # Reference manager
-cask "sioyek"         # Academic PDF reader
+# sioyek: the cask is DISABLED upstream (pinned to the x64-only v2.0.0 from
+# 2022). Install by hand instead - see docs/imac-setup.md.
 cask "digikam"        # Photo management
 cask "gimp"           # Image editor
 
