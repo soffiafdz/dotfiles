@@ -82,6 +82,7 @@ cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "karabiner-elements"  # Right Cmd -> Hyper, Caps -> Esc/Ctrl
 cask "raycast"        # Launcher (Hyper + D)
 cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
+cask "mac-mouse-fix"  # Mouse buttons and smooth scrolling; hestia only, mappings not in the repo
 
 # Browser (Aerospace binds Hyper+W to it)
 cask "zen"
