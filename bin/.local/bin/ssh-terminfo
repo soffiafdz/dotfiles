@@ -1,0 +1,22 @@
+#!/bin/sh
+# Install kitty's terminfo on remote hosts so TERM=xterm-kitty works there.
+# Goes into the remote's ~/.terminfo, so no root needed. Once per host.
+[ $# -gt 0 ] || { echo "usage: ssh-terminfo host..." >&2; exit 2; }
+
+ti=$(infocmp -x xterm-kitty 2>/dev/null) || {
+	echo "ssh-terminfo: no xterm-kitty terminfo here; run it inside kitty" >&2
+	exit 1
+}
+
+rc=0
+for host; do
+	if printf '%s\n' "$ti" |
+		ssh "$host" 'mkdir -p "$HOME/.terminfo" && tic -x -o "$HOME/.terminfo" /dev/stdin'
+	then
+		echo "$host: ok"
+	else
+		echo "$host: failed" >&2
+		rc=1
+	fi
+done
+exit $rc

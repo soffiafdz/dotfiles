@@ -270,6 +270,7 @@ All in `bin/.local/bin`, POSIX sh unless noted. The dmenu ones are bound in dwm.
 | `setmime` | Default apps per file type (OnlyOffice, Okular, calibre reader, Firefox) via `xdg-mime`; skips apps not installed. Run once per machine; `mimeapps.list` itself stays untracked. |
 | `displayoff`, `janus-monitors` | DPMS off; toggle the second monitor on janus. |
 | `tpadToggle`, `tpointToggle`, `killKbd`, `tpadfix` | ThinkPad input toggles and the i2c_hid blacklist fix. Laptop-only. |
+| `ssh-terminfo` | `ssh-terminfo host...`: installs kitty's `xterm-kitty` terminfo into each host's `~/.terminfo`. Once per host; run it inside kitty. |
 | `chp`, `chbicws` | Bluetooth headphone toggle; check which BIC workstations are reachable. |
 | `rotdir`, `transadd`, `teams_linux` | Helpers for an image viewer, transmission and Teams. Only useful where those are installed. |
 | `micromamba` | The binary, gitignored. |
