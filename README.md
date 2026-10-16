@@ -268,7 +268,7 @@ All in `bin/.local/bin`, POSIX sh unless noted. The dmenu ones are bound in dwm.
 | `dwmbar`, `refbar` | Status bar loop and its refresh signal (`SIGUSR1`). |
 | `setwp` | Wallpaper picker and setter. |
 | `setmime` | Default apps per file type (OnlyOffice, Okular, calibre reader, Firefox) via `xdg-mime`; skips apps not installed. Run once per machine; `mimeapps.list` itself stays untracked. |
-| `displayoff`, `janus-monitors` | DPMS off; toggle the second monitor on janus. |
+| `displayoff`, `janus-monitors`, `tango-extend` | DPMS off; toggle the second monitor on janus; toggle extended display on tango. |
 | `tpadToggle`, `tpointToggle`, `killKbd`, `tpadfix` | ThinkPad input toggles and the i2c_hid blacklist fix. Laptop-only. |
 | `chp`, `chbicws` | Bluetooth headphone toggle; check which BIC workstations are reachable. |
 | `rotdir`, `transadd`, `teams_linux` | Helpers for an image viewer, transmission and Teams. Only useful where those are installed. |
