@@ -94,7 +94,7 @@ cask "ferdium"        # Multi-messenger (WhatsApp, Telegram, etc.)
 
 # Remote access
 cask "rustdesk"       # Open-source remote desktop
-cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
+cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing
 
 # Nerd Fonts (from your xresources)
 cask "font-caskaydia-cove-nerd-font"
