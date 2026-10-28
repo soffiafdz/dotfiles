@@ -1,0 +1,10 @@
+#!/bin/sh
+# Regenerate the NVIDIA CDI spec that podman's --device nvidia.com/gpu=all
+# reads. nvidia-container-toolkit leaves this to a systemd unit, which runit
+# never starts. Boot is the one time the loaded kernel module is guaranteed to
+# match the installed driver libraries, and a driver update needs a reboot
+# before CUDA works anyway.
+
+command -v nvidia-ctk >/dev/null || exit 0
+mkdir -p /var/run/cdi
+nvidia-ctk --quiet cdi generate --output=/var/run/cdi/nvidia.yaml

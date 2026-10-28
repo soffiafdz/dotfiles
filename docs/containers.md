@@ -18,15 +18,20 @@ verify first.
 ## janus (Artix, build host)
 
     sudo pacman -S podman-docker buildah nvidia-container-toolkit
-    sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+    sudo stow -d ~/Repos/dotfiles -t / nvidia
+    sudo /etc/local.d/nvidia-cdi.start
 
 `podman-docker` provides a `docker` shim so the usual commands keep working.
 Rootless podman is already configured (subuid/subgid, storage) because the
 Jellyfin service uses it. If `nvidia-container-toolkit` is missing from the
 Artix repos, it is in the AUR.
 
-The CDI spec must be regenerated after every NVIDIA driver update; a GPU that
-"worked last month" is nearly always this.
+The CDI spec must match the installed NVIDIA driver; a GPU that "worked last
+month" is nearly always a stale or missing spec. Toolkit 1.20.1 dropped its
+pacman hook, deleted `/etc/cdi/nvidia.yaml`, and moved regeneration to a
+systemd unit that runit never starts. The `nvidia` package replaces that
+with a boot script writing `/var/run/cdi/nvidia.yaml`, so the reboot that a
+driver update needs anyway also refreshes the spec.
 
 Verify, in order:
 

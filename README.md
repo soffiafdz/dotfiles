@@ -34,7 +34,7 @@ tree. Almost all of them target the home directory:
 - `<pkg>/.<dotfile>` for the few programs that want a dotfile in `$HOME`
   (`vim/.vimrc`, `zsh/.zshenv`).
 - `bin/.local/bin/` for scripts, `ssh/.ssh/config` for ssh.
-- `jellyfin/etc/...` is the one package that targets `/`, see its README.
+- `jellyfin/etc/...` and `nvidia/etc/...` target `/`, see their READMEs.
 
 The checkout path is not fixed: `bootstrap` resolves its own location and
 every script works off `$HOME`. `~/Repos/dotfiles` on machines with several
@@ -191,6 +191,7 @@ aliases and job templates.
 | `kitty` | `~/.config/kitty` | all | Terminal. Asks before closing a window with a running child. |
 | `mpd`, `ncmpcpp` | `~/.config/...` | janus | Music daemon and client. mpd is started by `xprofile`. |
 | `mpv` | `~/.config/mpv` | Linux | Player with NVDEC and gpu-next; also the image viewer for yazi. |
+| `nvidia` | `/etc/local.d/nvidia-cdi.start` | janus | Regenerates the CDI spec for GPU containers at boot. See its README. |
 | `nvim` | `~/.config/nvim` | all but the Pi | LazyVim-based editor config, see Editors. |
 | `nvim_micro` | `~/.config/nvim` | writerdeck | Thin layer over `nvim`, see its README. |
 | `picom` | `~/.config/picom` | janus | Compositor. glx backend, sync fence and no damage tracking for NVIDIA. |
