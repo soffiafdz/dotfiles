@@ -1,0 +1,22 @@
+#!/bin/sh
+# Toggle extended display on tango (laptop).
+# No external connected    -> notify and exit
+# External already active  -> turn it off, eDP-1 stays primary
+# External connected only  -> extend --right-of eDP-1 at its preferred mode
+
+primary=eDP-1
+external=$(xrandr --query | awk '/ connected/ && $1 != "'"$primary"'" {print $1; exit}')
+
+if [ -z "$external" ]; then
+  notify-send "tango-extend" "No external display connected"
+  exit 0
+fi
+
+if xrandr --query | awk -v o="$external" '$1 == o' | grep -q "[0-9]x[0-9]"; then
+  xrandr --output "$external" --off
+  notify-send "tango-extend" "$external off"
+else
+  xrandr --output "$primary" --auto --primary \
+         --output "$external" --auto --right-of "$primary"
+  notify-send "tango-extend" "Extended to $external (right of $primary)"
+fi
