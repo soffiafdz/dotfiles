@@ -120,13 +120,13 @@ cd ~/Developer/dotfiles
 # -t "$HOME" is required: stow defaults to the parent dir, which here
 # would be ~/Developer, not ~
 stow -nv -t "$HOME" kitty aerospace karabiner zsh shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv atuin          # dry run
+  git ssh tmux nvim yazi sioyek radian mpv atuin gh       # dry run
 stow -v -t "$HOME" kitty aerospace karabiner zsh shell fzf \
-  git ssh tmux nvim yazi sioyek radian mpv atuin
+  git ssh tmux nvim yazi sioyek radian mpv atuin gh
 
-# bin and init_tmux MUST use --no-folding -- see the warning below
-stow -nv --no-folding -t "$HOME" bin init_tmux            # dry run
-stow -v --no-folding -t "$HOME" bin init_tmux
+# bin, init_tmux and gh MUST use --no-folding -- see the warning below
+stow -nv --no-folding -t "$HOME" bin init_tmux gh         # dry run
+stow -v --no-folding -t "$HOME" bin init_tmux gh
 ```
 
 Deliberately not stowed on macOS:
@@ -202,6 +202,16 @@ does `globinclude local.conf`. `macos.conf` loads automatically via kitty's own
 `KITTY_OS` variable.
 
 ## 7. Permissions and per-app setup
+
+### gh
+
+```sh
+gh auth login -p ssh
+```
+
+The machine's SSH key is already on GitHub (§3), so decline the offer to
+upload one. The token goes to `~/.config/gh/hosts.yml`, which stays out of
+the repo because `gh` is stowed `--no-folding`.
 
 ### Karabiner-Elements
 
@@ -471,6 +481,7 @@ pass ls | head
 - [ ] `nvim +checkhealth` clean
 - [ ] `git config user.email` → the work address
 - [ ] `ssh -T git@github.com` authenticates
+- [ ] `gh auth status` shows the account logged in over ssh
 - [ ] `r` starts radian; `vd` opens visidata
 - [ ] `gpg -K` shows the key as `[ultimate]`
 - [ ] `pass ls` lists entries and `pass show <entry>` decrypts via pinentry-mac

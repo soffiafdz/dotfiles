@@ -3,6 +3,7 @@
 # No `gnupg`: gpg-agent.conf is written locally (docs/imac-setup.md).
 nvim
 tmux
+gh
 init_tmux
 fzf
 yazi

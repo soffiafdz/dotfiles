@@ -13,6 +13,7 @@ brew "git"            # Version control
 brew "git-delta"      # Better git diffs
 brew "git-lfs"        # Large file storage
 brew "gitui"          # Git TUI
+brew "gh"             # GitHub CLI; `gh auth login -p ssh` once per machine
 brew "micromamba"     # Conda environment manager
 brew "syncthing"      # File synchronization
 brew "rclone"         # Mount remote filesystems (sshfs alternative)

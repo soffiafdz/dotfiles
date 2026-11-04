@@ -23,3 +23,7 @@ zsh/.config/zsh/.zsh_sessions/
 
 # Machine-local Slurm account
 hpc/.config/hpc/account
+
+# gh: hosts.yml holds the OAuth token; only config.yml is tracked
+gh/.config/gh/*
+!gh/.config/gh/config.yml

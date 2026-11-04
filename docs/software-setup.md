@@ -27,6 +27,7 @@ Reference for setting up machines after formatting.
 | **Video** | mpv | `pacman -S mpv` | `brew install mpv` | |
 | **Gaming** | Steam | `pacman -S steam` | `brew install --cask steam` | |
 | **Passwords** | pass | `pacman -S pass` | `brew install pass` | + dmenupass |
+| **GitHub** | gh | `pacman -S github-cli` | `brew install gh` | `gh auth login -p ssh` once per machine |
 | **Remote Desktop** | RustDesk | AUR: `rustdesk-bin` | `brew install --cask rustdesk` | Access homestation remotely |
 
 ## Linux-Only (Homestation)

@@ -3,6 +3,7 @@
 nvim
 bin
 tmux
+gh
 init_tmux
 fzf
 yazi

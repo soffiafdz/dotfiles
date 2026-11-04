@@ -68,9 +68,10 @@ for pkg in $packages; do
 	# Never fold these: a folded target directory becomes a symlink into
 	# the repo, so everything a program writes there lands in git. It cost
 	# 1.4G and the atuin key through bin/.local once; gnupg would take the
-	# keyring; hpc holds the machine-local account file.
+	# keyring; hpc holds the machine-local account file; gh writes its
+	# OAuth token to hosts.yml next to config.yml.
 	case "$pkg" in
-	bin | gnupg | hpc | init_tmux) fold="--no-folding" ;;
+	bin | gnupg | hpc | init_tmux | gh) fold="--no-folding" ;;
 	*) fold="" ;;
 	esac
 
