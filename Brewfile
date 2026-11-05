@@ -49,6 +49,7 @@ brew "shellcheck"     # Shell script linter
 brew "stylua"         # Lua formatter
 brew "ruff"           # Python linter/formatter
 brew "podman"         # Containers; local VM, builds go to janus (docs/containers.md)
+brew "awscli"         # AWS CLI
 
 # Documents and writing
 brew "pandoc"         # Document converter
