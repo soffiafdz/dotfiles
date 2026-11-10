@@ -304,10 +304,14 @@ micromamba binary out, and the machine-local companions above are never added.
 A VPN script with embedded credentials was removed in September 2026; the
 credential is retired.
 
+How the GPG key and the hardware keys are backed up and recovered is in
+`docs/security.md`: procedures only, no secrets or inventory.
+
 ## Docs
 
 | File | Contents |
 |---|---|
+| `docs/security.md` | GPG key, its offline backup, hardware keys, and what to do when one is lost. |
 | `docs/software-setup.md` | What to install on a Linux host and why. |
 | `docs/dual-boot-install.md` | Artix plus Windows installation notes. |
 | `docs/linux-setup-tasks.md` | Deferred tasks on the Linux hosts. |
