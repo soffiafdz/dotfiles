@@ -6,7 +6,7 @@ only. Secrets and specifics live elsewhere:
 
 | What | Where |
 |---|---|
-| The GPG passphrase and the backup stick's passphrase | on paper, offline |
+| The GPG passphrase and the backup stick's passphrase | on paper, offline; copies in `pass dev/gpg` and `pass dev/kryptos` |
 | Where the paper and the stick are kept | nowhere digital: memory, and one trusted person |
 | Hardware key names and serials | `pass dev/yubikeys` |
 | Which keys a service has | that service's pass entry, `2fa:` line |
@@ -16,6 +16,10 @@ The layering is deliberate: paper plus this file recover the GPG key, and the
 GPG key opens pass. Nothing depends on what it is supposed to recover, which
 is why the physical locations are not in pass: when they are needed, pass is
 exactly what cannot be opened.
+
+The passphrase copies in pass are a convenience, not a backup: they help only
+where pass is already unlocked, such as a phone holding its own copy of the
+key, while setting up a host that is not. The paper is what recovers them.
 
 ## GPG key
 
