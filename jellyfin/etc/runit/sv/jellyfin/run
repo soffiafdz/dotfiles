@@ -14,9 +14,9 @@ exec chpst -u soffiafdz podman run \
   -p 7359:7359/udp \
   -v /home/soffiafdz/.local/share/jellyfin/config:/config \
   -v /home/soffiafdz/.local/share/jellyfin/cache:/cache \
-  -v /mnt/vault/Videos/Movies:/media/movies:ro \
-  -v /mnt/vault/Videos/TV:/media/tv:ro \
-  -v /mnt/vault/Music:/media/music:ro \
-  -v /mnt/vault/Calibre:/media/books:ro \
-  -v /mnt/vault/Pictures:/media/photos:ro \
+  -v /mnt/cella/Videos/Movies:/media/movies:ro \
+  -v /mnt/cella/Videos/TV:/media/tv:ro \
+  -v /mnt/cella/Music:/media/music:ro \
+  -v /mnt/cella/Calibre:/media/books:ro \
+  -v /mnt/cella/Pictures:/media/photos:ro \
   docker.io/jellyfin/jellyfin:latest

@@ -14,5 +14,5 @@ database, metadata and user accounts, which live in
 `~/.local/share/jellyfin/config` and must be backed up separately.
 `~/.local/share/jellyfin/cache` can be discarded.
 
-`run` hardcodes the user, UID 1000 and the media paths under `/mnt/vault`;
+`run` hardcodes the user, UID 1000 and the media paths under `/mnt/cella`;
 adjust them if the machine layout changes.
