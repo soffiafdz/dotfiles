@@ -80,6 +80,7 @@ Machine-local files live next to the tracked ones and are never committed:
 |---|---|---|
 | `ssh/.ssh/config` | `~/.ssh/config.local` | `Include config.local` at the top; home hosts go here. |
 | `git/.config/git/config` | `~/.config/git/config.local` | `[include]`; per-host identity or credentials. |
+| `gh/.config/gh/config.yml` | `~/.config/gh/hosts.yml` | Written by `gh auth login`; holds the OAuth token, gitignored. |
 | `kitty/.config/kitty/kitty.conf` | `host-<name>.conf`, `local.conf` | `globinclude` and `include`; `local.conf` is gitignored. |
 | `x11/.config/x11/xresources` | `host-<name>.xresources` | Merged by `xprofile` when present. |
 | none | `~/.config/mimeapps.list` | Not tracked: desktop apps rewrite it constantly. |
@@ -95,7 +96,7 @@ plain symlinks where GNU Stow is not installed (clusters).
     ./bootstrap -f macos   # force a type
     ./bootstrap -D -f hpc  # unstow that type
 
-`bin`, `gnupg`, `hpc` and `init_tmux` are always stowed `--no-folding`, so
+`bin`, `gnupg`, `hpc`, `init_tmux` and `gh` are always stowed `--no-folding`, so
 nothing a program writes into those directories lands in the repo.
 
 ### Linux (Artix, runit)
@@ -182,6 +183,7 @@ aliases and job templates.
 | `duti` | `~/.config/duti` | macOS | Default apps per file type, the macOS side of `setmime`. Apply with `duti ~/.config/duti/defaults.duti` after installing an app. |
 | `foot` | `~/.config/foot` | Wayland hosts | Terminal, unused on janus. |
 | `fzf` | `~/.config/fzf` | all | Vendored key bindings and completion, sourced by `.zshrc`. |
+| `gh` | `~/.config/gh` | Linux, macOS | GitHub CLI: SSH protocol, nvim as editor. `hosts.yml` (the token) is written next to it and gitignored. Stow with `--no-folding`. |
 | `git` | `~/.config/git` | all | Identity, aliases, safe defaults. Includes `config.local`. |
 | `gnupg` | `~/.config/gnupg` | Linux | Only `gpg-agent.conf`. Stow with `--no-folding`. |
 | `hpc` | `~/.config/hpc`, `~/.local/...` | clusters | Slurm aliases, `salloc`/module helpers, sbatch templates, `hpc-setup`. See its README. |

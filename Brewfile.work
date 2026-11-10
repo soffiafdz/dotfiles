@@ -17,6 +17,7 @@ brew "git"            # Version control
 brew "git-delta"      # Better git diffs (git config sets pager = delta)
 brew "git-lfs"        # Large file storage (run `git lfs install` after)
 brew "gitui"          # Git TUI
+brew "gh"             # GitHub CLI; `gh auth login -p ssh` once per machine
 brew "rsync"          # Fast file sync (newer than macOS built-in)
 brew "tealdeer"       # Simplified man pages (tldr)
 brew "ouch"           # Universal compression tool
@@ -51,6 +52,7 @@ brew "shellcheck"     # Shell script linter
 brew "stylua"         # Lua formatter
 brew "ruff"           # Python linter/formatter
 brew "podman"         # Containers; local VM, builds go to janus (docs/containers.md)
+brew "awscli"         # AWS CLI
 
 # Documents and writing
 brew "pandoc"         # Document converter
@@ -81,7 +83,7 @@ cask "kitty"          # Terminal emulator
 cask "nikitabobko/tap/aerospace"  # Tiling window manager
 cask "karabiner-elements"  # Right Cmd -> Hyper, Caps -> Esc/Ctrl
 cask "raycast"        # Launcher (Hyper + D)
-cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
+cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing
 cask "mac-mouse-fix"  # Mouse buttons and smooth scrolling; hestia only, mappings not in the repo
 
 # Browser (Aerospace binds Hyper+W to it)

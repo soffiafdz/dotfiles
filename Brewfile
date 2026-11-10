@@ -13,6 +13,7 @@ brew "git"            # Version control
 brew "git-delta"      # Better git diffs
 brew "git-lfs"        # Large file storage
 brew "gitui"          # Git TUI
+brew "gh"             # GitHub CLI; `gh auth login -p ssh` once per machine
 brew "micromamba"     # Conda environment manager
 brew "syncthing"      # File synchronization
 brew "rclone"         # Mount remote filesystems (sshfs alternative)
@@ -48,6 +49,7 @@ brew "shellcheck"     # Shell script linter
 brew "stylua"         # Lua formatter
 brew "ruff"           # Python linter/formatter
 brew "podman"         # Containers; local VM, builds go to janus (docs/containers.md)
+brew "awscli"         # AWS CLI
 
 # Documents and writing
 brew "pandoc"         # Document converter
@@ -94,7 +96,7 @@ cask "ferdium"        # Multi-messenger (WhatsApp, Telegram, etc.)
 
 # Remote access
 cask "rustdesk"       # Open-source remote desktop
-cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing (unsigned; cask clears quarantine)
+cask "deskflow/tap/deskflow"  # Keyboard/mouse sharing
 
 # Nerd Fonts (from your xresources)
 cask "font-caskaydia-cove-nerd-font"
