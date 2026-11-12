@@ -1,5 +1,6 @@
 # gh settings. Stowed with --no-folding: `gh auth login` writes hosts.yml
 # (the OAuth token) next to this file, and that must never reach the repo.
+version: 1
 git_protocol: ssh
 editor: nvim
 prompt: enabled
