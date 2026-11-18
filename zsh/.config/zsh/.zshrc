@@ -132,6 +132,8 @@ fi
 # GPG
 GPG_TTY=$(tty)
 export GPG_TTY
+# Over ssh, have gpg prompt in this terminal, not on the remote desktop
+[[ -n $SSH_CONNECTION ]] && gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
 
 # # Go
 # export GOROOT=/usr/local/go
