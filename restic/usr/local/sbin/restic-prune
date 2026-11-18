@@ -1,0 +1,16 @@
+#!/bin/sh
+# Weekly retention and integrity check, run on janus directly against the
+# repository path: rest-server is append-only, so clients cannot prune.
+# Runs as the restic user so new files keep the ownership rest-server needs.
+set -eu
+
+r() {
+  chpst -u restic:restic env RESTIC_CACHE_DIR=/var/cache/restic \
+    restic -r /mnt/arca/restic --password-file /etc/restic/arca.pass "$@"
+}
+
+echo "== $(date -Is) prune start"
+r forget --prune \
+  --keep-daily 7 --keep-weekly 4 --keep-monthly 12 --keep-yearly 3
+r check --read-data-subset=2%
+echo "== $(date -Is) prune done"

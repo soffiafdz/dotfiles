@@ -1,0 +1,7 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/bin
+
+# m  h  dom mon dow user command
+0    3  *   *   *   root restic-backup >> /var/log/restic/backup.log 2>&1
+30   5  *   *   0   root restic-prune >> /var/log/restic/prune.log 2>&1
+30   4  *   *   6   root fstrim -av >> /var/log/fstrim.log 2>&1

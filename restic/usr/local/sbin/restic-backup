@@ -1,0 +1,24 @@
+#!/bin/sh
+# Nightly backup of janus to arca through the local rest-server. Runs as root.
+set -eu
+
+export RESTIC_REPOSITORY="rest:http://$(tailscale ip -4):8000/"
+export RESTIC_PASSWORD_FILE=/etc/restic/arca.pass
+
+echo "== $(date -Is) backup start"
+
+# digiKam keeps its albums, tags and faces in MariaDB; dump it so the
+# snapshot holds a consistent copy.
+install -dm 700 /var/backups/mariadb
+mariadb-dump --single-transaction \
+  --databases digikam_core digikam_face digikam_similar \
+  > /var/backups/mariadb/digikam.sql.tmp
+mv /var/backups/mariadb/digikam.sql.tmp /var/backups/mariadb/digikam.sql
+
+restic backup \
+  --one-file-system \
+  --exclude-file /etc/restic/excludes \
+  --exclude-caches \
+  /home /mnt/cella /etc /var/backups/mariadb
+
+echo "== $(date -Is) backup done"

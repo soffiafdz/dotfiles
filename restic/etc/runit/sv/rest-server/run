@@ -1,0 +1,13 @@
+#!/bin/sh
+# Serve /mnt/arca to restic clients on the tailnet, append-only.
+# Waits for tailscaled to hand out an address; runit retries on exit.
+exec 2>&1
+
+mountpoint -q /mnt/arca || { echo "arca not mounted"; sleep 30; exit 1; }
+addr=$(tailscale ip -4 2>/dev/null) || { echo "no tailscale address yet"; sleep 10; exit 1; }
+
+exec chpst -u restic:restic rest-server \
+  --path /mnt/arca/restic \
+  --listen "$addr:8000" \
+  --append-only \
+  --no-auth

@@ -1,0 +1,23 @@
+# Paths and patterns skipped by restic-backup (restic --exclude-file syntax).
+
+# Rebuildable or disposable
+/home/*/.cache
+/home/*/.local/share/Trash
+/home/*/.local/share/containers
+/home/*/.local/share/jellyfin/cache
+/home/*/.local/share/Steam
+SteamLibrary
+*.iso
+
+# Windows leftovers
+pagefile.sys
+hiberfil.sys
+swapfile.sys
+$$RECYCLE.BIN
+System Volume Information
+
+# Filesystem bookkeeping
+lost+found
+
+# Repository secrets stay out of the repository
+/etc/restic
