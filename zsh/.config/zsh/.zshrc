@@ -132,8 +132,8 @@ fi
 # GPG
 if [[ -t 0 ]]; then
   export GPG_TTY=$TTY
-  # Over ssh, have gpg prompt in this terminal, not on the remote desktop
-  [[ -n $SSH_CONNECTION ]] && gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
+  # Over ssh, ask for the passphrase in this terminal instead of a desktop pop-up
+  [[ -n $SSH_CONNECTION ]] && export PASSWORD_STORE_GPG_OPTS="--pinentry-mode loopback"
 fi
 
 # # Go
