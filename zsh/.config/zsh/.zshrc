@@ -133,7 +133,8 @@ fi
 if [[ -t 0 ]]; then
   export GPG_TTY=$TTY
   # Over ssh, ask for the passphrase in this terminal instead of a desktop pop-up
-  [[ -n $SSH_CONNECTION ]] && export PASSWORD_STORE_GPG_OPTS="--pinentry-mode loopback"
+  # (read by bin/.local/bin/pinentry-auto)
+  [[ -n $SSH_CONNECTION ]] && export PINENTRY_USER_DATA=tty
 fi
 
 # # Go

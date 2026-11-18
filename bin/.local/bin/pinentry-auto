@@ -1,6 +1,14 @@
 #!/bin/sh
 # Pick the first pinentry available: macOS GUI, then Qt/GTK, then curses.
 # Absolute paths first, since gpg-agent may invoke this with a minimal $PATH.
+
+# Shells over ssh set PINENTRY_USER_DATA=tty (.zshrc): ask in that terminal
+if [ "$PINENTRY_USER_DATA" = tty ]; then
+	for p in /usr/bin/pinentry-curses /opt/homebrew/bin/pinentry-curses /usr/local/bin/pinentry-curses; do
+		[ -x "$p" ] && exec "$p" "$@"
+	done
+fi
+
 for p in \
 	/opt/homebrew/bin/pinentry-mac \
 	/usr/local/bin/pinentry-mac \
