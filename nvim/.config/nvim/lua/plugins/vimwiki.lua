@@ -12,6 +12,19 @@ return {
       vim.g.vimwiki_markdown_link_ext = 1
       vim.g.vimwiki_list = {
         {
+          -- glosa's generated pages: markdown links, .md, home at index/index
+          name = "glosa",
+          path = "~/.local/share/glosa/views/",
+          syntax = "markdown",
+          ext = ".md",
+          index = "index/index",
+          links_space_char = "-",
+          auto_diary_index = 0,
+          auto_generate_links = 0,
+          auto_generate_tags = 0,
+          auto_tags = 0,
+        },
+        {
           name = "Notes",
           path = "~/Documents/wiki/",
           syntax = "markdown",
@@ -77,15 +90,18 @@ return {
         end,
       })
 
-      -- Set default icons for vimwiki group (palimpsest will override when active)
-      local has_wk, wk = pcall(require, "which-key")
-      if has_wk then
-        local has_icons, MiniIcons = pcall(require, "mini.icons")
-        local vimwiki_icon = has_icons and MiniIcons.get("extension", "md") or ""
-        wk.add({
-          { "<leader>v", group = "vimwiki", icon = { icon = vimwiki_icon, color = "green" } },
-        })
+      -- The which-key group of the vimwiki prefix, with its icon. vimwiki
+      -- loads at startup, before which-key: registered once everything
+      -- lazy has loaded, or the group shows with no icon.
+      local function group()
+        local has_wk, wk = pcall(require, "which-key")
+        if has_wk and wk.add then
+          wk.add({
+            { "<leader>v", group = "vimwiki", icon = { icon = "󰍔", color = "green" } },
+          })
+        end
       end
+      vim.api.nvim_create_autocmd("User", { pattern = "VeryLazy", once = true, callback = group })
     end,
   },
 }
