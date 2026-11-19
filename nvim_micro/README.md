@@ -18,10 +18,12 @@ Only `lua/micro/` is Pi-specific:
 
 - `disabled.lua` turns off what the Pi cannot afford: treesitter, LSP and
   mason, completion, linters, formatting, preview and the data-science stack.
-- `vimwiki.lua` drops the main config's wiki list; the palimpsest deck
-  registers its own.
+- `vimwiki.lua` replaces the main config's wiki list: glosa's pages when
+  `~/.local/share/glosa/views` exists, otherwise nothing (the palimpsest
+  deck registers its own).
 - `palimpsest.lua` loads the pure-Lua `palimpsest_deck` from `~/Palimpsest`
-  instead of the full plugin.
+  only while there is no `~/Repos/glosa`; with glosa present the main
+  config's `plugins/glosa.lua` loads its plugin and the deck is not loaded.
 
 `lazyvim.json` stays separate because it lists this config's extras (only the
 mini-comment, mini-surround and git ones).
